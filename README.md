@@ -52,8 +52,10 @@ Download `fldigi-mcp.mcpb` from the latest
 [release](https://github.com/sbrunner-atx/fldigi-mcp/releases), then in Claude
 Desktop go to **Settings → Extensions → Install Extension…** and choose the file.
 A short settings form asks for your callsign (everything else has a default).
-**No terminal, no Python, no uv to install.** See
-[docs/install-and-safety.md](docs/install-and-safety.md).
+**No terminal, no Python, no uv to install.**
+
+👉 **New to this? Follow the simple [step-by-step install guide](docs/INSTALL.md).**
+Also see the [install & safety model](docs/install-and-safety.md).
 
 ### From source (development)
 

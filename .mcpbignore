@@ -13,3 +13,4 @@ tests/
 build/
 dist/
 .DS_Store
+icon_*.png

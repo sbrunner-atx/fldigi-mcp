@@ -18,6 +18,7 @@
   "documentation": "https://github.com/sbrunner-atx/fldigi-mcp#readme",
   "support": "https://github.com/sbrunner-atx/fldigi-mcp/issues",
   "license": "MIT",
+  "icon": "icon.png",
   "keywords": ["fldigi", "ham radio", "amateur radio", "mcp", "xmlrpc", "digital modes"],
   "server": {
     "type": "uv",

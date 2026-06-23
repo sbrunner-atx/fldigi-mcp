@@ -42,9 +42,12 @@ that for you.
 1. Open **Claude Desktop**.
 2. Open **Settings** (the Claude menu, or the gear/⚙︎ icon).
 3. Click **Extensions**.
-4. Click **Install Extension…** (it may say *Install from file*).
+4. Click **Advanced settings**, then click **Install Extension…**.
 5. Choose the **`fldigi-mcp.mcpb`** file you just downloaded.
 6. Click **Install**.
+
+> Tip: the **Install Extension…** button lives under **Advanced settings** on
+> the Extensions page — that's the one spot people tend to miss.
 
 ## Step 3 — Enter your callsign
 

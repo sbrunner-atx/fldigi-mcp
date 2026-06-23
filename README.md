@@ -50,7 +50,8 @@ For **development from source** you additionally need **Python 3.10+** and
 
 Download `fldigi-mcp.mcpb` from the latest
 [release](https://github.com/sbrunner-atx/fldigi-mcp/releases), then in Claude
-Desktop go to **Settings → Extensions → Install Extension…** and choose the file.
+Desktop go to **Settings → Extensions → Advanced settings → Install Extension…**
+and choose the file.
 A short settings form asks for your callsign (everything else has a default).
 **No terminal, no Python, no uv to install.**
 

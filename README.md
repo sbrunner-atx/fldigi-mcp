@@ -33,18 +33,27 @@ keeping the moving parts to Python's standard library and fldigi's own API.
 
 ## Requirements
 
+To **install the desktop extension** (`.mcpb`) all you need is:
+
 - **fldigi** running (its XML-RPC server is on by default at `127.0.0.1:7362`).
-- **Python 3.10+**.
-- **[uv](https://docs.astral.sh/uv/)** for environment and dependency management.
-- **Node.js** — only for the MCP Inspector during development.
+
+Claude Desktop's `uv` runtime supplies Python and the dependencies, so end users
+do **not** install Python or `uv` themselves. (That runtime is currently marked
+experimental, so a recent Claude Desktop is recommended.)
+
+For **development from source** you additionally need **Python 3.10+** and
+**[uv](https://docs.astral.sh/uv/)** (and **Node.js**, only for the MCP Inspector).
 
 ## Install
 
-### Easiest: one-click desktop extension (planned release artifact)
+### Easiest: one-click desktop extension
 
-The packaged `.mcpb` bundle installs into Claude Desktop with a click and shows
-a short settings form (just enter your callsign; everything else has a default).
-See [docs/install-and-safety.md](docs/install-and-safety.md).
+Download `fldigi-mcp.mcpb` from the latest
+[release](https://github.com/sbrunner-atx/fldigi-mcp/releases), then in Claude
+Desktop go to **Settings → Extensions → Install Extension…** and choose the file.
+A short settings form asks for your callsign (everything else has a default).
+**No terminal, no Python, no uv to install.** See
+[docs/install-and-safety.md](docs/install-and-safety.md).
 
 ### From source (development)
 

@@ -20,3 +20,6 @@ venv/
 *.swp
 .idea/
 .vscode/
+
+# Packaged desktop-extension build artifact (attach to a GitHub Release instead)
+*.mcpb

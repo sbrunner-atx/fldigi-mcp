@@ -1,5 +1,7 @@
 # fldigi-mcp
 
+<!-- mcp-name: io.github.sbrunner-atx/fldigi-mcp -->
+
 An [MCP](https://modelcontextprotocol.io/) server for controlling
 [fldigi](https://www.w1hkj.org/), the popular amateur-radio digital-modem
 application, from MCP-aware clients such as Claude Desktop.

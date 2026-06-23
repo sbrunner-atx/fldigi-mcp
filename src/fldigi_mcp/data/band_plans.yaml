@@ -1,0 +1,329 @@
+# Curated amateur band-plan data for fldigi-mcp Band Guidance (EXPERIMENTAL).
+#
+# Purpose: advisory guidance only. These are voluntary IARU band plans, NOT
+# regulations, and they differ by region. Always defer to national regulations.
+#
+# Units: all frequencies are in Hz (integers).
+#
+# Per band we record the spans Band Guidance actually reasons about:
+#   edges_hz    - the band edges (widest extent in the plan)
+#   cw_hz       - the CW portion (CW is digital but lives in the CW segment)
+#   digital_hz  - the narrow-band data / "digimode" portion (where PSK/RTTY/
+#                 Olivia/FT8/JT/MFSK etc. operate)
+#   auto_data_hz- (optional) unattended / automatically-controlled data sub-band
+#
+# "watering_holes_hz" below are the internationally-coordinated digital calling
+# frequencies. The weak-signal modes (FT8/JT65/WSPR) are globally harmonised and
+# identical across regions; the text modes come from the widely-used "Preferred
+# HF Frequencies of Popular Digital Text Modes" reference.
+#
+# Sources (see docs/band-guidance.md):
+#   R1: IARU R1 HF Band Plan, effective 16 Oct 2020
+#       https://www.iaru-r1.org/wp-content/uploads/2019/08/hf_r1_bandplan.pdf
+#   R2: ARRL "Considerate Operator's Frequency Guide" (QST, Nov 2013), US usage
+#       + IARU R2 band plan
+#   R3: IARU R3 Interim Band Plan, doc R3-004, rev. 3 Sep 2019
+#       https://www.iaru.org/wp-content/uploads/2020/01/R3-004-IARU-Region-3-Bandplan-rev.2.pdf
+
+meta:
+  version: 1
+  updated: "2026-06-22"
+  status: experimental
+  disclaimer: >
+    Voluntary IARU band plans, not regulations; region-specific and advisory
+    only. Verify against your national regulations. Corrections welcome.
+
+# Internationally-coordinated digital calling frequencies (mode -> band -> Hz).
+# Treated as region-independent (the modes are globally harmonised). Where a
+# mode is absent on a band, it is simply omitted.
+watering_holes_hz:
+  FT8:
+    160m: 1840000
+    80m: 3573000
+    40m: 7074000
+    30m: 10136000
+    20m: 14074000
+    17m: 18100000
+    15m: 21074000
+    12m: 24915000
+    10m: 28074000
+    6m: 50313000
+    2m: 144174000
+  FT4:
+    80m: 3575000
+    40m: 7047500
+    30m: 10140000
+    20m: 14080000
+    17m: 18104000
+    15m: 21140000
+    12m: 24919000
+    10m: 28180000
+  JT65:
+    160m: 1838000
+    80m: 3570000
+    40m: 7076000
+    30m: 10138000
+    20m: 14076000
+    17m: 18102000
+    15m: 21076000
+    12m: 24917000
+    10m: 28076000
+  JT9:
+    160m: 1839000
+    80m: 3572000
+    40m: 7078000
+    30m: 10140000
+    20m: 14078000
+    17m: 18104000
+    15m: 21078000
+    12m: 24919000
+    10m: 28078000
+  WSPR:
+    160m: 1836600
+    80m: 3568600
+    40m: 7038600
+    30m: 10138700
+    20m: 14095600
+    17m: 18104600
+    15m: 21094600
+    12m: 24924600
+    10m: 28124600
+    6m: 50293000
+    2m: 144489000
+  PSK31:
+    160m: 1838000
+    80m: 3580000
+    40m: 7070000
+    30m: 10142000
+    20m: 14070000
+    17m: 18097000
+    15m: 21080000
+    12m: 24920000
+    10m: 28120000
+  RTTY:
+    160m: 1838000
+    80m: 3590000
+    40m: 7043000
+    30m: 10143000
+    20m: 14080000
+    17m: 18105000
+    15m: 21080000
+    12m: 24925000
+    10m: 28080000
+  Olivia:
+    160m: 1838000
+    80m: 3583000
+    40m: 7072000
+    30m: 10141000
+    20m: 14077000
+    17m: 18103000
+    15m: 21086000
+    12m: 24921000
+    10m: 28076000
+  MT63:
+    160m: 1807000
+    80m: 3585000
+    40m: 7035000
+    30m: 10137000
+    20m: 14109000
+    17m: 18100000
+    15m: 21070000
+    12m: 24920000
+    10m: 28130000
+  JS8Call:
+    160m: 1842000
+    80m: 3578000
+    40m: 7078000
+    30m: 10130000
+    20m: 14078000
+    17m: 18104000
+    15m: 21078000
+    12m: 24922000
+    10m: 28078000
+  # Note: the source "preferred frequencies" table printed FT8 160m as 1.940 MHz,
+  # which is an apparent typo; the globally-used FT8 160m dial is 1.840 MHz (used
+  # above), consistent with the IARU R3 band plan footnote.
+
+regions:
+  "1":
+    name: "IARU Region 1 (Europe, Africa, Middle East, Northern Asia)"
+    source: "IARU R1 HF Band Plan (eff. 16 Oct 2020) + IARU R1 VHF/UHF/Microwave Band Plan"
+    source_url: "https://www.iaru-r1.org/wp-content/uploads/2019/08/hf_r1_bandplan.pdf"
+    bands:
+      160m:
+        edges_hz: [1810000, 2000000]
+        cw_hz: [1810000, 1838000]
+        digital_hz: [1838000, 1843000]
+      80m:
+        edges_hz: [3500000, 3800000]
+        cw_hz: [3500000, 3570000]
+        digital_hz: [3570000, 3600000]
+        auto_data_hz: [3590000, 3600000]
+      60m:
+        edges_hz: [5351500, 5366500]
+        cw_hz: [5351500, 5354000]
+        digital_hz: [5351500, 5354000]
+      40m:
+        edges_hz: [7000000, 7200000]
+        cw_hz: [7000000, 7040000]
+        digital_hz: [7040000, 7053000]
+        auto_data_hz: [7047000, 7050000]
+      30m:
+        edges_hz: [10100000, 10150000]
+        cw_hz: [10100000, 10130000]
+        digital_hz: [10130000, 10150000]
+      20m:
+        edges_hz: [14000000, 14350000]
+        cw_hz: [14000000, 14070000]
+        digital_hz: [14070000, 14099000]
+        auto_data_hz: [14089000, 14099000]
+      17m:
+        edges_hz: [18068000, 18168000]
+        cw_hz: [18068000, 18095000]
+        digital_hz: [18095000, 18109000]
+        auto_data_hz: [18105000, 18109000]
+      15m:
+        edges_hz: [21000000, 21450000]
+        cw_hz: [21000000, 21070000]
+        digital_hz: [21070000, 21110000]
+        auto_data_hz: [21090000, 21110000]
+      12m:
+        edges_hz: [24890000, 24990000]
+        cw_hz: [24890000, 24915000]
+        digital_hz: [24915000, 24929000]
+        auto_data_hz: [24925000, 24929000]
+      10m:
+        edges_hz: [28000000, 29700000]
+        cw_hz: [28000000, 28070000]
+        digital_hz: [28070000, 28190000]
+        auto_data_hz: [28120000, 28150000]
+      # VHF/UHF from the IARU R1 VHF/UHF/Microwave Band Plan.
+      6m:
+        edges_hz: [50000000, 52000000]
+        cw_hz: [50000000, 50100000]
+        digital_hz: [50100000, 50500000]
+      2m:
+        edges_hz: [144000000, 146000000]
+        cw_hz: [144000000, 144150000]
+        digital_hz: [144035000, 144400000]
+      70cm:
+        edges_hz: [430000000, 440000000]
+        cw_hz: [432000000, 432100000]
+        digital_hz: [432000000, 432400000]
+
+  "2":
+    name: "IARU Region 2 (Americas)"
+    source: "ARRL Considerate Operator's Frequency Guide (QST, Nov 2013) + ARRL band plan (VHF/UHF), US usage"
+    source_url: "https://www.iaru-r2.org/wp-content/uploads/2020/02/IARU-Region-2-Band-plan.pdf"
+    bands:
+      160m:
+        edges_hz: [1800000, 2000000]
+        cw_hz: [1800000, 2000000]
+        digital_hz: [1800000, 1810000]
+      80m:
+        edges_hz: [3500000, 4000000]
+        cw_hz: [3500000, 3600000]
+        digital_hz: [3570000, 3600000]
+        auto_data_hz: [3585000, 3600000]
+      40m:
+        edges_hz: [7000000, 7300000]
+        cw_hz: [7000000, 7125000]
+        digital_hz: [7070000, 7125000]
+        auto_data_hz: [7100000, 7105000]
+      30m:
+        edges_hz: [10100000, 10150000]
+        cw_hz: [10100000, 10130000]
+        digital_hz: [10130000, 10140000]
+        auto_data_hz: [10140000, 10150000]
+      20m:
+        edges_hz: [14000000, 14350000]
+        cw_hz: [14000000, 14150000]
+        digital_hz: [14070000, 14095000]
+        auto_data_hz: [14095000, 14099500]
+      17m:
+        edges_hz: [18068000, 18168000]
+        cw_hz: [18068000, 18110000]
+        digital_hz: [18100000, 18105000]
+        auto_data_hz: [18105000, 18110000]
+      15m:
+        edges_hz: [21000000, 21450000]
+        cw_hz: [21000000, 21200000]
+        digital_hz: [21070000, 21110000]
+        auto_data_hz: [21090000, 21100000]
+      12m:
+        edges_hz: [24890000, 24990000]
+        cw_hz: [24890000, 24930000]
+        digital_hz: [24920000, 24925000]
+        auto_data_hz: [24925000, 24930000]
+      10m:
+        edges_hz: [28000000, 29700000]
+        cw_hz: [28000000, 28300000]
+        digital_hz: [28070000, 28120000]
+        auto_data_hz: [28120000, 28189000]
+      # VHF/UHF from the ARRL band plan (US weak-signal / digital segments).
+      6m:
+        edges_hz: [50000000, 54000000]
+        cw_hz: [50000000, 50100000]
+        digital_hz: [50100000, 50400000]
+      2m:
+        edges_hz: [144000000, 148000000]
+        cw_hz: [144000000, 144100000]
+        digital_hz: [144100000, 144275000]
+      70cm:
+        edges_hz: [420000000, 450000000]
+        cw_hz: [432000000, 432100000]
+        digital_hz: [432000000, 432400000]
+
+  "3":
+    name: "IARU Region 3 (Asia-Pacific)"
+    source: "IARU R3 Interim Band Plan, doc R3-004, rev. 3 Sep 2019"
+    source_url: "https://www.iaru.org/wp-content/uploads/2020/01/R3-004-IARU-Region-3-Bandplan-rev.2.pdf"
+    bands:
+      160m:
+        edges_hz: [1800000, 2000000]
+        cw_hz: [1800000, 1840000]
+        digital_hz: [1830000, 1840000]
+      80m:
+        edges_hz: [3500000, 3900000]
+        cw_hz: [3500000, 3535000]
+        digital_hz: [3535000, 3600000]
+      40m:
+        edges_hz: [7000000, 7200000]
+        cw_hz: [7000000, 7030000]
+        digital_hz: [7030000, 7060000]
+      30m:
+        edges_hz: [10100000, 10150000]
+        cw_hz: [10100000, 10130000]
+        digital_hz: [10130000, 10150000]
+      20m:
+        edges_hz: [14000000, 14350000]
+        cw_hz: [14000000, 14070000]
+        digital_hz: [14070000, 14112000]
+      17m:
+        edges_hz: [18068000, 18168000]
+        cw_hz: [18068000, 18095000]
+        digital_hz: [18095000, 18110000]
+      15m:
+        edges_hz: [21000000, 21450000]
+        cw_hz: [21000000, 21070000]
+        digital_hz: [21070000, 21125000]
+      12m:
+        edges_hz: [24890000, 24990000]
+        cw_hz: [24890000, 24915000]
+        digital_hz: [24915000, 24940000]
+      10m:
+        edges_hz: [28000000, 29700000]
+        cw_hz: [28000000, 28070000]
+        digital_hz: [28070000, 28190000]
+      6m:
+        edges_hz: [50000000, 54000000]
+        cw_hz: [50000000, 50100000]
+        digital_hz: [50100000, 50500000]
+      2m:
+        edges_hz: [144000000, 148000000]
+        cw_hz: [144025000, 144035000]
+        digital_hz: [144000000, 144035000]
+      70cm:
+        edges_hz: [430000000, 440000000]
+        cw_hz: [431900000, 432240000]
+        digital_hz: [431900000, 432240000]

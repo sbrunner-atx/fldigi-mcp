@@ -1,0 +1,93 @@
+{
+  "manifest_version": "0.4",
+  "name": "fldigi-mcp",
+  "display_name": "fldigi (Amateur Radio)",
+  "version": "0.1.0",
+  "description": "Control the fldigi amateur-radio digital-modem application from Claude.",
+  "long_description": "Connects to fldigi's built-in XML-RPC interface and exposes the full API as a small set of logically-grouped tools. Read and control the modem, frequency, rig (CAT), logbook, and transmitter through plain language. Safe by default: the operator callsign is the single transmit gate, so with no callsign set the station is receive-only and nothing can key the radio. Includes an optional, experimental, region-aware Band Guidance feature that suggests calling frequencies and warns about out-of-segment operation (advisory only, never a hard lock).",
+  "author": {
+    "name": "Stefan Brunner (AE5VG)",
+    "email": "me@stefanbrunner.org",
+    "url": "https://github.com/sbrunner-atx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sbrunner-atx/fldigi-mcp.git"
+  },
+  "homepage": "https://github.com/sbrunner-atx/fldigi-mcp",
+  "documentation": "https://github.com/sbrunner-atx/fldigi-mcp#readme",
+  "support": "https://github.com/sbrunner-atx/fldigi-mcp/issues",
+  "license": "MIT",
+  "keywords": ["fldigi", "ham radio", "amateur radio", "mcp", "xmlrpc", "digital modes"],
+  "server": {
+    "type": "uv",
+    "entry_point": "src/fldigi_mcp/server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "fldigi-mcp"],
+      "env": {
+        "FLDIGI_CALLSIGN": "${user_config.callsign}",
+        "FLDIGI_HOST": "${user_config.fldigi_host}",
+        "FLDIGI_PORT": "${user_config.fldigi_port}",
+        "FLDIGI_BAND_GUIDANCE": "${user_config.band_guidance}",
+        "FLDIGI_REGION": "${user_config.region}"
+      }
+    }
+  },
+  "tools": [
+    { "name": "status", "description": "Snapshot of version, mode, frequency, T/R, callsign, band." },
+    { "name": "application", "description": "fldigi program info and launch/stop the process." },
+    { "name": "modem", "description": "Operating mode (Op Mode) and modem settings." },
+    { "name": "frequency", "description": "Dial frequency and waterfall sideband." },
+    { "name": "controls", "description": "AFC, SQL, Rev, Lock, RxID, TxID, and status fields." },
+    { "name": "transmit", "description": "T/R, Tune, abort, macros, send text (callsign-gated)." },
+    { "name": "rig", "description": "Rig (CAT) control: mode, frequency, bandwidth, notch, QSY." },
+    { "name": "log", "description": "Logbook / contest fields and ADIF records." },
+    { "name": "text", "description": "RX/TX text and data streams." },
+    { "name": "spot", "description": "Spotting / PSK Reporter." },
+    { "name": "wefax", "description": "WEFAX (weather fax) mode." },
+    { "name": "navtex", "description": "NAVTEX / SitorB mode." },
+    { "name": "band_guidance", "description": "Advisory band/watering-hole help (experimental)." },
+    { "name": "fldigi_call", "description": "Escape hatch: call any fldigi XML-RPC method by name." }
+  ],
+  "tools_generated": false,
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  },
+  "user_config": {
+    "callsign": {
+      "type": "string",
+      "title": "Callsign",
+      "description": "Your amateur radio callsign. Required to enable transmit; leave blank to keep the station receive-only. Any value is accepted (club, event, vanity, portable, international).",
+      "required": false
+    },
+    "band_guidance": {
+      "type": "boolean",
+      "title": "Band Guidance (experimental)",
+      "description": "Suggest a mode's calling frequency and warn when a frequency is outside the digital band segment. Advisory only — never changes anything on its own.",
+      "default": false
+    },
+    "region": {
+      "type": "string",
+      "title": "IARU Region",
+      "description": "Your IARU region for Band Guidance: 1 (Europe/Africa), 2 (Americas), 3 (Asia-Pacific).",
+      "default": "2"
+    },
+    "fldigi_host": {
+      "type": "string",
+      "title": "fldigi host",
+      "description": "Host where fldigi runs. Leave as 127.0.0.1 unless fldigi is on another computer.",
+      "default": "127.0.0.1"
+    },
+    "fldigi_port": {
+      "type": "number",
+      "title": "fldigi port",
+      "description": "fldigi XML-RPC port (default 7362).",
+      "default": 7362
+    }
+  }
+}

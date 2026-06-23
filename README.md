@@ -14,6 +14,26 @@ transmitter through plain language.
 > **Status:** beta. Full API coverage, callsign-gated transmit, and an optional
 > experimental Band Guidance feature. Tested against fldigi 4.2.x.
 
+## 📻 A field-tested fldigi XML-RPC API reference (free community resource)
+
+Building this server meant mapping fldigi's entire XML-RPC interface and
+**verifying every method against a live build** — so we've written it all up and
+are sharing it freely, whether or not you ever use this MCP server:
+
+- **[docs/FLDIGI-API.md](docs/FLDIGI-API.md)** — a clean, complete, human-readable
+  reference organized by namespace, with transport details, types, worked
+  examples, a transmit-safety section, and field-tested gotchas.
+- **[docs/FLDIGI-API.pdf](docs/FLDIGI-API.pdf)** — the same, as a printable PDF.
+- **[docs/FLDIGI-API-SPEC.md](docs/FLDIGI-API-SPEC.md)** — a terse,
+  machine-readable catalog of all **174 methods** (args, return type,
+  read/write/keying).
+
+Verified live against **fldigi 4.2.11** via `fldigi.list`. It's more complete and
+current than the public wiki (it documents methods the wiki omits, e.g. `TxID`,
+and flags deprecated ones). **Independent project — not affiliated with the
+fldigi / W1HKJ project.** Corrections welcome via
+[issues / PRs](https://github.com/sbrunner-atx/fldigi-mcp/issues).
+
 ## Highlights
 
 - **Complete control** — every documented XML-RPC method is reachable, grouped

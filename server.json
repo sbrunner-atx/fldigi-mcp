@@ -1,0 +1,61 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.sbrunner-atx/fldigi-mcp",
+  "description": "Control fldigi (amateur-radio digital modes) over XML-RPC: modem, frequency, rig, log, transmit.",
+  "repository": {
+    "url": "https://github.com/sbrunner-atx/fldigi-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "fldigi-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "FLDIGI_CALLSIGN",
+          "description": "Operator callsign. Required to enable transmit; leave blank to stay receive-only.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string"
+        },
+        {
+          "name": "FLDIGI_HOST",
+          "description": "fldigi XML-RPC host.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": "127.0.0.1"
+        },
+        {
+          "name": "FLDIGI_PORT",
+          "description": "fldigi XML-RPC port.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": "7362"
+        },
+        {
+          "name": "FLDIGI_BAND_GUIDANCE",
+          "description": "Enable experimental advisory band guidance (on/off).",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": "off"
+        },
+        {
+          "name": "FLDIGI_REGION",
+          "description": "IARU region for band guidance: 1, 2, or 3.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string",
+          "default": "2"
+        }
+      ]
+    }
+  ]
+}

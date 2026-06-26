@@ -1,6 +1,6 @@
 [project]
 name = "fldigi-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "An MCP server for controlling the fldigi digital-modem application over XML-RPC."
 readme = "README.md"
 license = { text = "MIT" }

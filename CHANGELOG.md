@@ -7,7 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-26
+
+### Added
+- New read-only **`diagnostics`** tool: reports the resolved `FLDIGI_HOST`/
+  `FLDIGI_PORT`, transmit-gate state, this process's Python/hostname, and the
+  host's network interfaces — **without connecting to fldigi** — so you can tell
+  whether the connector can even see the target's network (host-side vs.
+  sandboxed).
+
 ### Changed
+- **Structured connection errors.** When fldigi can't be reached, the message now
+  carries `target=host:port`, the symbolic `errno`
+  (`ETIMEDOUT`/`EHOSTUNREACH`/`ENETUNREACH`/`ECONNREFUSED`/`ENOTFOUND`), the
+  process hostname, and the IPv4 addresses seen — and, for a **non-loopback**
+  host, a pointer to the [mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge)
+  fix. Post-connect XML-RPC faults keep their own message.
 - Docs: when fldigi runs on another computer and a **sandboxed** MCP client (e.g.
   Claude Desktop) can only reach loopback, point users to the standalone
   [mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge) relay
@@ -43,5 +58,6 @@ Initial release.
   GitHub Actions CI workflow running ruff and pytest on Python 3.10–3.12.
 - Documentation: README, installation & safety model, and Band Guidance design.
 
-[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/sbrunner-atx/fldigi-mcp/releases/tag/v0.1.0

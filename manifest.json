@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "fldigi-mcp",
   "display_name": "fldigi (Amateur Radio)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Control the fldigi amateur-radio digital-modem application from Claude.",
   "long_description": "Connects to fldigi's built-in XML-RPC interface and exposes the full API as a small set of logically-grouped tools. Read and control the modem, frequency, rig (CAT), logbook, and transmitter through plain language. Safe by default: the operator callsign is the single transmit gate, so with no callsign set the station is receive-only and nothing can key the radio. Includes an optional, experimental, region-aware Band Guidance feature that suggests calling frequencies and warns about out-of-segment operation (advisory only, never a hard lock).",
   "author": {
@@ -37,6 +37,7 @@
   },
   "tools": [
     { "name": "status", "description": "Snapshot of version, mode, frequency, T/R, callsign, band." },
+    { "name": "diagnostics", "description": "Host/network diagnostics for connectivity troubleshooting (no fldigi connection)." },
     { "name": "application", "description": "fldigi program info and launch/stop the process." },
     { "name": "modem", "description": "Operating mode (Op Mode) and modem settings." },
     { "name": "frequency", "description": "Dial frequency and waterfall sideband." },

@@ -5,4 +5,4 @@ interface and presents it to MCP clients (Claude Desktop, the MCP Inspector,
 etc.) as a set of tools.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

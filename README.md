@@ -120,6 +120,7 @@ the mode" is a single permission regardless of which underlying method runs.
 | Tool | Controls (fldigi area) |
 | --- | --- |
 | `status` | quick snapshot: version, mode, frequency, T/R, callsign, band |
+| `diagnostics` | host/network info for connectivity troubleshooting (no fldigi connection) |
 | `application` | program info + launch/stop the fldigi process (`fldigi.*`) |
 | `modem` | Op Mode / modem select, carrier, bandwidth, AFC range, Olivia |
 | `frequency` | dial frequency and waterfall sideband |

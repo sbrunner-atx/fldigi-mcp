@@ -19,13 +19,14 @@ with advisory suggestions; it never blocks or changes anything on its own.
 from __future__ import annotations
 
 import os
+import sys
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from fldigi_mcp import methods
+from fldigi_mcp import diag, methods
 from fldigi_mcp.bandplan import BandPlan, mode_category
-from fldigi_mcp.client import Fldigi
+from fldigi_mcp.client import Fldigi, _is_loopback
 from fldigi_mcp.config import Config
 from fldigi_mcp.methods import KEYING_METHODS, resolve
 from fldigi_mcp.process import FldigiProcess
@@ -86,6 +87,41 @@ def status() -> dict:
     if _bandplan is not None:
         snapshot["band"] = _bandplan.band_for(freq)
     return snapshot
+
+
+# --- Diagnostics (read, no fldigi connection) --------------------------------
+
+
+@mcp.tool()
+def diagnostics() -> dict:
+    """Host + network diagnostics for troubleshooting connectivity.
+
+    Does NOT connect to fldigi. Reports the resolved FLDIGI_HOST/PORT, this
+    process's Python and hostname, the transmit-gate state, and the host's
+    network interfaces — so you can tell whether the process can even see the
+    target's network (e.g. when running host-side vs. sandboxed). If a non-
+    loopback host times out, see mcp-host-bridge (docs/INSTALL.md).
+    """
+    net = diag.network_interfaces()
+    return {
+        "fldigi_host": config.host,
+        "fldigi_port": config.port,
+        "resolved_target": f"{config.host}:{config.port}",
+        "host_is_loopback": _is_loopback(config.host),
+        "callsign": config.callsign or None,
+        "transmit_ready": config.transmit_ready,
+        "band_guidance": config.band_guidance,
+        "region": config.region,
+        "python_executable": sys.executable,
+        "python_version": sys.version.split()[0],
+        "platform": sys.platform,
+        "hostname": net["hostname"],
+        "fqdn": net["fqdn"],
+        "primary_outbound_ip": net["primary_outbound_ip"],
+        "interface_command": net["interface_command"],
+        "ipv4_addresses": net["ipv4_addresses"],
+        "interfaces_raw": net["interfaces_raw"],
+    }
 
 
 # --- Grouped tools -----------------------------------------------------------

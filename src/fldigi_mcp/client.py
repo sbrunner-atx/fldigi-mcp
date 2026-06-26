@@ -16,8 +16,16 @@ from __future__ import annotations
 import os
 import xmlrpc.client
 
+from fldigi_mcp import diag
+
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 7362
+
+_LOOPBACK = {"127.0.0.1", "::1", "localhost"}
+
+
+def _is_loopback(host: str) -> bool:
+    return host.strip().lower() in _LOOPBACK
 
 
 class FldigiError(RuntimeError):
@@ -42,13 +50,29 @@ class Fldigi:
         self._proxy = xmlrpc.client.ServerProxy(self.url, allow_none=True)
 
     def _guard(self, call, *args):
-        """Invoke an RPC call, translating low-level errors into FldigiError."""
+        """Invoke an RPC call, translating low-level errors into FldigiError.
+
+        ``OSError`` (incl. ``ConnectionRefusedError`` and ``socket.gaierror``)
+        means we could not *reach* fldigi, so we raise a structured message with
+        host/network detail (see :mod:`fldigi_mcp.diag`) plus, for a non-loopback
+        host, a pointer to mcp-host-bridge. ``xmlrpc.client.Fault`` is a
+        *post-connect* fault (fldigi got the call and rejected it), so it keeps
+        its own message.
+        """
         try:
             return call(*args)
-        except ConnectionRefusedError as exc:
-            raise FldigiError(f"Could not reach fldigi at {self.url}. Is fldigi running?") from exc
         except OSError as exc:
-            raise FldigiError(f"Network error talking to fldigi: {exc}") from exc
+            msg = diag.connection_error(self.host, self.port, exc)
+            if not _is_loopback(self.host):
+                msg += (
+                    " | If this host cannot reach the target (e.g. a sandboxed MCP "
+                    "client that only reaches loopback), run the standalone "
+                    f"mcp-host-bridge on this machine — `mcp-host-bridge install fldigi "
+                    f"--to {self.host}` — and set FLDIGI_HOST to 127.0.0.1. See "
+                    "https://github.com/sbrunner-atx/mcp-host-bridge and docs/INSTALL.md. "
+                    "Run the `diagnostics` tool for host/network detail."
+                )
+            raise FldigiError(msg) from exc
         except xmlrpc.client.Fault as exc:
             raise FldigiError(f"fldigi rejected the call: {exc.faultString}") from exc
 

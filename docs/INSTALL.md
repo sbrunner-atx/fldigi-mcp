@@ -83,10 +83,21 @@ received?"*.
 
 If fldigi runs on a different PC (common in contest stations):
 
-1. In the extension's settings, set **fldigi host** to that computer's address
-   (e.g. `192.168.1.50`).
-2. On the fldigi computer, start fldigi with
+1. On the fldigi computer, start fldigi with
    `--xmlrpc-server-address 0.0.0.0` so it accepts connections.
+2. In the extension's settings, set **fldigi host** to that computer's address
+   (e.g. `192.168.1.50`).
+
+**If the host times out (Claude Desktop and similar sandboxed clients):** the
+connector can only reach `127.0.0.1`, not LAN addresses, so the correct LAN IP
+fails even though `telnet` to it works. Install the small
+[mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge) relay on the
+computer running Claude (it knows `fldigi` = 7362), then set **fldigi host =
+`127.0.0.1`**:
+
+```
+mcp-host-bridge install fldigi --to 192.168.1.50
+```
 
 Keep this on a trusted home/club network — the connection is not encrypted.
 

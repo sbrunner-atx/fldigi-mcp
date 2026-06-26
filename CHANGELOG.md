@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Docs: when fldigi runs on another computer and a **sandboxed** MCP client (e.g.
+  Claude Desktop) can only reach loopback, point users to the standalone
+  [mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge) relay
+  (`mcp-host-bridge install fldigi --to <ip>`, then `FLDIGI_HOST=127.0.0.1`).
+
 ## [0.1.0] - 2026-06-22
 
 Initial release.

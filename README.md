@@ -179,6 +179,21 @@ fldigi need not run on the same machine. Point the server at it with
 be kept on a trusted LAN or tunneled over SSH (the XML-RPC interface is
 unauthenticated).
 
+**Sandboxed MCP clients (e.g. Claude Desktop):** the client runs the connector
+**sandboxed so it can only reach `127.0.0.1`, not LAN addresses** — so a correct
+LAN IP for fldigi will time out even though `telnet` to it works. Use the
+standalone [mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge)
+relay on the client computer (it knows `fldigi` = port 7362), then set
+`FLDIGI_HOST=127.0.0.1`:
+
+```
+pipx install mcp-host-bridge             # or download a binary from its releases
+mcp-host-bridge install fldigi --to 192.168.1.50
+```
+
+Manage it with `mcp-host-bridge status fldigi` / `uninstall fldigi`. The same tool
+also bridges N3FJP (for the sibling `contest-mcp`) and any other local service.
+
 ## Development
 
 ```bash

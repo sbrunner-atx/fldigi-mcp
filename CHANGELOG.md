@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`fldigi-operating` agent skill** (`skills/fldigi-operating/SKILL.md`),
+  bundled in the repo and the `.mcpb` package. Distills the TX/RX handoff
+  discipline field-proven at ARRL Field Day 2026: end every over with `^r`
+  via `transmit → send` (never poll the TX buffer), `abort` as the
+  immediate stop, RX-buffer delta polling with the no-echo rule and
+  fldigi-restart detection, and a reference CQ loop. README now has a
+  **Skills** section describing usage.
+- **Operating Skills Field Guide** (`docs/operating-skills-field-guide.pdf`)
+  covering this skill and contest-mcp's `contest-operating`: skills at a
+  glance, TOC, installation, a plain-language "Your first session — Claude
+  for hams" chapter for operators new to AI, the six-rule operating
+  standard, the special-case playbook, and worked examples transcribed from
+  ARRL Field Day 2026. Regenerable HTML/CSS sources under `docs/brand/`
+  (AE5VG personal amateur-radio brand — dark ink, signal amber, Morse
+  wordmark).
+
 ## [0.1.1] - 2026-06-26
 
 ### Added

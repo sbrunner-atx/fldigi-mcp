@@ -195,6 +195,29 @@ mcp-host-bridge install fldigi --to 192.168.1.50
 Manage it with `mcp-host-bridge status fldigi` / `uninstall fldigi`. The same tool
 also bridges N3FJP (for the sibling `contest-mcp`) and any other local service.
 
+## Skills
+
+The [`skills/`](skills/) directory contains agent skills — operating
+procedures distilled from live on-air use — bundled with the repo and the
+`.mcpb` package:
+
+- **[fldigi-operating](skills/fldigi-operating/SKILL.md)** — TX/RX handoff
+  done right (`^r` return-to-receive via `transmit → send`, `abort` as the
+  panic button, never poll the TX buffer), RX-buffer polling discipline
+  (delta reads, the no-echo rule, restart detection), and a reference CQ
+  loop. Field-proven during ARRL Field Day 2026.
+
+The **[Operating Skills Field Guide](docs/operating-skills-field-guide.pdf)**
+(PDF) documents this skill and its companion `contest-operating` from the
+sibling [contest-mcp](https://github.com/sbrunner-atx/contest-mcp) — skills
+at a glance, installation, a plain-language "Your first session — Claude for
+hams" chapter for operators new to AI, the operating standard, the
+special-case playbook, and worked examples transcribed from ARRL Field Day
+2026.
+
+To use with Claude Code / Cowork, copy the skill directory into your
+`~/.claude/skills/` (or a project's `.claude/skills/`).
+
 ## Development
 
 ```bash

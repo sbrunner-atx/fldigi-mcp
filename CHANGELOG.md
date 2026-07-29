@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-07-29
+
+### Fixed
+- Field guide: coherent pseudonymization of garbled callsign fragments in
+  the worked-example transcripts (fragments are now fragments of the
+  sample calls, not of any real callsign).
+
 ## [0.1.2] - 2026-07-29
 
 ### Added
@@ -77,7 +84,8 @@ Initial release.
   GitHub Actions CI workflow running ruff and pytest on Python 3.10–3.12.
 - Documentation: README, installation & safety model, and Band Guidance design.
 
-[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/sbrunner-atx/fldigi-mcp/releases/tag/v0.1.0

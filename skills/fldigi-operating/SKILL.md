@@ -88,7 +88,7 @@ loop:
   poll controls → get_trx_status until "rx"
   listen ~10 s (1–2 polls of text → rx_length)
   if new RX text contains a plausible callsign:
-      work the station (see contest-operating skill in contest-mcp
+      work the station (see contest-operating skill in n3fjp-mcp
       for the full exchange state machine)
   else:
       goto loop

@@ -193,7 +193,7 @@ mcp-host-bridge install fldigi --to 192.168.1.50
 ```
 
 Manage it with `mcp-host-bridge status fldigi` / `uninstall fldigi`. The same tool
-also bridges N3FJP (for the sibling `contest-mcp`) and any other local service.
+also bridges N3FJP (for the sibling `n3fjp-mcp`) and any other local service.
 
 ## Skills
 
@@ -209,7 +209,7 @@ procedures distilled from live on-air use — bundled with the repo and the
 
 The **[Operating Skills Field Guide](docs/operating-skills-field-guide.pdf)**
 (PDF) documents this skill and its companion `contest-operating` from the
-sibling [contest-mcp](https://github.com/sbrunner-atx/contest-mcp) — skills
+sibling [n3fjp-mcp](https://github.com/sbrunner-atx/n3fjp-mcp) — skills
 at a glance, installation, a plain-language "Your first session — Claude for
 hams" chapter for operators new to AI, the operating standard, the
 special-case playbook, and worked examples transcribed from ARRL Field Day

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Docs: updated references to the sibling logging project, which was **renamed
+  `contest-mcp` → `n3fjp-mcp`** (README, the Operating Skills Field Guide, and the
+  `fldigi-operating` skill). No code changes.
+
 ## [0.1.3] - 2026-07-29
 
 ### Fixed
@@ -25,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   fldigi-restart detection, and a reference CQ loop. README now has a
   **Skills** section describing usage.
 - **Operating Skills Field Guide** (`docs/operating-skills-field-guide.pdf`)
-  covering this skill and contest-mcp's `contest-operating`: skills at a
+  covering this skill and n3fjp-mcp's `contest-operating`: skills at a
   glance, TOC, installation, a plain-language "Your first session — Claude
   for hams" chapter for operators new to AI, the six-rule operating
   standard, the special-case playbook, and worked examples transcribed from

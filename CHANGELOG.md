@@ -7,10 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-07-31
+
 ### Changed
 - Docs: updated references to the sibling logging project, which was **renamed
   `contest-mcp` → `n3fjp-mcp`** (README, the Operating Skills Field Guide, and the
   `fldigi-operating` skill). No code changes.
+- **Regenerated the compiled Operating Skills Field Guide PDF**
+  (`docs/operating-skills-field-guide.pdf`, shipped inside the `.mcpb`) from the
+  corrected HTML so it no longer carries stale `contest-mcp` references — a text
+  rename can't touch the binary. 0 `contest-mcp` refs remain.
+
+### Added
+- CI: a `release.yml` workflow that publishes to PyPI via **Trusted Publishing
+  (OIDC)** on GitHub Release — no API tokens.
 
 ## [0.1.3] - 2026-07-29
 
@@ -89,7 +99,8 @@ Initial release.
   GitHub Actions CI workflow running ruff and pytest on Python 3.10–3.12.
 - Documentation: README, installation & safety model, and Band Guidance design.
 
-[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.0...v0.1.1

@@ -49,6 +49,16 @@ docs/           # design & safety documentation
 - **Band-plan data needs a cited, dated source.** No guessed frequencies; add a
   `source` to `band_plans.yaml` and keep the validation passing.
 
+## When fldigi releases a new version
+
+1. Run the new build and `uv run python scripts/refresh_method_catalog.py` (it
+   reads `fldigi.list` and rewrites `src/fldigi_mcp/data/fldigi_methods.json`).
+2. `uv run pytest`. `tests/test_coverage.py` names every new method that has no
+   operation yet and every operation whose argument kind no longer matches.
+3. Wire the new methods into the right group in `methods.py` (or `LEGACY_OPS` if
+   fldigi marks them deprecated), update the tool docstring, the README tool
+   table, `docs/FLDIGI-API-SPEC.md`, and the supported-release line in the README.
+
 ## Building the desktop extension (.mcpb)
 
 ```bash

@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-09-09
+
+### Added
+- **Full catalog coverage.** Every one of fldigi's 174 XML-RPC methods is now
+  reachable through a named operation. New tools `flmsg` (online, available,
+  transfer, squelch, get_data), `io` (in_use, enable_kiss, enable_arq) and
+  `legacy` (the 14 deprecated methods and the `main.flmsg_*` aliases, each with
+  its current equivalent named). New operations: `modem` get_io_names; `transmit`
+  tx_timing, char_rates, char_timing; `rig` set_smeter, set_pwrmeter; `text`
+  get_rx (value=[start, length]) and add_tx_bytes; `log` set contest_counter.
+- `tests/test_coverage.py` and the shipped catalog
+  `src/fldigi_mcp/data/fldigi_methods.json` (the `fldigi.list` output of 4.2.13):
+  the suite fails if a catalog method has no operation, if an operation targets a
+  method fldigi does not serve, or if an argument kind disagrees with fldigi's
+  signature. `scripts/refresh_method_catalog.py` regenerates the catalog.
+- New argument kinds: `6` (base64 bytes) and two-argument `ii` / `si`.
+
+### Fixed
+- **Array parameters.** `rig.set_modes` and `rig.set_bandwidths` were spread into
+  positional strings, which fldigi answers with `type error`; they are now sent as
+  one XML-RPC array. `wefax.send_file` now takes `[filename, timeout]` per its
+  `s:si` signature.
+- **`rig` `take_control` / `release_control` removed**: no fldigi 4.2.x build serves
+  those methods; the calls could never succeed.
+- `main.get_tx_timing` / `main.get_char_timing` are called with the base64
+  parameter the live build actually accepts (its `fldigi.list` signature is wrong).
+- `application` `launch` picks the newest installed fldigi by version number
+  (4.2.13 over 4.2.9), not by string order.
+
+### Changed
+- Supported fldigi release is **4.2.13**, verified live 2026-09-09; the XML-RPC
+  surface is identical to 4.2.11. Docs updated (README, FLDIGI-API.md gotchas
+  11 to 15, FLDIGI-API-SPEC.md rows for the timing and array methods).
+
 ## [0.1.5] - 2026-09-09
 
 ### Fixed

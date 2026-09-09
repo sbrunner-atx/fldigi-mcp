@@ -5,7 +5,7 @@ built into [fldigi](https://www.w1hkj.org/). Every method below was enumerated
 **live** from a running instance via `fldigi.list`, so it reflects what the
 software actually exposes — not just what the wiki documents.
 
-> **Tested against:** `fldigi 4.2.11` — **174 methods** enumerated via
+> **Tested against:** `fldigi 4.2.13` (2026-09-09; identical to `4.2.11`, 2026-06-23) — **174 methods** enumerated via
 > `fldigi.list` / `fldigi.name_version` on 2026-06-23. Newer or older builds may
 > add or remove methods — always call `fldigi.list` to confirm what *your* build
 > supports. A terse, machine-readable catalog of all 174 is in
@@ -38,7 +38,7 @@ Minimal client (Python standard library — no third-party packages):
 import xmlrpc.client
 fldigi = xmlrpc.client.ServerProxy("http://127.0.0.1:7362/", allow_none=True)
 
-print(fldigi.fldigi.name_version())     # 'fldigi 4.2.11'
+print(fldigi.fldigi.name_version())     # 'fldigi 4.2.13'
 print(fldigi.main.get_trx_status())     # 'rx' | 'tx' | 'tune'
 fldigi.modem.set_by_name("BPSK31")
 fldigi.main.set_frequency(14070000.0)   # Hz, as a float
@@ -71,7 +71,7 @@ nothing and takes a string.
 | Method | Sig | Description |
 | --- | --- | --- |
 | `fldigi.list` | `A:n` | Array of `{name, signature, help}` structs — every method this build exposes. **Start here.** |
-| `fldigi.name_version` | `s:n` | Program name + version, e.g. `fldigi 4.2.11`. |
+| `fldigi.name_version` | `s:n` | Program name + version, e.g. `fldigi 4.2.13`. |
 | `fldigi.version` | `s:n` | Version string only. |
 | `fldigi.version_struct` | `S:n` | Version as a struct (major/minor/patch). |
 | `fldigi.name` | `s:n` | Program name. |
@@ -327,7 +327,7 @@ Practical guidance:
 
 ## 14. Field-tested notes & gotchas
 
-Things that bit us (or surprised us) verifying against fldigi 4.2.11:
+Things that bit us (or surprised us) verifying against fldigi 4.2.13:
 
 1. **Binary returns are base64, not plain strings.** Anything with signature
    `6:` (e.g. `text.get_rx`, `rx.get_data`) comes back as `xmlrpc.client.Binary`
@@ -341,7 +341,7 @@ Things that bit us (or surprised us) verifying against fldigi 4.2.11:
 4. **Setters return the *old* value.** `set_*` typically returns the previous
    value, and `toggle_*` returns the *new* one — don't mistake the old value for
    a failure.
-5. **This build exposes more than the public wiki.** Present in 4.2.11 but absent
+5. **This build exposes more than the public wiki.** Present in 4.2.11 and 4.2.13 but absent
    from the older
    [wiki](https://sourceforge.net/p/fldigi/wiki/api_for_xmlrpc_socket_services/):
    `main.{get,set,toggle}_txid` (**TxID**), `main.rx_only` / `main.rx_tx`,
@@ -367,6 +367,21 @@ Things that bit us (or surprised us) verifying against fldigi 4.2.11:
 10. **`fldigi.terminate` bitmask.** The help says "0=options; 1=log; 2=macros";
     in practice these are **bit values** — pass `1` to save options, `2` log,
     `4` macros, OR them together (e.g. `3` = options+log).
+11. **Array parameters are one array.** `rig.set_modes`, `rig.set_bandwidths` and
+    their deprecated `main.set_rig_*` twins (signature `n:A`) take a single
+    XML-RPC array; spreading the list into positional strings returns
+    `type error`. Verified 4.2.13.
+12. **The two timing calls lie about their types.** `main.get_tx_timing` is
+    listed as `n:s` and `main.get_char_timing` as `n:i`, but the live build
+    rejects a string and an int and accepts a **base64** parameter, returning
+    a string `samples : sample rate : seconds`. `main.get_char_rates` can take
+    several seconds to answer. Verified 4.2.13.
+13. **`rig.take_control` / `rig.release_control` do not exist** in any 4.2.x
+    build (they appear in older third-party write-ups). Use `rig.enable_qsy`.
+14. **`fldigi.list` repeats two rows** (`log.set_rst_in`, `log.set_rst_out`), so it
+    reports 176 entries for 174 methods.
+15. **4.2.13 is API-identical to 4.2.11.** Names, signatures and help text match
+    row for row (diffed 2026-09-09). The behavioural notes above hold on both.
 
 ## 15. Worked example — send, then read the reply
 

@@ -1,0 +1,877 @@
+{
+ "fldigi_version": "4.2.13",
+ "verified": "2026-09-09",
+ "note": "fldigi.list output; identical to 4.2.11. The live list has 176 rows because two names are listed twice.",
+ "methods": [
+  {
+   "name": "fldigi.list",
+   "signature": "A:n",
+   "help": "Returns the list of methods."
+  },
+  {
+   "name": "fldigi.name",
+   "signature": "s:n",
+   "help": "Returns the program name."
+  },
+  {
+   "name": "fldigi.version_struct",
+   "signature": "S:n",
+   "help": "Returns the program version as a struct."
+  },
+  {
+   "name": "fldigi.version",
+   "signature": "s:n",
+   "help": "Returns the program version as a string."
+  },
+  {
+   "name": "fldigi.name_version",
+   "signature": "s:n",
+   "help": "Returns the program name and version."
+  },
+  {
+   "name": "fldigi.config_dir",
+   "signature": "s:n",
+   "help": "Returns the name of the configuration directory."
+  },
+  {
+   "name": "fldigi.terminate",
+   "signature": "n:i",
+   "help": "Terminates fldigi. ``i'' is bitmask specifying data to save: 0=options; 1=log; 2=macros."
+  },
+  {
+   "name": "modem.get_mode",
+   "signature": "s:n",
+   "help": "Returns the ADIF mode for the current modem."
+  },
+  {
+   "name": "modem.get_submode",
+   "signature": "s:n",
+   "help": "Returns the ADIF submode for the current modem."
+  },
+  {
+   "name": "modem.get_name",
+   "signature": "s:n",
+   "help": "Returns the name of the current modem."
+  },
+  {
+   "name": "modem.get_io_names",
+   "signature": "A:n",
+   "help": "Returns all usable KISS, ARQ I/O modem names."
+  },
+  {
+   "name": "modem.get_names",
+   "signature": "A:n",
+   "help": "Returns all modem names."
+  },
+  {
+   "name": "modem.get_id",
+   "signature": "i:n",
+   "help": "Returns the ID of the current modem."
+  },
+  {
+   "name": "modem.get_max_id",
+   "signature": "i:n",
+   "help": "Returns the maximum modem ID number."
+  },
+  {
+   "name": "modem.set_by_name",
+   "signature": "s:s",
+   "help": "Sets the current modem. Returns old name."
+  },
+  {
+   "name": "modem.set_by_id",
+   "signature": "i:i",
+   "help": "Sets the current modem. Returns old ID."
+  },
+  {
+   "name": "modem.set_carrier",
+   "signature": "i:i",
+   "help": "Sets modem carrier. Returns old carrier."
+  },
+  {
+   "name": "modem.inc_carrier",
+   "signature": "i:i",
+   "help": "Increments the modem carrier frequency. Returns the new carrier."
+  },
+  {
+   "name": "modem.get_carrier",
+   "signature": "i:n",
+   "help": "Returns the modem carrier frequency."
+  },
+  {
+   "name": "modem.get_afc_search_range",
+   "signature": "i:n",
+   "help": "Returns the modem AFC search range."
+  },
+  {
+   "name": "modem.set_afc_search_range",
+   "signature": "i:i",
+   "help": "Sets the modem AFC search range. Returns the old value."
+  },
+  {
+   "name": "modem.inc_afc_search_range",
+   "signature": "i:i",
+   "help": "Increments the modem AFC search range. Returns the new value."
+  },
+  {
+   "name": "modem.get_bandwidth",
+   "signature": "i:n",
+   "help": "Returns the modem bandwidth."
+  },
+  {
+   "name": "modem.set_bandwidth",
+   "signature": "i:i",
+   "help": "Sets the modem bandwidth. Returns the old value."
+  },
+  {
+   "name": "modem.inc_bandwidth",
+   "signature": "i:i",
+   "help": "Increments the modem bandwidth. Returns the new value."
+  },
+  {
+   "name": "modem.get_quality",
+   "signature": "d:n",
+   "help": "Returns the modem signal quality in the range [0:100]."
+  },
+  {
+   "name": "modem.search_up",
+   "signature": "n:n",
+   "help": "Searches upward in frequency."
+  },
+  {
+   "name": "modem.search_down",
+   "signature": "n:n",
+   "help": "Searches downward in frequency."
+  },
+  {
+   "name": "modem.olivia.set_bandwidth",
+   "signature": "n:i",
+   "help": "Sets the Olivia bandwidth."
+  },
+  {
+   "name": "modem.olivia.get_bandwidth",
+   "signature": "i:n",
+   "help": "Returns the Olivia bandwidth."
+  },
+  {
+   "name": "modem.olivia.set_tones",
+   "signature": "n:i",
+   "help": "Sets the Olivia tones."
+  },
+  {
+   "name": "modem.olivia.get_tones",
+   "signature": "i:n",
+   "help": "Returns the Olivia tones."
+  },
+  {
+   "name": "main.get_status1",
+   "signature": "s:n",
+   "help": "Returns the contents of the first status field (typically s/n)."
+  },
+  {
+   "name": "main.get_status2",
+   "signature": "s:n",
+   "help": "Returns the contents of the second status field."
+  },
+  {
+   "name": "main.get_sideband",
+   "signature": "s:n",
+   "help": "[DEPRECATED; use main.get_wf_sideband and/or rig.get_mode]"
+  },
+  {
+   "name": "main.set_sideband",
+   "signature": "n:s",
+   "help": "[DEPRECATED; use main.set_wf_sideband and/or rig.set_mode]"
+  },
+  {
+   "name": "main.get_wf_sideband",
+   "signature": "s:n",
+   "help": "Returns the current waterfall sideband."
+  },
+  {
+   "name": "main.set_wf_sideband",
+   "signature": "n:s",
+   "help": "Sets the waterfall sideband to USB or LSB."
+  },
+  {
+   "name": "main.get_frequency",
+   "signature": "d:n",
+   "help": "[DEPRECATED; use rig.get_frequency"
+  },
+  {
+   "name": "main.set_frequency",
+   "signature": "d:d",
+   "help": "Sets the RF carrier frequency. Returns the old value."
+  },
+  {
+   "name": "main.inc_frequency",
+   "signature": "d:d",
+   "help": "Increments the RF carrier frequency. Returns the new value."
+  },
+  {
+   "name": "main.get_afc",
+   "signature": "b:n",
+   "help": "Returns the AFC state."
+  },
+  {
+   "name": "main.set_afc",
+   "signature": "b:b",
+   "help": "Sets the AFC state. Returns the old state."
+  },
+  {
+   "name": "main.toggle_afc",
+   "signature": "b:n",
+   "help": "Toggles the AFC state. Returns the new state."
+  },
+  {
+   "name": "main.get_squelch",
+   "signature": "b:n",
+   "help": "Returns the squelch state."
+  },
+  {
+   "name": "main.set_squelch",
+   "signature": "b:b",
+   "help": "Sets the squelch state. Returns the old state."
+  },
+  {
+   "name": "main.toggle_squelch",
+   "signature": "b:n",
+   "help": "Toggles the squelch state. Returns the new state."
+  },
+  {
+   "name": "main.get_squelch_level",
+   "signature": "d:n",
+   "help": "Returns the squelch level."
+  },
+  {
+   "name": "main.set_squelch_level",
+   "signature": "d:d",
+   "help": "Sets the squelch level. Returns the old level."
+  },
+  {
+   "name": "main.inc_squelch_level",
+   "signature": "d:d",
+   "help": "Increments the squelch level. Returns the new level."
+  },
+  {
+   "name": "main.get_reverse",
+   "signature": "b:n",
+   "help": "Returns the Reverse Sideband state."
+  },
+  {
+   "name": "main.set_reverse",
+   "signature": "b:b",
+   "help": "Sets the Reverse Sideband state. Returns the old state."
+  },
+  {
+   "name": "main.toggle_reverse",
+   "signature": "b:n",
+   "help": "Toggles the Reverse Sideband state. Returns the new state."
+  },
+  {
+   "name": "main.get_lock",
+   "signature": "b:n",
+   "help": "Returns the Transmit Lock state."
+  },
+  {
+   "name": "main.set_lock",
+   "signature": "b:b",
+   "help": "Sets the Transmit Lock state. Returns the old state."
+  },
+  {
+   "name": "main.toggle_lock",
+   "signature": "b:n",
+   "help": "Toggles the Transmit Lock state. Returns the new state."
+  },
+  {
+   "name": "main.get_txid",
+   "signature": "b:n",
+   "help": "Returns the TXID state."
+  },
+  {
+   "name": "main.set_txid",
+   "signature": "b:b",
+   "help": "Sets the TXID state. Returns the old state."
+  },
+  {
+   "name": "main.toggle_txid",
+   "signature": "b:n",
+   "help": "Toggles the TXID state. Returns the new state."
+  },
+  {
+   "name": "main.get_rsid",
+   "signature": "b:n",
+   "help": "Returns the RSID state."
+  },
+  {
+   "name": "main.set_rsid",
+   "signature": "b:b",
+   "help": "Sets the RSID state. Returns the old state."
+  },
+  {
+   "name": "main.toggle_rsid",
+   "signature": "b:n",
+   "help": "Toggles the RSID state. Returns the new state."
+  },
+  {
+   "name": "main.get_trx_status",
+   "signature": "s:n",
+   "help": "Returns transmit/tune/receive status."
+  },
+  {
+   "name": "main.tx",
+   "signature": "n:n",
+   "help": "Transmits."
+  },
+  {
+   "name": "main.tune",
+   "signature": "n:n",
+   "help": "Tunes."
+  },
+  {
+   "name": "main.rsid",
+   "signature": "n:n",
+   "help": "[DEPRECATED; use main.{get,set,toggle}_rsid]"
+  },
+  {
+   "name": "main.rx",
+   "signature": "n:n",
+   "help": "Receives."
+  },
+  {
+   "name": "main.rx_tx",
+   "signature": "n:n",
+   "help": "Sets normal Rx/Tx switching."
+  },
+  {
+   "name": "main.rx_only",
+   "signature": "n:n",
+   "help": "Disables Tx."
+  },
+  {
+   "name": "main.abort",
+   "signature": "n:n",
+   "help": "Aborts a transmit or tune."
+  },
+  {
+   "name": "main.get_trx_state",
+   "signature": "s:n",
+   "help": "Returns T/R state."
+  },
+  {
+   "name": "main.get_tx_timing",
+   "signature": "n:s",
+   "help": "Returns transmit duration for test string (samples:sample rate:secs)."
+  },
+  {
+   "name": "main.get_char_rates",
+   "signature": "s:n",
+   "help": "Returns table of char rates."
+  },
+  {
+   "name": "main.get_char_timing",
+   "signature": "n:i",
+   "help": "Input: value of character. Returns transmit duration for specified character (samples:sample rate)."
+  },
+  {
+   "name": "main.set_rig_name",
+   "signature": "n:s",
+   "help": "[DEPRECATED; use rig.set_name]"
+  },
+  {
+   "name": "main.set_rig_frequency",
+   "signature": "d:d",
+   "help": "[DEPRECATED; use rig.set_frequency]"
+  },
+  {
+   "name": "main.set_rig_modes",
+   "signature": "n:A",
+   "help": "[DEPRECATED; use rig.set_modes"
+  },
+  {
+   "name": "main.set_rig_mode",
+   "signature": "n:s",
+   "help": "[DEPRECATED; use rig.set_mode"
+  },
+  {
+   "name": "main.get_rig_modes",
+   "signature": "A:n",
+   "help": "[DEPRECATED; use rig.get_modes]"
+  },
+  {
+   "name": "main.get_rig_mode",
+   "signature": "s:n",
+   "help": "[DEPRECATED; use rig.get_mode]"
+  },
+  {
+   "name": "main.set_rig_bandwidths",
+   "signature": "n:A",
+   "help": "[DEPRECATED; use rig.set_bandwidths]"
+  },
+  {
+   "name": "main.set_rig_bandwidth",
+   "signature": "n:s",
+   "help": "[DEPRECATED; use rig.set_bandwidth]"
+  },
+  {
+   "name": "main.get_rig_bandwidth",
+   "signature": "s:n",
+   "help": "[DEPRECATED; use rig.get_bandwidth]"
+  },
+  {
+   "name": "main.get_rig_bandwidths",
+   "signature": "n:A",
+   "help": "[DEPRECATED; use rig.get_bandwidths]"
+  },
+  {
+   "name": "main.run_macro",
+   "signature": "n:i",
+   "help": "Runs a macro."
+  },
+  {
+   "name": "main.get_max_macro_id",
+   "signature": "i:n",
+   "help": "Returns the maximum macro ID number."
+  },
+  {
+   "name": "rig.set_name",
+   "signature": "n:s",
+   "help": "Sets the rig name for xmlrpc rig"
+  },
+  {
+   "name": "rig.get_name",
+   "signature": "s:n",
+   "help": "Returns the rig name previously set via rig.set_name"
+  },
+  {
+   "name": "rig.set_frequency",
+   "signature": "d:d",
+   "help": "Sets the RF carrier frequency. Returns the old value."
+  },
+  {
+   "name": "rig.set_smeter",
+   "signature": "n:i",
+   "help": "Sets the smeter returns null."
+  },
+  {
+   "name": "rig.set_pwrmeter",
+   "signature": "n:i",
+   "help": "Sets the power meter returns null."
+  },
+  {
+   "name": "rig.set_modes",
+   "signature": "n:A",
+   "help": "Sets the list of available rig modes"
+  },
+  {
+   "name": "rig.set_mode",
+   "signature": "n:s",
+   "help": "Selects a mode previously added by rig.set_modes"
+  },
+  {
+   "name": "rig.get_modes",
+   "signature": "A:n",
+   "help": "Returns the list of available rig modes"
+  },
+  {
+   "name": "rig.get_mode",
+   "signature": "s:n",
+   "help": "Returns the name of the current transceiver mode"
+  },
+  {
+   "name": "rig.set_bandwidths",
+   "signature": "n:A",
+   "help": "Sets the list of available rig bandwidths"
+  },
+  {
+   "name": "rig.set_bandwidth",
+   "signature": "n:s",
+   "help": "Selects a bandwidth previously added by rig.set_bandwidths"
+  },
+  {
+   "name": "rig.get_frequency",
+   "signature": "d:n",
+   "help": "Returns the RF carrier frequency."
+  },
+  {
+   "name": "rig.get_bandwidth",
+   "signature": "s:n",
+   "help": "Returns the name of the current transceiver bandwidth"
+  },
+  {
+   "name": "rig.get_bandwidths",
+   "signature": "A:n",
+   "help": "Returns the list of available rig bandwidths"
+  },
+  {
+   "name": "rig.get_notch",
+   "signature": "s:n",
+   "help": "Reports a notch filter frequency based on WF action"
+  },
+  {
+   "name": "rig.set_notch",
+   "signature": "n:i",
+   "help": "Sets the notch filter position on WF"
+  },
+  {
+   "name": "rig.enable_qsy",
+   "signature": "n:i",
+   "help": "Enable/disable (1/0) QSY for xmlrpc transceiver control"
+  },
+  {
+   "name": "log.get_frequency",
+   "signature": "s:n",
+   "help": "Returns the Frequency field contents."
+  },
+  {
+   "name": "log.get_time_on",
+   "signature": "s:n",
+   "help": "Returns the Time-On field contents."
+  },
+  {
+   "name": "log.get_time_off",
+   "signature": "s:n",
+   "help": "Returns the Time-Off field contents."
+  },
+  {
+   "name": "log.get_date_on",
+   "signature": "s:n",
+   "help": "Returns the date associated with time_on field contents."
+  },
+  {
+   "name": "log.get_date_off",
+   "signature": "s:n",
+   "help": "Returns the date associated with time_off field contents."
+  },
+  {
+   "name": "log.get_call",
+   "signature": "s:n",
+   "help": "Returns the Call field contents."
+  },
+  {
+   "name": "log.get_name",
+   "signature": "s:n",
+   "help": "Returns the Name field contents."
+  },
+  {
+   "name": "log.get_rst_in",
+   "signature": "s:n",
+   "help": "Returns the RST(r) field contents."
+  },
+  {
+   "name": "log.get_rst_out",
+   "signature": "s:n",
+   "help": "Returns the RST(s) field contents."
+  },
+  {
+   "name": "log.set_rst_in",
+   "signature": "n:s",
+   "help": "Sets the RST(r) field contents."
+  },
+  {
+   "name": "log.set_rst_out",
+   "signature": "n:s",
+   "help": "Sets the RST(s) field contents."
+  },
+  {
+   "name": "log.get_serial_number",
+   "signature": "s:n",
+   "help": "Returns the serial number field contents."
+  },
+  {
+   "name": "log.get_serial_number_sent",
+   "signature": "s:n",
+   "help": "Returns the serial number (sent) field contents."
+  },
+  {
+   "name": "log.get_exchange",
+   "signature": "s:n",
+   "help": "Returns the contest exchange field contents."
+  },
+  {
+   "name": "log.set_exchange",
+   "signature": "n:s",
+   "help": "Sets the contest exchange field contents."
+  },
+  {
+   "name": "log.get_state",
+   "signature": "s:n",
+   "help": "Returns the State field contents."
+  },
+  {
+   "name": "log.get_province",
+   "signature": "s:n",
+   "help": "Returns the Province field contents."
+  },
+  {
+   "name": "log.get_country",
+   "signature": "s:n",
+   "help": "Returns the Country field contents."
+  },
+  {
+   "name": "log.get_qth",
+   "signature": "s:n",
+   "help": "Returns the QTH field contents."
+  },
+  {
+   "name": "log.get_band",
+   "signature": "s:n",
+   "help": "Returns the current band name."
+  },
+  {
+   "name": "log.get_sideband",
+   "signature": "s:n",
+   "help": "[DEPRECATED; use main.get_wf_sideband]"
+  },
+  {
+   "name": "log.get_notes",
+   "signature": "s:n",
+   "help": "Returns the Notes field contents."
+  },
+  {
+   "name": "log.get_locator",
+   "signature": "s:n",
+   "help": "Returns the Locator field contents."
+  },
+  {
+   "name": "log.get_az",
+   "signature": "s:n",
+   "help": "Returns the AZ field contents."
+  },
+  {
+   "name": "log.clear",
+   "signature": "n:n",
+   "help": "Clears the contents of the log fields."
+  },
+  {
+   "name": "log.set_call",
+   "signature": "n:s",
+   "help": "Sets the Call field contents."
+  },
+  {
+   "name": "log.set_name",
+   "signature": "n:s",
+   "help": "Sets the Name field contents."
+  },
+  {
+   "name": "log.set_qth",
+   "signature": "n:s",
+   "help": "Sets the QTH field contents."
+  },
+  {
+   "name": "log.set_locator",
+   "signature": "n:s",
+   "help": "Sets the Locator field contents."
+  },
+  {
+   "name": "log.set_serial_number",
+   "signature": "n:s",
+   "help": "Sets the serial number field contents."
+  },
+  {
+   "name": "log.set_contest_counter",
+   "signature": "n:s",
+   "help": "Sets the starting contest number field contents."
+  },
+  {
+   "name": "logbook.last_record",
+   "signature": "s:n",
+   "help": "Returns the ADIF record of the last logbook record."
+  },
+  {
+   "name": "logbook.all_records",
+   "signature": "s:n",
+   "help": "Returns the entire ADIF logbook currently opened."
+  },
+  {
+   "name": "main.flmsg_online",
+   "signature": "n:n",
+   "help": "flmsg online indication"
+  },
+  {
+   "name": "main.flmsg_available",
+   "signature": "n:n",
+   "help": "flmsg data available"
+  },
+  {
+   "name": "main.flmsg_transfer",
+   "signature": "n:n",
+   "help": "data transfer to flmsg"
+  },
+  {
+   "name": "main.flmsg_squelch",
+   "signature": "b:n",
+   "help": "Returns the squelch state."
+  },
+  {
+   "name": "flmsg.online",
+   "signature": "n:n",
+   "help": "flmsg online indication"
+  },
+  {
+   "name": "flmsg.available",
+   "signature": "n:n",
+   "help": "flmsg data available"
+  },
+  {
+   "name": "flmsg.transfer",
+   "signature": "n:n",
+   "help": "data transfer to flmsg"
+  },
+  {
+   "name": "flmsg.squelch",
+   "signature": "b:n",
+   "help": "Returns the squelch state."
+  },
+  {
+   "name": "flmsg.get_data",
+   "signature": "6:n",
+   "help": "Returns all RX data received since last query."
+  },
+  {
+   "name": "io.in_use",
+   "signature": "s:n",
+   "help": "Returns the IO port in use (ARQ/KISS)."
+  },
+  {
+   "name": "io.enable_kiss",
+   "signature": "n:n",
+   "help": "Switch to KISS I/O"
+  },
+  {
+   "name": "io.enable_arq",
+   "signature": "n:n",
+   "help": "Switch to ARQ I/O"
+  },
+  {
+   "name": "text.get_rx_length",
+   "signature": "i:n",
+   "help": "Returns the number of characters in the RX widget."
+  },
+  {
+   "name": "text.get_rx",
+   "signature": "6:ii",
+   "help": "Returns a range of characters (start, length) from the RX text widget."
+  },
+  {
+   "name": "text.clear_rx",
+   "signature": "n:n",
+   "help": "Clears the RX text widget."
+  },
+  {
+   "name": "text.add_tx",
+   "signature": "n:s",
+   "help": "Adds a string to the TX text widget."
+  },
+  {
+   "name": "text.add_tx_queu",
+   "signature": "n:s",
+   "help": "Adds a string to the TX transmit queu."
+  },
+  {
+   "name": "text.add_tx_bytes",
+   "signature": "n:6",
+   "help": "Adds a byte string to the TX text widget."
+  },
+  {
+   "name": "text.clear_tx",
+   "signature": "n:n",
+   "help": "Clears the TX text widget."
+  },
+  {
+   "name": "rxtx.get_data",
+   "signature": "6:n",
+   "help": "Returns all RXTX combined data since last query."
+  },
+  {
+   "name": "rx.get_data",
+   "signature": "6:n",
+   "help": "Returns all RX data received since last query."
+  },
+  {
+   "name": "tx.get_data",
+   "signature": "6:n",
+   "help": "Returns all TX data transmitted since last query."
+  },
+  {
+   "name": "spot.get_auto",
+   "signature": "b:n",
+   "help": "Returns the autospotter state."
+  },
+  {
+   "name": "spot.set_auto",
+   "signature": "b:b",
+   "help": "Sets the autospotter state. Returns the old state."
+  },
+  {
+   "name": "spot.toggle_auto",
+   "signature": "b:n",
+   "help": "Toggles the autospotter state. Returns the new state."
+  },
+  {
+   "name": "spot.pskrep.get_count",
+   "signature": "i:n",
+   "help": "Returns the number of callsigns spotted in the current session."
+  },
+  {
+   "name": "wefax.state_string",
+   "signature": "s:n",
+   "help": "Returns Wefax engine state (tx and rx) for information."
+  },
+  {
+   "name": "wefax.skip_apt",
+   "signature": "s:n",
+   "help": "Skip APT during Wefax reception"
+  },
+  {
+   "name": "wefax.skip_phasing",
+   "signature": "s:n",
+   "help": "Skip phasing during Wefax reception"
+  },
+  {
+   "name": "wefax.set_tx_abort_flag",
+   "signature": "s:n",
+   "help": "Cancels Wefax image transmission"
+  },
+  {
+   "name": "wefax.end_reception",
+   "signature": "s:n",
+   "help": "End Wefax image reception"
+  },
+  {
+   "name": "wefax.start_manual_reception",
+   "signature": "s:n",
+   "help": "Starts fax image reception in manual mode"
+  },
+  {
+   "name": "wefax.set_adif_log",
+   "signature": "s:b",
+   "help": "Set/reset logging to received/transmit images to ADIF log file"
+  },
+  {
+   "name": "wefax.set_max_lines",
+   "signature": "s:i",
+   "help": "Set maximum lines for fax image reception"
+  },
+  {
+   "name": "wefax.get_received_file",
+   "signature": "s:i",
+   "help": "Waits for next received fax file, returns its name with a delay. Empty string if timeout."
+  },
+  {
+   "name": "wefax.send_file",
+   "signature": "s:si",
+   "help": "Send file. returns an empty string if OK otherwise an error message."
+  },
+  {
+   "name": "navtex.get_message",
+   "signature": "s:i",
+   "help": "Returns next Navtex/SitorB message with a max delay in seconds.. Empty string if timeout."
+  },
+  {
+   "name": "navtex.send_message",
+   "signature": "s:s",
+   "help": "Send a Navtex/SitorB message. Returns an empty string if OK otherwise an error message."
+  }
+ ]
+}

@@ -11,8 +11,10 @@ and exposes the whole API as a small set of logically-grouped MCP tools, so an
 assistant can read the radio's state and drive the modem, rig, log, and
 transmitter through plain language.
 
-> **Status:** beta. Full API coverage, callsign-gated transmit, and an optional
-> experimental Band Guidance feature. Tested against fldigi 4.2.x.
+> **Status:** beta. Full API coverage (every one of fldigi's 174 XML-RPC methods
+> is reachable through a named operation, enforced by a test), callsign-gated
+> transmit, and an optional experimental Band Guidance feature. Supports the
+> current fldigi release, **4.2.13**, verified live on 2026-09-09.
 
 ## 📻 A field-tested fldigi XML-RPC API reference (free community resource)
 
@@ -28,7 +30,8 @@ are sharing it freely, whether or not you ever use this MCP server:
   machine-readable catalog of all **174 methods** (args, return type,
   read/write/keying).
 
-Verified live against **fldigi 4.2.11** via `fldigi.list`. It's more complete and
+Verified live against **fldigi 4.2.13** via `fldigi.list` on 2026-09-09 (the method
+list is identical to 4.2.11, first verified 2026-06-23). It's more complete and
 current than the public wiki (it documents methods the wiki omits, e.g. `TxID`,
 and flags deprecated ones). **Independent project — not affiliated with the
 fldigi / W1HKJ project.** Corrections welcome via
@@ -36,9 +39,11 @@ fldigi / W1HKJ project.** Corrections welcome via
 
 ## Highlights
 
-- **Complete control** — every documented XML-RPC method is reachable, grouped
-  into ~14 tools (one permission each) plus a `fldigi_call` escape hatch for the
-  long tail and future methods.
+- **Complete control** — every one of the 174 XML-RPC methods in fldigi 4.2.13 is
+  reachable through a named operation in one of 17 tools (one permission each);
+  `tests/test_coverage.py` fails the build if a method of the shipped catalog is
+  not wired or an argument type disagrees with fldigi's signature. The
+  `fldigi_call` escape hatch remains for methods a newer build may add.
 - **Safe by default** — the **callsign is the single transmit gate**. With no
   callsign configured the station is receive-only; nothing can key the radio.
 - **Names match fldigi** — tools and operations mirror fldigi's own API
@@ -126,17 +131,21 @@ the mode" is a single permission regardless of which underlying method runs.
 | `frequency` | dial frequency and waterfall sideband |
 | `controls` | AFC, SQL, Rev, Lock, RxID, TxID, status fields |
 | `transmit` | T/R, Tune, abort, disable/enable Tx, macros, send — **callsign-gated** |
-| `rig` | CAT control: mode, frequency, bandwidth, notch, QSY, take/release |
+| `rig` | CAT control: mode, frequency, bandwidth, notch, QSY, meters |
 | `log` | Logbook / contest fields; ADIF last/all records |
 | `text` | RX/TX text and data streams |
 | `spot` | spotting / PSK Reporter |
 | `wefax` | WEFAX (weather fax) mode |
 | `navtex` | NAVTEX / SitorB mode |
+| `flmsg` | flmsg (message forms) interworking |
+| `io` | ARQ / KISS I/O port selection |
+| `legacy` | deprecated methods fldigi still serves, each with its current equivalent named |
 | `band_guidance` | advisory band/watering-hole help (experimental) |
 | `fldigi_call` | escape hatch — call any method by name, incl. future ones |
 
 Use `application` → `list_methods` to enumerate every method the running build
-supports; anything not surfaced in a group is reachable via `fldigi_call`.
+supports. On 4.2.13 all of them are surfaced in a group; `fldigi_call` is for
+methods a newer fldigi may add before this connector catches up.
 
 ## Configuration
 

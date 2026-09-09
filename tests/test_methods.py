@@ -18,7 +18,14 @@ ALL_MAPS = [
     methods.SPOT_OPS,
     methods.WEFAX_OPS,
     methods.NAVTEX_OPS,
+    methods.FLMSG_OPS,
+    methods.IO_OPS,
+    methods.LEGACY_OPS,
 ]
+
+
+def test_all_opmaps_registers_every_map():
+    assert list(methods.ALL_OPMAPS.values()) == ALL_MAPS
 
 
 def test_resolve_known_and_unknown():
@@ -45,7 +52,18 @@ def test_coerce_types():
     assert coerce("b", "off") == (False,)
     assert coerce("b", 1) == (True,)
     assert coerce("s", 123) == ("123",)
-    assert coerce("A", [1, 2]) == (1, 2)
+    # An array parameter is ONE XML-RPC array, not spread positionals (fldigi
+    # answers "type error" to rig.set_modes("USB", "LSB"); verified 4.2.13).
+    assert coerce("A", [1, 2]) == ([1, 2],)
+    assert coerce("A", "USB") == (["USB"],)
+    assert coerce("ii", [0, 10]) == (0, 10)
+    assert coerce("si", ["/tmp/x.png", 5]) == ("/tmp/x.png", 5)
+    import xmlrpc.client
+
+    (b,) = coerce("6", "abc")
+    assert isinstance(b, xmlrpc.client.Binary) and b.data == b"abc"
+    with pytest.raises(ValueError):
+        coerce("ii", [1])
     assert coerce(None, None) == ()
 
 
@@ -61,9 +79,11 @@ def test_keying_methods_are_gated_set():
 
 
 def test_log_fields():
-    # Every settable field is also gettable.
+    # Every settable field is also gettable, except contest_counter, which fldigi
+    # exposes as a setter only (log.set_contest_counter, no getter).
     for field in methods.LOG_SET_FIELDS:
-        assert field in methods.LOG_GET_FIELDS
+        if field != "contest_counter":
+            assert field in methods.LOG_GET_FIELDS
 
 
 def test_no_duplicate_methods_within_a_map():

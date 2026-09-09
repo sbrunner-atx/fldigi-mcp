@@ -66,9 +66,7 @@ def network_interfaces() -> dict:
     raw = ""
     if cmd:
         try:
-            raw = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=5
-            ).stdout
+            raw = subprocess.run(cmd, capture_output=True, text=True, timeout=5).stdout
         except (OSError, subprocess.SubprocessError):
             raw = ""
     return {

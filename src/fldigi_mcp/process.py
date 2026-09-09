@@ -47,10 +47,19 @@ def find_executable(explicit: str | None = None) -> str | None:
     else:
         globs = _LINUX_GLOBS
     for pattern in globs:
-        matches = sorted(glob.glob(pattern))
+        matches = sorted(glob.glob(pattern), key=_version_key)
         if matches:
-            return matches[-1]  # newest-sorted
+            return matches[-1]  # newest by version number, not by string order
     return None
+
+
+def _version_key(path: str) -> tuple:
+    """Sort key: the dotted version in the path as integers, so 4.2.13 beats 4.2.9;
+    a path with no version (a plain fldigi.app) sorts last, i.e. is preferred."""
+    import re
+
+    m = re.search(r"(\d+)\.(\d+)\.(\d+)", path)
+    return (1,) if m is None else (0, *(int(g) for g in m.groups()))
 
 
 def _exists(path: str) -> bool:

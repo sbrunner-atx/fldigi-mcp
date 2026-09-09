@@ -3,9 +3,10 @@
 The tools are organised into logical **groups** (one permission each) rather than
 one tool per XML-RPC method. Each group tool takes an ``operation`` argument, so
 e.g. "change the mode" is a single permission regardless of which underlying
-method runs. Every documented method is reachable through a group, and the
-``fldigi_call`` escape hatch reaches anything else (including methods added by
-newer fldigi builds).
+method runs. Every method of the supported fldigi release (4.2.13, catalog in
+``data/fldigi_methods.json``) is reachable through a named operation, which
+``tests/test_coverage.py`` enforces; the ``fldigi_call`` escape hatch remains for
+methods a newer build may add.
 
 Safety: the **callsign is the single transmit gate**. Any operation that keys the
 transmitter — through the ``transmit``/``fax`` tools or the raw ``fldigi_call``
@@ -157,9 +158,9 @@ def application(operation: str, save_log: bool = False, save_macros: bool = Fals
 def modem(operation: str, value: Any = None) -> dict:
     """Operating mode (the fldigi "Op Mode" menu) and modem settings.
     operations: get, list, get_id, get_max_id, set (value=mode name e.g. 'BPSK31'),
-    set_by_id (value=id), get/set/inc_carrier, get/set/inc_afc_range,
-    get/set/inc_bandwidth, get_quality, search_up, search_down,
-    olivia_get/set_bandwidth, olivia_get/set_tones.
+    set_by_id (value=id), get_io_names (modems usable for KISS/ARQ I/O),
+    get/set/inc_carrier, get/set/inc_afc_range, get/set/inc_bandwidth, get_quality,
+    search_up, search_down, olivia_get/set_bandwidth, olivia_get/set_tones.
     """
     result = _run(methods.MODEM_OPS, operation, value)
     out = {"operation": operation, "result": result}
@@ -232,11 +233,13 @@ def transmit(
     return_to_rx: bool = True,
 ) -> dict:
     """Transmitter control. operations: tx, tune, rx, abort, disable_tx, enable_tx,
-    run_macro (value=id), get_max_macro_id, send (text=...).
+    run_macro (value=id), get_max_macro_id, send (text=...), and timing information:
+    tx_timing (value=test string), char_rates, char_timing (value=one character); both
+    timings return 'samples : sample rate : seconds'.
 
     Keying operations (tx, tune, run_macro, send) require a configured callsign;
-    rx, abort, and disable_tx are always allowed because they take the station off
-    the air. `send` queues text and transmits, auto-returning to receive by default.
+    rx, abort, disable_tx and the timing operations never key and are always allowed.
+    `send` queues text and transmits, auto-returning to receive by default.
     """
     if operation == "send":
         return _send_message(text or "", return_to_rx)
@@ -249,9 +252,10 @@ def transmit(
 @mcp.tool()
 def rig(operation: str, value: Any = None) -> dict:
     """Rig (CAT) control via flrig/Hamlib/RigCAT. operations: get/set_name,
-    set_frequency (value=Hz), get/set_mode (value=name), get_modes,
+    get/set_frequency (value=Hz), get/set_mode (value=name), get_modes,
     set_modes (value=[...]), get/set_bandwidth, get_bandwidths,
-    set_bandwidths (value=[...]), get/set_notch, take_control, release_control.
+    set_bandwidths (value=[...]), get/set_notch, enable_qsy (value=1|0),
+    set_smeter / set_pwrmeter (value=int, drives fldigi's meter display).
     """
     return {"operation": operation, "result": _run(methods.RIG_OPS, operation, value)}
 
@@ -261,7 +265,8 @@ def log(operation: str, field: str | None = None, value: str | None = None) -> d
     """Logbook (QSO / contest) fields. operations: get (field=...), set (field=..., value=...),
     clear, last_record, all_records.
 
-    Settable fields: call, name, qth, locator, serial_number, exchange, rst_in, rst_out.
+    Settable fields: call, name, qth, locator, serial_number, exchange, rst_in, rst_out,
+    contest_counter (set only: the starting contest serial number).
     Gettable fields also include frequency, time_on/off, serial_number_sent, state,
     province, country, band, notes, az. last_record / all_records return ADIF.
     """
@@ -292,10 +297,12 @@ def log(operation: str, field: str | None = None, value: str | None = None) -> d
 
 @mcp.tool()
 def text(operation: str, value: Any = None, start: int = 0, length: int | None = None) -> dict:
-    """RX/TX text and data. operations: read (decoded RX text), rx_length, clear_rx,
-    add_tx (value=text), clear_tx, get_rxtx_data, get_rx_data, get_tx_data.
+    """RX/TX text and data. operations: read (decoded RX text; start/length),
+    rx_length, get_rx (value=[start, length], the raw byte range), clear_rx,
+    add_tx (value=text), add_tx_queue, add_tx_bytes (value=text or bytes), clear_tx,
+    get_rxtx_data, get_rx_data, get_tx_data.
 
-    `add_tx` only stages text in the TX widget; it does not transmit.
+    `add_tx` / `add_tx_bytes` only stage text in the TX widget; they do not transmit.
     """
     if operation == "read":
         return {"operation": "read", "result": _fldigi.read_rx(start, length)}
@@ -315,7 +322,7 @@ def wefax(operation: str, value: Any = None) -> dict:
     """WEFAX (weather fax) mode. operations: state, skip_apt, skip_phasing, tx_abort,
     end_reception, start_manual_reception, set_adif_log (value=bool),
     set_max_lines (value=int), get_received_file (value=timeout),
-    send_file (value=[filename, ...]).
+    send_file (value=[filename, timeout_seconds]).
 
     send_file transmits and is callsign-gated.
     """
@@ -330,6 +337,36 @@ def navtex(operation: str, value: Any = None) -> dict:
     send_message transmits and is callsign-gated.
     """
     return {"operation": operation, "result": _run(methods.NAVTEX_OPS, operation, value, gate=True)}
+
+
+@mcp.tool()
+def flmsg(operation: str) -> dict:
+    """flmsg (message forms) interworking. operations: online, available, transfer,
+    squelch, get_data (RX data since the last query).
+
+    These signal or hand data to a running flmsg; none of them key the transmitter.
+    """
+    return {"operation": operation, "result": _run(methods.FLMSG_OPS, operation)}
+
+
+@mcp.tool()
+def io(operation: str) -> dict:
+    """ARQ / KISS I/O port. operations: in_use (which port is active), enable_kiss,
+    enable_arq.
+    """
+    return {"operation": operation, "result": _run(methods.IO_OPS, operation)}
+
+
+@mcp.tool()
+def legacy(operation: str, value: Any = None) -> dict:
+    """Deprecated fldigi methods, kept so the whole catalog is reachable. Each has a
+    current equivalent, which you should prefer:
+    get/set_sideband -> frequency get/set_sideband; rsid -> controls toggle_rxid;
+    get/set_rig_name, get/set_rig_frequency, get/set_rig_mode(s), get/set_rig_bandwidth(s)
+    -> the rig tool; log_get_sideband -> frequency get_sideband;
+    flmsg_online/available/transfer/squelch -> the flmsg tool.
+    """
+    return {"operation": operation, "result": _run(methods.LEGACY_OPS, operation, value)}
 
 
 @mcp.tool()

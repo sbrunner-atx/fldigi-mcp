@@ -1,7 +1,8 @@
 # fldigi XML-RPC API — Machine-Readable Method Catalog
 
-Field-verified against **fldigi 4.2.11** via `fldigi.list` on 2026-06-23.
-Total methods: **174**. Companion to [FLDIGI-API.md](FLDIGI-API.md).
+Field-verified against **fldigi 4.2.13** via `fldigi.list` on 2026-09-09; the list is
+identical to 4.2.11 (first verified 2026-06-23). Total methods: **174** (`fldigi.list`
+prints 176 rows because `log.set_rst_in` and `log.set_rst_out` appear twice). Companion to [FLDIGI-API.md](FLDIGI-API.md).
 
 Categories: **read** (returns state, no side effect) · **write** (changes
 state / fires an action) · **keying** (puts RF on the air — see transmit safety
@@ -81,9 +82,9 @@ array, struct. Confidence: all rows enumerated live (`fldigi.list`).
 | `main.rx_only` | — | void | write |  |
 | `main.abort` | — | void | write |  |
 | `main.get_trx_state` | — | string | read |  |
-| `main.get_tx_timing` | string | void | read |  |
-| `main.get_char_rates` | — | string | read |  |
-| `main.get_char_timing` | int | void | read |  |
+| `main.get_tx_timing` | bytes | string | read | listed as `n:s`; live build takes base64, returns `samples : rate : secs` |
+| `main.get_char_rates` | — | string | read | slow: several seconds |
+| `main.get_char_timing` | bytes | string | read | listed as `n:i`; live build takes base64 (the character), returns a string |
 | `main.set_rig_name` | string | void | write | deprecated |
 | `main.set_rig_frequency` | double | double | write | deprecated |
 | `main.set_rig_modes` | array | void | write | deprecated |
@@ -101,11 +102,11 @@ array, struct. Confidence: all rows enumerated live (`fldigi.list`).
 | `rig.set_frequency` | double | double | write |  |
 | `rig.set_smeter` | int | void | write |  |
 | `rig.set_pwrmeter` | int | void | write |  |
-| `rig.set_modes` | array | void | write |  |
+| `rig.set_modes` | array | void | write | one array parameter, not spread |
 | `rig.set_mode` | string | void | write |  |
 | `rig.get_modes` | — | array | read |  |
 | `rig.get_mode` | — | string | read |  |
-| `rig.set_bandwidths` | array | void | write |  |
+| `rig.set_bandwidths` | array | void | write | one array parameter, not spread |
 | `rig.set_bandwidth` | string | void | write |  |
 | `rig.get_frequency` | — | double | read |  |
 | `rig.get_bandwidth` | — | string | read |  |

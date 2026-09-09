@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-09-09
+
+### Fixed
+- **Pin the MCP SDK below 2.0** (`mcp[cli]>=1.2.0,<2`). mcp 2.x renamed
+  `FastMCP` to `MCPServer` and moved `mcp.server.fastmcp`, so a fresh install
+  from PyPI (`uvx fldigi-mcp`) resolved 2.x and failed at import. The `.mcpb`
+  was unaffected because it ships `uv.lock`. No functional changes.
+
 ## [0.1.4] - 2026-07-31
 
 ### Changed
@@ -99,7 +107,8 @@ Initial release.
   GitHub Actions CI workflow running ruff and pytest on Python 3.10–3.12.
 - Documentation: README, installation & safety model, and Band Guidance design.
 
-[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/sbrunner-atx/fldigi-mcp/compare/v0.1.1...v0.1.2

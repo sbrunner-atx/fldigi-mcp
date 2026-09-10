@@ -1,6 +1,6 @@
 [project]
 name = "fldigi-mcp"
-version = "0.1.6"
+version = "0.2.0"
 description = "An MCP server for controlling the fldigi digital-modem application over XML-RPC."
 readme = "README.md"
 license = { text = "MIT" }
@@ -29,6 +29,11 @@ dependencies = [
     "mcp[cli]>=1.2.0,<2",
     "pyyaml>=6.0",
 ]
+
+[project.optional-dependencies]
+# signal hunting: analyse receiver audio to find and name signals (numpy) and tap
+# the input device live (sounddevice / PortAudio). The base server stays dependency-free.
+hunt = ["numpy>=1.24", "sounddevice>=0.4.6"]
 
 [dependency-groups]
 dev = [

@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-10
+
+### Added
+- **Signal hunting.** `signal_hunt` taps the audio fldigi listens to (new setting
+  `FLDIGI_AUDIO_DEVICE` / "Audio input device") and returns ranked candidates:
+  carrier, mode named from bandwidth and tone structure (RTTY with shift, CW,
+  BPSK31/63/125, Olivia with tones and bandwidth, MFSK16, DominoEX, MT63;
+  `data/mode_signatures.json`, checked against the Signal Identification Wiki),
+  strength, persistence, periodicity, and an operator-style score that ranks the
+  station sitting still and calling CQ first. `tune_to` sets modem and carrier
+  from a candidate, RxID off during a classified pass. `method="api"` is the
+  blind fallback without audio (fldigi `search_up` + `get_quality`).
+- Optional extra `fldigi-mcp[hunt]` (numpy, sounddevice); the base server stays
+  dependency-free.
+- Skill `signal-hunting` and a chapter in the Operating Skills Field Guide.
+- Tests with synthetic RTTY, PSK31, keyed CW, Olivia and mixed signals. The
+  analyser was verified on five real recordings of known mode, 5 of 5.
+
+### Notes
+- Contestia shares Olivia's grid and THOR shares DominoEX's; only RSID
+  separates them. Symbol rate is the next feature. Everything here is receive only.
+
 ## [0.1.6] - 2026-09-09
 
 ### Added

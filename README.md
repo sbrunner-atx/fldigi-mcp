@@ -11,7 +11,8 @@ and exposes the whole API as a small set of logically-grouped MCP tools, so an
 assistant can read the radio's state and drive the modem, rig, log, and
 transmitter through plain language.
 
-> **Status:** beta. Full API coverage (every one of fldigi's 174 XML-RPC methods
+> **Status:** beta. Signal hunting (find, name and tune to a station from the
+> receiver audio, 0.2.0) and full API coverage (every one of fldigi's 174 XML-RPC methods
 > is reachable through a named operation, enforced by a test), callsign-gated
 > transmit, and an optional experimental Band Guidance feature. Supports the
 > current fldigi release, **4.2.13**, verified live on 2026-09-09.
@@ -141,6 +142,8 @@ the mode" is a single permission regardless of which underlying method runs.
 | `io` | ARQ / KISS I/O port selection |
 | `legacy` | deprecated methods fldigi still serves, each with its current equivalent named |
 | `band_guidance` | advisory band/watering-hole help (experimental) |
+| `signal_hunt` | find and name the signals in the receiver audio; rank CQing stations (experimental, `[hunt]` extra) |
+| `tune_to` | set modem and carrier to a `signal_hunt` candidate, receive only |
 | `fldigi_call` | escape hatch — call any method by name, incl. future ones |
 
 Use `application` → `list_methods` to enumerate every method the running build
@@ -210,6 +213,15 @@ The [`skills/`](skills/) directory contains agent skills — operating
 procedures distilled from live on-air use — bundled with the repo and the
 `.mcpb` package:
 
+- **[signal-hunting](skills/signal-hunting/SKILL.md)** — find a station worth
+  working the way an operator reads the waterfall: `signal_hunt` names each
+  signal's mode from its bandwidth and tone grid (RTTY, CW, PSK, Olivia, MFSK,
+  DominoEX, MT63; signatures checked against sigidwiki.com), ranks the one that
+  sits still and calls CQ, `tune_to` sets modem and carrier, and twenty seconds
+  of text confirms it. Needs `pip install 'fldigi-mcp[hunt]'` (numpy,
+  sounddevice) and the **Audio input device** setting; without audio it falls
+  back to stepping fldigi's `search_up`. Verified on five recordings of known
+  mode, 5 of 5. Receive only.
 - **[fldigi-operating](skills/fldigi-operating/SKILL.md)** — TX/RX handoff
   done right (`^r` return-to-receive via `transmit → send`, `abort` as the
   panic button, never poll the TX buffer), RX-buffer polling discipline
@@ -217,7 +229,7 @@ procedures distilled from live on-air use — bundled with the repo and the
   loop. Field-proven during ARRL Field Day 2026.
 
 The **[Operating Skills Field Guide](docs/operating-skills-field-guide.pdf)**
-(PDF) documents this skill and its companion `contest-operating` from the
+(PDF) documents these skills and their companion `contest-operating` from the
 sibling [n3fjp-mcp](https://github.com/sbrunner-atx/n3fjp-mcp) — skills
 at a glance, installation, a plain-language "Your first session — Claude for
 hams" chapter for operators new to AI, the operating standard, the

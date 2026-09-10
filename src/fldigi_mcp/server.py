@@ -25,7 +25,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from fldigi_mcp import diag, methods
+from fldigi_mcp import diag, hunt, methods
 from fldigi_mcp.bandplan import BandPlan, mode_category
 from fldigi_mcp.client import Fldigi, _is_loopback
 from fldigi_mcp.config import Config
@@ -380,6 +380,91 @@ def fldigi_call(method: str, params: list | None = None) -> dict:
         _require_transmit_allowed()
     args = tuple(params) if params else ()
     return {"method": method, "result": _fldigi.call(method, *args)}
+
+
+# --- Signal hunt (experimental) ----------------------------------------------
+
+
+@mcp.tool()
+def signal_hunt(
+    seconds: float = 20.0,
+    mode: str | None = None,
+    device: str | None = None,
+    wav: str | None = None,
+    method: str = "audio",
+    top: int = 4,
+) -> dict:
+    """Find and name the signals in the receiver audio and rank them the way a contest
+    operator reads the waterfall: the station that sits still and calls CQ scores highest.
+
+    method 'audio' (default): tap `seconds` of audio from the input device (FLDIGI_AUDIO_DEVICE,
+    the device fldigi listens on; or `device` as a name substring or index; `wav` analyses a
+    file instead). Needs the optional extra: pip install 'fldigi-mcp[hunt]'.
+    method 'devices': list the input devices the tap can open.
+    method 'api': blind fallback with no audio access; steps modem.search_up across the
+    passband for each modem (mode='RTTY,BPSK31,...') and reads modem.get_quality. Slow.
+
+    Each candidate carries carrier_hz, mode (RTTY with shift, CW, BPSK31/63/125, Olivia
+    with tones and bw, MFSK16, DominoEX, MT63, or unknown), db_over_floor, persistence
+    (fraction of the window it was present), periodicity (a CQ loop repeats), score, and
+    fldigi_modem, the name tune_to needs. Nothing here transmits.
+    """
+    if method == "devices":
+        return {"devices": hunt.list_devices()}
+    if method == "api":
+        modems = [m.strip() for m in (mode or "RTTY,BPSK31").split(",") if m.strip()]
+        return {"method": "api", "candidates": hunt.api_hunt(_fldigi, modems)}
+    if wav:
+        x, fs = hunt.read_wav(wav)
+        source = wav
+    else:
+        dev = device or config.audio_device or None
+        x, fs = hunt.capture(seconds, dev)
+        source = f"device {dev or 'default'}"
+    cands = hunt.analyse(x, fs, top=max(1, top))
+    if mode:
+        want = mode.upper()
+        cands = [
+            c
+            for c in cands
+            if c["mode"].upper().startswith(want) or want in (c.get("fldigi_modem") or "").upper()
+        ]
+    return {
+        "method": "audio",
+        "source": source,
+        "seconds": round(len(x) / fs, 1),
+        "candidates": cands,
+        "note": "Contestia shares Olivia's grid and THOR shares DominoEX's; only RSID separates "
+        "them. Confirm a candidate by tuning to it and reading 20 s of text.",
+    }
+
+
+@mcp.tool()
+def tune_to(carrier_hz: int, fldigi_modem: str, rxid: bool = False, afc: bool = True) -> dict:
+    """Set fldigi to a signal_hunt candidate: modem by fldigi name (e.g. 'RTTY', 'BPSK31',
+    'OLIVIA-8/250', 'MFSK16', 'DOMEX11', 'MT63-500'), the audio carrier, AFC on, and RxID
+    off by default so another station's RSID burst cannot retune the modem mid-pass.
+    Read the result with `text` read after 20 seconds; `modem` get_quality says whether
+    it locked. Does not transmit.
+    """
+    previous = _fldigi.call("modem.get_name")
+    _fldigi.call("main.set_rsid", bool(rxid))
+    _fldigi.call("modem.set_by_name", fldigi_modem)
+    now = _fldigi.call("modem.get_name")
+    if now != fldigi_modem:
+        raise ValueError(
+            f"fldigi does not know modem {fldigi_modem!r} (still {now!r}); see modem list"
+        )
+    _fldigi.call("modem.set_carrier", int(carrier_hz))
+    _fldigi.call("main.set_afc", bool(afc))
+    return {
+        "previous_modem": previous,
+        "modem": now,
+        "carrier_hz": _fldigi.call("modem.get_carrier"),
+        "afc": afc,
+        "rxid": rxid,
+        "frequency_hz": _fldigi.frequency(),
+    }
 
 
 # --- Band Guidance (experimental, advisory) ----------------------------------

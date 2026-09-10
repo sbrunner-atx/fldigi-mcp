@@ -1,0 +1,26 @@
+{
+  "_source": "Spectral signatures used by classify_signal.py. Numbers checked on 10 Sep 2026 against the Signal Identification Wiki, sigidwiki.com/wiki/Category:Amateur_Radio (pages: Radio_Teletype_(RTTY), Phase_Shift_Keying_(PSK), Olivia, Contestia, Multi_Frequency_Shift_Keying_(MFSK), DominoEX, THOR, THROB, MT63, Morse_Code_(CW)), and against the fldigi 4.2.13 manual for the decoder's own parameters. Widths here are the -6 dB extent of the block in a 1.5 Hz-bin max-hold spectrum, narrower than the wiki's quoted occupied bandwidths for PSK.",
+  "features": {
+    "width_hz": "extent of the block at -6 dB below its smoothed peak",
+    "lines": "narrow lines inside the block (RTTY has two, PSK and CW one)",
+    "tone_spacing_hz": "median spacing of tone lines in the AVERAGE spectrum of the blocks where the signal is on",
+    "duty_db": "max-hold minus average inside the block: a hopping single-tone mode (Olivia, MFSK, DominoEX, THOR) sits 8 dB or more below its max-hold on average; a continuous one (PSK, MT63, RTTY) within about 3 dB",
+    "symbol_rate": "not measured yet; would separate Contestia from Olivia (same grid, twice the baud) and THOR from DominoEX (same grid)"
+  },
+  "modes": {
+    "RTTY":      {"shape": "two lines", "shifts_hz": [85, 170, 200, 450, 850], "line_width_hz": 45, "fldigi": "RTTY", "wiki": "170 Hz at 45.45 Bd is the amateur default; 50 Bd/200 Hz Russian; 450 and 850 commercial and maritime; 85 on LF", "carrier": "midpoint of the two lines"},
+    "CW":        {"shape": "one keyed line", "width_hz": [1, 12], "fldigi": "CW", "wiki": "bandwidth approximately 4 Hz, on-off keying", "carrier": "the line"},
+    "BPSK31":    {"shape": "one line", "width_hz": [20, 45], "fldigi": "BPSK31", "wiki": "31 Hz", "carrier": "line centre"},
+    "BPSK63":    {"shape": "one line", "width_hz": [50, 80], "fldigi": "BPSK63", "wiki": "63 Hz (the page also quotes a 160 Hz total footprint)", "carrier": "line centre"},
+    "BPSK125":   {"shape": "one line", "width_hz": [100, 150], "fldigi": "BPSK125", "wiki": "125 Hz", "carrier": "line centre"},
+    "Olivia":    {"shape": "hopping tone grid", "tones": [2, 4, 8, 16, 32, 64], "bandwidths_hz": [125, 250, 500, 1000, 2000], "spacing_rule": "bandwidth / tones", "fldigi": "OLIVIA-{tones}/{bw}", "wiki": "OLIVIA X/Y, X tones in Y Hz; 8/250 is the common calling submode", "carrier": "centre of the block"},
+    "Contestia": {"shape": "hopping tone grid", "same_grid_as": "Olivia", "fldigi": "CONTESTIA", "wiki": "Olivia-derived, twice the symbol rate, same X/Y naming", "carrier": "centre of the block", "note": "not separable from Olivia by spectrum; RSID or the symbol rate decides"},
+    "MFSK16":    {"shape": "hopping tone grid", "tones": 16, "tone_spacing_hz": 15.625, "width_hz": [280, 350], "fldigi": "MFSK16", "wiki": "316 Hz, 15.625 Bd (the wiki's tone-count sentence is garbled; fldigi manual: 16 tones at 15.625 Hz)", "carrier": "centre of the block"},
+    "MFSK8":     {"shape": "hopping tone grid", "tones": 32, "tone_spacing_hz": 7.8125, "width_hz": [280, 350], "fldigi": "MFSK8", "wiki": "same bandwidth as MFSK16 at half the baud", "carrier": "centre of the block"},
+    "DominoEX":  {"shape": "hopping tone grid", "tones": 18, "submodes": {"4": {"bw": 173, "baud": 3.90625}, "5": {"bw": 224, "baud": 5.3833}, "8": {"bw": 346, "baud": 7.8125}, "11": {"bw": 262, "baud": 10.766}, "16": {"bw": 355, "baud": 15.625}, "22": {"bw": 524, "baud": 21.533}}, "spacing_rule": "bw / 18", "fldigi": "DOMEX{n}", "wiki": "bandwidths 173, 224, 346, 262, 355, 524 Hz; IFK modulation", "carrier": "centre of the block"},
+    "THOR":      {"shape": "hopping tone grid", "same_grid_as": "DominoEX", "fldigi": "THOR{n}", "wiki": "same six bandwidths as DominoEX, IFK with FEC", "carrier": "centre of the block", "note": "not separable from DominoEX by spectrum; RSID decides"},
+    "THROB":     {"shape": "hopping tone grid", "tones": 9, "tone_spacing_hz": [8, 16], "width_hz": [64, 150], "fldigi": "THROB", "wiki": "9 tones spaced 8 or 16 Hz, 72 or 144 Hz wide; THROBX 11 tones at 7.8 or 15.6 Hz", "carrier": "centre of the block"},
+    "MT63":      {"shape": "continuous flat block", "bandwidths_hz": [500, 1000, 2000], "carriers": 64, "fldigi": "MT63-{bw}", "wiki": "64 BPSK carriers in 500, 1000 or 2000 Hz; tolerant of 120 Hz mistuning", "carrier": "lower edge plus half the bandwidth", "note": "distinguished from Olivia 32/1000 by duty: all carriers on at once"}
+  },
+  "unclassified_policy": "a signal with no matching signature is decoded with the dwell's nominal modem at the block centre, RxID on; an RSID burst from the station overrides any classification; during a classified pass RxID is off"
+}

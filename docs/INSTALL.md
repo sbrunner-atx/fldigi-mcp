@@ -113,3 +113,11 @@ Keep this on a trusted home/club network — the connection is not encrypted.
 
 When a new version is released, download the newest `fldigi-mcp.mcpb` from the
 releases page and install it the same way — it replaces the old one.
+
+## Signal hunting (optional)
+
+`signal_hunt` needs the audio fldigi listens to. Install the extra
+(`pip install 'fldigi-mcp[hunt]'`, or the `.mcpb` runtime does it) and set
+**Audio input device** to the device fldigi uses (part of its name is enough,
+e.g. `iMic`). `signal_hunt` with `method="devices"` lists what it can open. macOS
+asks once for microphone permission for the process that runs the server.

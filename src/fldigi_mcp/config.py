@@ -37,6 +37,7 @@ class Config:
     callsign: str
     band_guidance: bool
     region: str
+    audio_device: str
 
     @property
     def transmit_ready(self) -> bool:
@@ -54,4 +55,6 @@ class Config:
             callsign=os.environ.get("FLDIGI_CALLSIGN", "").strip().upper(),
             band_guidance=_as_bool(os.environ.get("FLDIGI_BAND_GUIDANCE")),
             region=region,
+            # input device the signal hunt taps (name substring or index); blank = system default
+            audio_device=os.environ.get("FLDIGI_AUDIO_DEVICE", "").strip(),
         )

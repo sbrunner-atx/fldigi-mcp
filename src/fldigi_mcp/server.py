@@ -19,6 +19,7 @@ with advisory suggestions; it never blocks or changes anything on its own.
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 from typing import Any
@@ -384,6 +385,13 @@ def fldigi_call(method: str, params: list | None = None) -> dict:
 
 # --- Signal hunt (experimental) ----------------------------------------------
 
+_SILENCE_WARNING = (
+    "audio is all zeros. Either the input device is silent or this process has no microphone "
+    "permission (macOS: System Settings > Privacy & Security > Microphone, allow Claude). If the "
+    "server does not run where the audio is, run fldigi-mcp-tap beside fldigi and set "
+    "FLDIGI_HUNT_URL."
+)
+
 
 @mcp.tool()
 def signal_hunt(
@@ -417,10 +425,36 @@ def signal_hunt(
     if wav:
         x, fs = hunt.read_wav(wav)
         source = wav
+    elif config.hunt_url:
+        # the audio is elsewhere (sandbox, remote fldigi): ask the host-side fldigi-mcp-tap
+        import urllib.request
+
+        url = f"{config.hunt_url}/hunt?seconds={float(seconds)}&top={max(1, top)}"
+        with urllib.request.urlopen(url, timeout=seconds + 30) as r:
+            out = json.loads(r.read().decode())
+        out["method"] = "tap"
+        out["source"] = f"{config.hunt_url} ({out.get('source')})"
+        if mode:
+            want = mode.upper()
+            out["candidates"] = [
+                c
+                for c in out["candidates"]
+                if c["mode"].upper().startswith(want)
+                or want in (c.get("fldigi_modem") or "").upper()
+            ]
+        return out
     else:
         dev = device or config.audio_device or None
         x, fs = hunt.capture(seconds, dev)
         source = f"device {dev or 'default'}"
+        if float((x**2).mean()) == 0.0:
+            return {
+                "method": "audio",
+                "source": source,
+                "seconds": seconds,
+                "candidates": [],
+                "warning": _SILENCE_WARNING,
+            }
     cands = hunt.analyse(x, fs, top=max(1, top))
     if mode:
         want = mode.upper()

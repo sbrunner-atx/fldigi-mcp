@@ -43,6 +43,7 @@ dev = [
 
 [project.scripts]
 fldigi-mcp = "fldigi_mcp.server:main"
+fldigi-mcp-tap = "fldigi_mcp.tapd:main"
 
 [project.urls]
 Homepage = "https://github.com/sbrunner-atx/fldigi-mcp"

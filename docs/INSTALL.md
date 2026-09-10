@@ -116,7 +116,17 @@ releases page and install it the same way — it replaces the old one.
 
 ## Signal hunting (optional)
 
-`signal_hunt` needs the audio fldigi listens to. Install the extra
+`signal_hunt` needs the audio fldigi listens to. Where that audio is decides the setup:
+
+| The MCP server runs... | Setting | Why |
+| --- | --- | --- |
+| on the Mac that hears the receiver (Claude Desktop `.mcpb`) | **Audio input device** = fldigi's input, e.g. `iMic` | Claude Desktop is not App-Sandboxed and holds the audio-input entitlement; macOS asks once for microphone permission, attributed to Claude |
+| somewhere without the sound card (Cowork sandbox, a container, or fldigi on a VM via mcp-host-bridge) | run `fldigi-mcp-tap --device iMic` beside fldigi and set **Signal-hunt tap URL** = `http://127.0.0.1:7365` (or the host's address) | the tap runs where the audio is and answers over HTTP; the server never opens a device |
+| anywhere, no audio at all | `signal_hunt` with `method="api"` | steps fldigi's own `search_up` and reads `get_quality`; slow and blind to mode |
+
+If a hunt returns a `warning` about all-zero audio, the device is silent or the process lacks
+microphone permission; the message says which setting to fix.
+ Install the extra
 (`pip install 'fldigi-mcp[hunt]'`, or the `.mcpb` runtime does it) and set
 **Audio input device** to the device fldigi uses (part of its name is enough,
 e.g. `iMic`). `signal_hunt` with `method="devices"` lists what it can open. macOS

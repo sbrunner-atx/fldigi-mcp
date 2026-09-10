@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   blind fallback without audio (fldigi `search_up` + `get_quality`).
 - Optional extra `fldigi-mcp[hunt]` (numpy, sounddevice); the base server stays
   dependency-free.
+- `fldigi-mcp-tap`, a host-side HTTP tap for deployments where the server does not
+  run where the audio is (Cowork sandbox, remote fldigi via mcp-host-bridge): set
+  `FLDIGI_HUNT_URL` and `signal_hunt` asks it instead of the sound card. All-zero
+  audio is reported as a warning naming the microphone-permission fix.
 - Skill `signal-hunting` and a chapter in the Operating Skills Field Guide.
 - Tests with synthetic RTTY, PSK31, keyed CW, Olivia and mixed signals. The
   analyser was verified on five real recordings of known mode, 5 of 5.

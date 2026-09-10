@@ -38,6 +38,7 @@ class Config:
     band_guidance: bool
     region: str
     audio_device: str
+    hunt_url: str
 
     @property
     def transmit_ready(self) -> bool:
@@ -57,4 +58,7 @@ class Config:
             region=region,
             # input device the signal hunt taps (name substring or index); blank = system default
             audio_device=os.environ.get("FLDIGI_AUDIO_DEVICE", "").strip(),
+            # a host-side fldigi-mcp-tap to ask instead of the local sound card
+            # (sandbox, or fldigi on another machine)
+            hunt_url=os.environ.get("FLDIGI_HUNT_URL", "").strip().rstrip("/"),
         )

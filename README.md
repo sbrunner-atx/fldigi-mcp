@@ -219,8 +219,10 @@ procedures distilled from live on-air use — bundled with the repo and the
   DominoEX, MT63; signatures checked against sigidwiki.com), ranks the one that
   sits still and calls CQ, `tune_to` sets modem and carrier, and twenty seconds
   of text confirms it. Needs `pip install 'fldigi-mcp[hunt]'` (numpy,
-  sounddevice) and the **Audio input device** setting; without audio it falls
-  back to stepping fldigi's `search_up`. Verified on five recordings of known
+  sounddevice) and the **Audio input device** setting; where the server does not
+  run beside the receiver (sandbox, remote fldigi), `fldigi-mcp-tap` runs there
+  and the server asks it over HTTP (**Signal-hunt tap URL**); without any audio it
+  falls back to stepping fldigi's `search_up`. Verified on five recordings of known
   mode, 5 of 5. Receive only.
 - **[fldigi-operating](skills/fldigi-operating/SKILL.md)** — TX/RX handoff
   done right (`^r` return-to-receive via `transmit → send`, `abort` as the

@@ -32,7 +32,8 @@
         "FLDIGI_PORT": "${user_config.fldigi_port}",
         "FLDIGI_BAND_GUIDANCE": "${user_config.band_guidance}",
         "FLDIGI_REGION": "${user_config.region}",
-        "FLDIGI_AUDIO_DEVICE": "${user_config.audio_device}"
+        "FLDIGI_AUDIO_DEVICE": "${user_config.audio_device}",
+        "FLDIGI_HUNT_URL": "${user_config.hunt_url}"
       }
     }
   },
@@ -71,6 +72,12 @@
       "type": "string",
       "title": "Audio input device for signal hunting",
       "description": "Name (or part of it) of the input device fldigi listens on, e.g. 'iMic' or 'Soundflower'. Used by signal_hunt to look at the same audio; leave blank for the system default.",
+      "required": false
+    },
+    "hunt_url": {
+      "type": "string",
+      "title": "Signal-hunt tap URL (optional)",
+      "description": "If this server does not run on the machine that hears the receiver, run 'fldigi-mcp-tap' beside fldigi and put its URL here, e.g. http://127.0.0.1:7365. Leave blank to tap the local input device.",
       "required": false
     },
     "callsign": {

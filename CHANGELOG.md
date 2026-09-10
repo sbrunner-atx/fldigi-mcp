@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-10
+
+### Fixed
+- The `.mcpb` started the server with `uv run fldigi-mcp`, which does not install
+  the optional `hunt` extra, so `signal_hunt` in Claude Desktop reported numpy
+  missing. The bundle now runs `uv run --extra hunt fldigi-mcp`. PyPI users were
+  unaffected (`pip install 'fldigi-mcp[hunt]'`).
+
 ## [0.2.0] - 2026-09-10
 
 ### Added

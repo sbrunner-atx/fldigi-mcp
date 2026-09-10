@@ -28,6 +28,13 @@ def _as_bool(value: str | None) -> bool:
     return value is not None and str(value).strip().lower() in _TRUE
 
 
+def _setting(name: str, default: str = "") -> str:
+    """An environment setting, with Claude Desktop's unsubstituted templates treated as
+    unset: a blank optional user_config field arrives as the literal '${user_config.x}'."""
+    v = os.environ.get(name, default).strip()
+    return default if v.startswith("${") else v
+
+
 @dataclass
 class Config:
     """Resolved server configuration."""
@@ -47,18 +54,18 @@ class Config:
 
     @classmethod
     def from_env(cls) -> Config:
-        region = os.environ.get("FLDIGI_REGION", "2").strip()
+        region = _setting("FLDIGI_REGION", "2")
         if region not in _REGIONS:
             region = "2"
         return cls(
-            host=os.environ.get("FLDIGI_HOST", "127.0.0.1"),
-            port=int(os.environ.get("FLDIGI_PORT", "7362")),
-            callsign=os.environ.get("FLDIGI_CALLSIGN", "").strip().upper(),
-            band_guidance=_as_bool(os.environ.get("FLDIGI_BAND_GUIDANCE")),
+            host=_setting("FLDIGI_HOST", "127.0.0.1"),
+            port=int(_setting("FLDIGI_PORT", "7362") or "7362"),
+            callsign=_setting("FLDIGI_CALLSIGN").upper(),
+            band_guidance=_as_bool(_setting("FLDIGI_BAND_GUIDANCE")),
             region=region,
             # input device the signal hunt taps (name substring or index); blank = system default
-            audio_device=os.environ.get("FLDIGI_AUDIO_DEVICE", "").strip(),
+            audio_device=_setting("FLDIGI_AUDIO_DEVICE"),
             # a host-side fldigi-mcp-tap to ask instead of the local sound card
             # (sandbox, or fldigi on another machine)
-            hunt_url=os.environ.get("FLDIGI_HUNT_URL", "").strip().rstrip("/"),
+            hunt_url=_setting("FLDIGI_HUNT_URL").rstrip("/"),
         )

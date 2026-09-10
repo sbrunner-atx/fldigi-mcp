@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-09-10
+
+### Fixed
+- A blank optional setting in Claude Desktop reaches the server as the literal
+  template string (`${user_config.hunt_url}`), which 0.2.1 would have used as the
+  tap URL. All settings now treat an unsubstituted template as unset; a blank
+  callsign template also keeps the station receive-only, as intended.
+
 ## [0.2.1] - 2026-09-10
 
 ### Fixed

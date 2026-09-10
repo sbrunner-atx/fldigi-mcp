@@ -334,6 +334,17 @@ def analyse(
                 mode, extra = "MT63", {"bw": bw}
         if any(abs(r["carrier_hz"] - carrier) < 100 for r in results):
             continue  # same signal seen from its other line
+        # confidence: high when the mode was read from a real grid (frame-peak histogram)
+        # or from strong lines; a hopping mode inferred from the averaged spectrum alone,
+        # or anything under 10 dB, is a guess and should not buy a decode pass by itself
+        if mode == "unknown":
+            confidence = "none"
+        elif mode in ("RTTY", "CW", "BPSK31", "BPSK63", "BPSK125") and float(sm[i]) >= 10:
+            confidence = "high"
+        elif spacing_grid and float(sm[i]) >= 10:
+            confidence = "high"
+        else:
+            confidence = "low"
         strength = float(sm[i])
         persistence = float(present.mean())
         per = periodicity(present)
@@ -352,6 +363,7 @@ def analyse(
                 "persistence": round(persistence, 2),
                 "periodicity": per,
                 "score": round(score, 1),
+                "confidence": confidence,
                 "fldigi_modem": fldigi_modem(mode, extra),
             }
         )

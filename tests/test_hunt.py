@@ -157,6 +157,15 @@ def test_cq_loop_outranks_a_brief_station():
     assert rs[0]["carrier_hz"] == pytest.approx(1000, abs=20)
 
 
+def test_confidence_labels():
+    r = analyse(rtty(1500, 170, 40) + noise(40), top=1)[0]
+    assert r["confidence"] == "high"
+    r = analyse(olivia(2000, 8, 250, 60) + noise(60), top=1)[0]
+    assert r["confidence"] == "high" and r["grid"] == "frame-peak histogram"
+    r = analyse(noise(40, level=0.05), top=1)
+    assert all(c["confidence"] in ("none", "low") for c in r)
+
+
 def test_fldigi_modem_names():
     assert hunt.fldigi_modem("Olivia", {"tones": 16, "bw": 1000}) == "OLIVIA-16/1K"
     assert hunt.fldigi_modem("DominoEX11", {"bw": 262}) == "DOMEX11"

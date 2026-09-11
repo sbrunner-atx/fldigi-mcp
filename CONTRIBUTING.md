@@ -68,4 +68,4 @@ npx @anthropic-ai/mcpb pack      # produces fldigi-mcp.mcpb from manifest.json
 ## License
 
 By contributing you agree that your contributions are licensed under the
-project's [MIT License](LICENSE).
+project's [GPL-3.0-or-later](LICENSE).

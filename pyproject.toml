@@ -1,9 +1,9 @@
 [project]
 name = "fldigi-mcp"
-version = "0.2.2"
+version = "0.3.0"
 description = "An MCP server for controlling the fldigi digital-modem application over XML-RPC."
 readme = "README.md"
-license = { text = "MIT" }
+license = { text = "GPL-3.0-or-later" }
 requires-python = ">=3.10"
 authors = [
     { name = "Stefan Brunner (AE5VG)", email = "me@stefanbrunner.org" },
@@ -19,7 +19,7 @@ keywords = [
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",

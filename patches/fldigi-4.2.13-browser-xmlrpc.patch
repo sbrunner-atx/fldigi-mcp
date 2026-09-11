@@ -1,0 +1,207 @@
+--- a/src/include/psk_browser.h
++++ b/src/include/psk_browser.h
+@@ -36,6 +36,7 @@
+ #include "re.h"
+ 
+ #define BWSR_BORDER 2
++#define API_TEXT_MAX 8192   // per-channel text kept for browser.get_channels
+ 
+ class pskBrowser : public Fl_Hold_Browser{
+ private:
+@@ -49,6 +50,13 @@
+ 
+ 	std::string bwsrline[MAXCHANNELS];
+ 	int bwsrfreq[MAXCHANNELS];
++	// Per-channel text kept for the XML-RPC browser.* methods.  bwsrline is
++	// trimmed to the widget width for display; this buffer is not (capped at
++	// API_TEXT_MAX, oldest dropped).  A channel that lost its signal and
++	// later prints again gets a '\n' before the new text.
++	std::string apitext[MAXCHANNELS];
++	int apifreq[MAXCHANNELS];
++	bool apibreak[MAXCHANNELS];
+ 	struct {bool regex_alert; bool mycall_alert;} alerted[MAXCHANNELS];
+ 
+ 	CharsetDistiller *cdistiller;
+@@ -99,6 +107,10 @@
+ 	void set_freq(int i, int freq);
+ 	void clearline(int i) { bwsrline[i] = ""; }
+ 	std::string line(int i) { return (i < 1 ? "" : i > MAXCHANNELS ? "" : bwsrline[i - 1]); }
++	std::string api_text(int i) { return (i < 1 || i > MAXCHANNELS) ? "" : apitext[i - 1]; }
++	int api_freq(int i) { return (i < 1 || i > MAXCHANNELS) ? 0 : apifreq[i - 1]; }
++	bool api_active(int i) { return (i < 1 || i > MAXCHANNELS) ? false : bwsrfreq[i - 1] != NULLFREQ; }
++	void api_clear();
+ 	int  freq(int i);
+ 	void clear();
+ 	void clearch(int n, int freq);
+--- a/src/widgets/psk_browser.cxx
++++ b/src/widgets/psk_browser.cxx
+@@ -58,6 +58,7 @@
+ pskBrowser::pskBrowser(int x, int y, int w, int h, const char *l)
+ 	:Fl_Hold_Browser(x,y,w,h,l)
+ {
++	api_clear();
+ 	fnt = FL_HELVETICA;
+ 	siz = 12;
+ 	rfc = 0LL;
+@@ -146,6 +147,9 @@
+ 	int f = bwsrfreq[j];
+ 	bwsrfreq[j] = bwsrfreq[i];
+ 	bwsrfreq[i] = f;
++	tempstr = apitext[j]; apitext[j] = apitext[i]; apitext[i] = tempstr;
++	f = apifreq[j]; apifreq[j] = apifreq[i]; apifreq[i] = f;
++	bool bk = apibreak[j]; apibreak[j] = apibreak[i]; apibreak[i] = bk;
+ 
+ 	tempstr = freqformat(i);
+ 	tempstr.append(bwsrline[i]);
+@@ -229,7 +233,14 @@
+ 	cdistiller[ch].rx(c);
+ 
+ 	if (cdistiller[ch].data_length() > 0) {
+-		bwsrline[ch] += cdistiller[ch].data();
++		std::string d = cdistiller[ch].data();
++		bwsrline[ch] += d;
++		if (apibreak[ch] && !apitext[ch].empty()) apitext[ch] += '\n';
++		apibreak[ch] = false;
++		apitext[ch] += d;
++		if (apitext[ch].length() > API_TEXT_MAX)
++			apitext[ch].erase(0, apitext[ch].length() - API_TEXT_MAX);
++		apifreq[ch] = freq;
+ 		cdistiller[ch].clear();
+ 	}
+ 
+@@ -305,6 +316,7 @@
+ {
+ 	long freq;
+ 	Fl_Hold_Browser::clear();
++	api_clear();
+ 	for (int i = 0, j = 0; i < progdefaults.VIEWERchannels; i++) {
+ 		if (progdefaults.VIEWERascend) j = progdefaults.VIEWERchannels - 1 - i;
+ 		else j = i;
+@@ -318,9 +330,19 @@
+ 	redraw();
+ }
+ 
++void pskBrowser::api_clear()
++{
++	for (int i = 0; i < MAXCHANNELS; i++) {
++		apitext[i].clear();
++		apifreq[i] = 0;
++		apibreak[i] = false;
++	}
++}
++
+ void pskBrowser::clearch(int n, int freq) // 0 < n < channels
+ {
+ 	bwsrline[n] = " ";
++	if (n >= 0 && n < MAXCHANNELS) apibreak[n] = true;
+ 	set_freq(n, freq);
+ 	redraw();
+ }
+--- a/src/network/xmlrpc.cxx
++++ b/src/network/xmlrpc.cxx
+@@ -3496,7 +3496,94 @@
+ };
+ 
+ // =============================================================================
++
++
++// =====================================================================
++// browser.* : the Signal Browser (multi-channel decoder bank) over XML-RPC.
++//
++// mainViewer (main window) and brwsViewer (View > Signal browser) hold, per
++// channel, the audio frequency and the text decoded there.  These methods
++// expose that state so an external program can see every station the decoder
++// bank has locked to.  The snapshot is taken on the GUI thread (REQ_SYNC)
++// because the viewer thread writes the widget lines.
++// =====================================================================
++
++#include "Viewer.h"
++#include "viewpsk.h"
+ 
++struct browser_channel_t { int channel; int freq; bool active; std::string text; };
++
++static void browser_snapshot(std::vector<browser_channel_t>* out)
++{
++	pskBrowser* b = mainViewer ? mainViewer : brwsViewer;
++	if (!b) return;
++	for (int i = 1; i <= MAXCHANNELS; i++) {
++		std::string t = b->api_text(i);
++		bool active = b->api_active(i);
++		if (t.empty() && !active) continue;
++		browser_channel_t c;
++		c.channel = i;
++		c.freq = b->api_freq(i);
++		c.active = active;
++		c.text = t;
++		out->push_back(c);
++	}
++}
++
++class Browser_get_channels : public xmlrpc_c::method
++{
++public:
++	Browser_get_channels()
++	{
++		_signature = "A:n";
++		_help = "Returns the Signal Browser channels as an array of structs "
++			"{channel, freq, active, text}: channel number, audio frequency in Hz, "
++			"whether the channel currently has a signal, and all text decoded there "
++			"since browser.clear (not trimmed to the widget width; a newline marks "
++			"where the channel lost and regained a signal). Empty when no browser "
++			"widget exists or nothing has been decoded.";
++	}
++	void execute(const xmlrpc_c::paramList& params, xmlrpc_c::value* retval)
++	{
++		XMLRPC_LOCK;
++		std::vector<browser_channel_t> chans;
++		REQ_SYNC(browser_snapshot, &chans);
++		std::vector<xmlrpc_c::value> out;
++		for (size_t i = 0; i < chans.size(); i++) {
++			std::map<std::string, xmlrpc_c::value> item;
++			item["channel"] = xmlrpc_c::value_int(chans[i].channel);
++			item["freq"] = xmlrpc_c::value_int(chans[i].freq);
++			item["active"] = xmlrpc_c::value_boolean(chans[i].active);
++			item["text"] = xmlrpc_c::value_string(chans[i].text);
++			out.push_back(xmlrpc_c::value_struct(item));
++		}
++		*retval = xmlrpc_c::value_array(out);
++	}
++};
++
++static void browser_clear_all(void)
++{
++	if (mainViewer) mainViewer->clear();
++	if (brwsViewer) brwsViewer->clear();
++}
++
++class Browser_clear : public xmlrpc_c::method
++{
++public:
++	Browser_clear()
++	{
++		_signature = "n:n";
++		_help = "Clears the text of every Signal Browser channel, on screen and in the "
++			"buffer browser.get_channels reads.";
++	}
++	void execute(const xmlrpc_c::paramList& params, xmlrpc_c::value* retval)
++	{
++		XMLRPC_LOCK;
++		REQ(browser_clear_all);
++		*retval = xmlrpc_c::value_nil();
++	}
++};
++
+ class Text_get_rx_length : public xmlrpc_c::method
+ {
+ public:
+@@ -4369,7 +4456,9 @@
+ ELEM_(Io_enable_kiss, "io.enable_kiss")                                \
+ ELEM_(Io_enable_arq, "io.enable_arq")                                  \
+ \
+-ELEM_(Text_get_rx_length, "text.get_rx_length")                        \
++ELEM_(Browser_get_channels, "browser.get_channels")                    \
++	ELEM_(Browser_clear, "browser.clear")                                   \
++	ELEM_(Text_get_rx_length, "text.get_rx_length")                        \
+ ELEM_(Text_get_rx, "text.get_rx")                                      \
+ ELEM_(Text_clear_rx, "text.clear_rx")                                  \
+ ELEM_(Text_add_tx, "text.add_tx")                                      \

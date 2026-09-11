@@ -406,11 +406,30 @@ print(data.data.decode("utf-8", "replace"))
 
 ---
 
+## 16. Patched methods — `browser.*` (not in stock fldigi)
+
+fldigi's Signal Browser (the multi-channel PSK/RTTY/CW decoder bank behind the
+left-hand panel and View › Signal browser) has no XML-RPC surface in 4.2.13. The
+patch `patches/fldigi-4.2.13-browser-xmlrpc.patch` in fldigi-mcp adds these two
+methods; they appear in `fldigi.list` only on a build that carries it, and the
+`browser` tool checks for them before calling.
+
+| Method | Signature | Notes |
+| --- | --- | --- |
+| `browser.get_channels` | `A:n` | Array of structs `{channel:int, freq:int, active:bool, text:string}`: one per channel that has printed since the last clear. `freq` is the audio frequency in Hz; `active` says the channel currently holds a signal; `text` is everything decoded on the channel since `browser.clear`, not trimmed to the widget width (capped at 8192 chars, oldest dropped), with a newline where the channel lost and regained a signal. Empty when the current modem has no browser (Olivia, MFSK, …) or nothing has printed. |
+| `browser.clear` | `n:n` | Clears every channel on screen and in the buffer above. |
+
+Gotcha 16: the channel number is a slot in the decoder bank, not a frequency;
+under the browser's ascending-order display the on-screen row and the slot differ,
+which is why the patch keeps its own per-slot frequency. Read `freq`, not `channel`.
+
+---
+
 ## Credits, license & contributing
 
 Maintained as a free community resource by **Stefan Brunner (AE5VG)** alongside
 [`fldigi-mcp`](https://github.com/sbrunner-atx/fldigi-mcp). Released under the
-**MIT License** — use it, fork it, quote it.
+**GPL-3.0-or-later** — use it, fork it, quote it.
 
 This is an **independent project and is not affiliated with, nor endorsed by, the
 fldigi / W1HKJ project.** fldigi is © Dave Freese W1HKJ and contributors.

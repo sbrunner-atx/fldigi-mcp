@@ -318,6 +318,16 @@ LEGACY_OPS = {
     "flmsg_squelch": ("main.flmsg_squelch", None),  # -> flmsg squelch
 }
 
+# Methods that exist only in a patched fldigi (patches/fldigi-4.2.13-browser-xmlrpc.patch,
+# prepared for upstream submission 11 Sep 2026). Kept out of ALL_OPMAPS on purpose: the coverage
+# test holds ALL_OPMAPS to the stock 4.2.13 catalog, and the browser tool checks
+# fldigi.list before calling these.
+BROWSER_OPS = {
+    "channels": ("browser.get_channels", None),
+    "clear": ("browser.clear", None),
+}
+PATCHED_OPMAPS = {"browser": BROWSER_OPS}
+
 ALL_OPMAPS = {
     "application": STATION_OPS,
     "modem": MODEM_OPS,

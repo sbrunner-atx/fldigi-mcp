@@ -34,6 +34,17 @@ audio access, `signal_hunt` with `method="api"` steps `modem.search_up` for each
 modem and reads `modem.get_quality`. It is slow and only finds what the current
 modem can lock to; use it when the tap is unavailable, not by preference.
 
+## With the Signal Browser patch
+
+fldigi's own Signal Browser is a bank of up to 30 demodulators with DCD; it copies
+PSK, RTTY and CW stations too faint for a spectrum to rank. On a fldigi built with
+`patches/fldigi-4.2.13-browser-xmlrpc.patch` (see `browser available`), use it as
+the finder for those modes: set the modem family with `tune_to` (any carrier), wait
+20 s, then `browser channels` or `signal_hunt method="browser"`. Each channel gives
+the carrier and the text already copied, so the "confirm" step is done before you
+tune. The browser names no mode; use the audio hunt first when the band's mode is
+not known. Without the patch both calls answer with a hint and nothing else changes.
+
 ## The loop
 
 1. **Hunt.** `signal_hunt(seconds=20)`. For a contest, pass the contest mode so

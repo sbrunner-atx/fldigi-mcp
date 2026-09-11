@@ -370,6 +370,45 @@ def legacy(operation: str, value: Any = None) -> dict:
     return {"operation": operation, "result": _run(methods.LEGACY_OPS, operation, value)}
 
 
+_BROWSER_HINT = (
+    "This fldigi has no browser.* methods. They come from the Signal Browser XML-RPC "
+    "patch shipped in fldigi-mcp (patches/fldigi-4.2.13-browser-xmlrpc.patch; prepared for "
+    "upstream submission). Build fldigi with it, or use signal_hunt with the audio tap instead."
+)
+
+
+def _browser_available() -> bool:
+    try:
+        names = {m["name"] for m in _fldigi.call("fldigi.list")}
+    except Exception:
+        return False
+    return "browser.get_channels" in names
+
+
+@mcp.tool()
+def browser(operation: str = "channels") -> dict:
+    """fldigi's Signal Browser over XML-RPC: every station the multi-channel decoder
+    bank has locked to in the passband, with the text decoded on each channel. This is
+    what the left-hand browser panel shows, and it copies stations far too weak for
+    the waterfall to show. operations: channels (list of {channel, freq, active, text};
+    text accumulates since the last clear, a newline marks a lost-and-regained signal),
+    clear, available.
+
+    Runs for PSK, RTTY and CW modems (fldigi's browser covers those). Needs a fldigi
+    built with the patch in fldigi-mcp/patches; stock 4.2.13 has no browser.* methods,
+    and then this tool says so instead of failing. Receive only.
+    """
+    if operation == "available":
+        return {"available": _browser_available()}
+    if not _browser_available():
+        return {"operation": operation, "available": False, "hint": _BROWSER_HINT}
+    return {
+        "operation": operation,
+        "modem": _fldigi.call("modem.get_name"),
+        "result": _run(methods.BROWSER_OPS, operation),
+    }
+
+
 @mcp.tool()
 def fldigi_call(method: str, params: list | None = None) -> dict:
     """Escape hatch: call ANY fldigi XML-RPC method by dotted name (e.g. 'rig.get_mode').
@@ -409,6 +448,10 @@ def signal_hunt(
     the device fldigi listens on; or `device` as a name substring or index; `wav` analyses a
     file instead). Needs the optional extra: pip install 'fldigi-mcp[hunt]'.
     method 'devices': list the input devices the tap can open.
+    method 'browser': read fldigi's Signal Browser (needs the browser patch, see the
+    `browser` tool): one candidate per channel the decoder bank holds, with its text,
+    for the current modem family (PSK, RTTY or CW). Finds stations the spectrum
+    analyser ranks near the floor, but names no mode: it reports what fldigi is set to.
     method 'api': blind fallback with no audio access; steps modem.search_up across the
     passband for each modem (mode='RTTY,BPSK31,...') and reads modem.get_quality. Slow.
 
@@ -419,6 +462,35 @@ def signal_hunt(
     """
     if method == "devices":
         return {"devices": hunt.list_devices()}
+    if method == "browser":
+        if not _browser_available():
+            return {"method": "browser", "candidates": [], "warning": _BROWSER_HINT}
+        modem_name = _fldigi.call("modem.get_name")
+        chans = _fldigi.call("browser.get_channels")
+        cands = []
+        for c in chans:
+            txt = c.get("text", "")
+            cands.append(
+                {
+                    "carrier_hz": c["freq"],
+                    "mode": modem_name,
+                    "fldigi_modem": modem_name,
+                    "channel": c["channel"],
+                    "active": bool(c.get("active")),
+                    "chars": len(txt),
+                    "text_tail": txt[-80:],
+                    "cq": " CQ " in f" {txt.upper()} ",
+                    "confidence": "high" if len(txt.strip()) >= 12 else "low",
+                }
+            )
+        cands.sort(key=lambda c: (c["cq"], c["active"], c["chars"]), reverse=True)
+        return {
+            "method": "browser",
+            "source": f"fldigi Signal Browser, modem {modem_name}",
+            "candidates": cands[: max(1, top)],
+            "note": "Mode is what fldigi is set to, not measured. tune_to a candidate's "
+            "carrier_hz with the same modem to read it in the main window.",
+        }
     if method == "api":
         modems = [m.strip() for m in (mode or "RTTY,BPSK31").split(",") if m.strip()]
         return {"method": "api", "candidates": hunt.api_hunt(_fldigi, modems)}

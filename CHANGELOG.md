@@ -5,7 +5,23 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-09-11
+
+### Added
+- `browser` tool and `signal_hunt method="browser"`: fldigi's Signal Browser over
+  XML-RPC, every station the decoder bank holds with its text. Needs the patch in
+  `patches/fldigi-4.2.13-browser-xmlrpc.patch` (two methods, `browser.get_channels`
+  and `browser.clear`, with an untrimmed per-channel text buffer); on stock fldigi
+  the tool answers with a hint. Tested on 4.2.13 with four synthetic PSK31 stations
+  from 0 to -26 dB, all copied in full.
+- FLDIGI-API.md section 16 documents the patched methods; the signal-hunting skill
+  and Field Guide say when to use the browser instead of the audio hunt.
+
+### Changed
+- Licence changed from MIT to GPL-3.0-or-later (sole author). The MIT choice was
+  arbitrary; GPL-3.0-or-later matches fldigi and allows reusing its code (the
+  signal-browser decoder bank is the first candidate). Releases up to 0.2.2 remain
+  available under MIT.
 
 ## [0.2.2] - 2026-09-10
 

@@ -118,6 +118,23 @@ to run receive-only.
 uv run mcp dev src/fldigi_mcp/server.py
 ```
 
+## The Signal Browser patch (`patches/`)
+
+fldigi's Signal Browser, the left-hand panel that decodes up to 30 PSK, RTTY or CW
+stations at once, is not on its XML-RPC API. `patches/fldigi-4.2.13-browser-xmlrpc.patch`
+adds two methods, `browser.get_channels` (array of `{channel, freq, active, text}`,
+text untrimmed and accumulated since the last clear) and `browser.clear`. The `browser`
+tool and `signal_hunt method="browser"` use them and say so when fldigi is unpatched.
+Tested on 4.2.13 (macOS, four synthetic PSK31 stations from 0 to -26 dB: all four
+copied in full). The patch applies to the fldigi git HEAD on SourceForge and is prepared
+for upstream submission; until it lands, build fldigi from source with it:
+
+```bash
+tar xf fldigi-4.2.13.tar.gz && cd fldigi-4.2.13
+patch -p1 < /path/to/fldigi-mcp/patches/fldigi-4.2.13-browser-xmlrpc.patch
+./configure --prefix=$HOME/.local/fldigi && make -j8 && make install
+```
+
 ## Tools
 
 Each tool is one permission and takes an `operation` argument, so e.g. "change
@@ -144,6 +161,7 @@ the mode" is a single permission regardless of which underlying method runs.
 | `band_guidance` | advisory band/watering-hole help (experimental) |
 | `signal_hunt` | find and name the signals in the receiver audio; rank CQing stations (experimental, `[hunt]` extra) |
 | `tune_to` | set modem and carrier to a `signal_hunt` candidate, receive only |
+| `browser` | fldigi's Signal Browser: every station the decoder bank holds, with its text (needs the fldigi patch in `patches/`) |
 | `fldigi_call` | escape hatch — call any method by name, incl. future ones |
 
 Use `application` → `list_methods` to enumerate every method the running build
@@ -254,4 +272,12 @@ coercion; it does not require a running fldigi.
 
 ## License
 
-[MIT](LICENSE) © 2026 Stefan Brunner (AE5VG)
+[GPL-3.0-or-later](LICENSE) © 2026 Stefan Brunner (AE5VG)
+
+fldigi-mcp is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version. It was MIT-licensed through 0.2.2; the change to GPL-3.0-or-later
+(the licence fldigi itself uses) lets this project reuse fldigi code, such as
+its multi-channel signal browser, directly. Talking to fldigi over XML-RPC
+never required this; porting its decoders does.

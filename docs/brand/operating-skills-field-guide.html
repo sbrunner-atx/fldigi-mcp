@@ -395,6 +395,15 @@
     <tr><td class="strong mono">score</td><td>Strength weighted by persistence and periodicity. The CQing station wins.</td></tr>
   </table>
 
+  <h3>With the Signal Browser patch</h3>
+  <p>fldigi's own Signal Browser, the left-hand panel, is a bank of thirty demodulators with DCD; it copies
+  PSK, RTTY and CW stations too faint for any spectrum to rank. Stock fldigi does not expose it, so
+  fldigi-mcp ships a small patch (<span class="mono">patches/</span>, prepared for upstream) that adds
+  <code>browser.get_channels</code>. On such a build, <code>browser channels</code> or
+  <code>signal_hunt method="browser"</code> returns every channel with its carrier and the text already
+  copied: the confirm step is done before you tune. Four synthetic PSK31 stations from 0 to −26 dB: all
+  four copied in full. The browser names no mode; hunt the audio first when the band's mode is unknown.</p>
+
   <h3>How a mode is named</h3>
   <p>From the signal's shape, the way you would from the waterfall, with the numbers checked against the
   Signal Identification Wiki. Two narrow lines a standard shift apart (170 Hz in amateur use) is RTTY,
@@ -566,8 +575,8 @@ wait 20 s, then text → read
   <div class="callout">
     <div class="ct">73</div>
     <p>This is private, personal work by Stefan Brunner, AE5VG — built for amateur radio
-    operators. Not affiliated with fldigi, N3FJP, or any employer. MIT licensed, like the
-    servers it documents. GL es 73 de AE5VG sk.</p>
+    operators. Not affiliated with fldigi, N3FJP, or any employer. GPL-3.0-or-later, like
+    fldigi itself. GL es 73 de AE5VG sk.</p>
   </div>
 </div>
 </body></html>

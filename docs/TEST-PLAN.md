@@ -89,6 +89,17 @@ on-air tests are clearly marked and require a licensed operator.
 | G2 | `application` launch (when fldigi closed) | Starts fldigi; becomes reachable. |
 | G3 | `application` stop | fldigi quits gracefully. |
 
+## I. Signal Browser (optional, patched fldigi only)
+
+| # | Step | Expect |
+| --- | --- | --- |
+| I1 | `browser available` on stock fldigi | `available: false` |
+| I2 | `browser channels` on stock fldigi | `available: false` plus a hint naming the patch; no error |
+| I3 | On a patched build in BPSK31 with two or more stations audible, wait 20 s, `browser channels` | one entry per station with its carrier (`freq`) and text; `active` true while it prints |
+| I4 | `signal_hunt method="browser"` | same stations as candidates, CQ callers first |
+| I5 | `browser clear`, then `browser channels` | empty until a station prints again |
+| I6 | Stop the browser modem (e.g. switch to Olivia) | `browser channels` returns the last text; no new entries |
+
 ## H. Automated regression (no radio needed)
 
 Run before every release:

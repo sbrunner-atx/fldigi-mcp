@@ -124,6 +124,15 @@ releases page and install it the same way — it replaces the old one.
 | somewhere without the sound card (Cowork sandbox, a container, or fldigi on a VM via mcp-host-bridge) | run `fldigi-mcp-tap --device iMic` beside fldigi and set **Signal-hunt tap URL** = `http://127.0.0.1:7365` (or the host's address) | the tap runs where the audio is and answers over HTTP; the server never opens a device |
 | anywhere, no audio at all | `signal_hunt` with `method="api"` | steps fldigi's own `search_up` and reads `get_quality`; slow and blind to mode |
 
+## The Signal Browser (optional, needs a patched fldigi)
+
+fldigi's left-hand Signal Browser decodes up to 30 PSK, RTTY or CW stations at once
+and copies signals far too weak for a spectrum to rank, but stock fldigi does not
+put it on the API. The `browser` tool and `signal_hunt` with `method="browser"`
+read it on a fldigi built with `patches/fldigi-4.2.13-browser-xmlrpc.patch` (see the
+README for the three-line build). On stock fldigi both answer with a hint and
+nothing else changes. No audio setting is involved: the browser runs inside fldigi.
+
 If a hunt returns a `warning` about all-zero audio, the device is silent or the process lacks
 microphone permission; the message says which setting to fix.
  Install the extra

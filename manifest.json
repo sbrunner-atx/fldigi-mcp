@@ -129,6 +129,10 @@
       "description": "Set modem and carrier to a signal_hunt candidate (receive only)."
     },
     {
+      "name": "browser",
+      "description": "fldigi's Signal Browser: every station the decoder bank holds, with its text (needs the browser patch in patches/; says so on stock fldigi)."
+    },
+    {
       "name": "fldigi_call",
       "description": "Escape hatch: call any fldigi XML-RPC method by name."
     }

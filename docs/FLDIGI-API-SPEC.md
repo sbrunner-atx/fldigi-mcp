@@ -185,3 +185,14 @@ array, struct. Confidence: all rows enumerated live (`fldigi.list`).
 | `wefax.send_file` | string int | string | keying |  |
 | `navtex.get_message` | int | string | read |  |
 | `navtex.send_message` | string | string | keying |  |
+
+## Patched methods (not in stock 4.2.13)
+
+Served only by a fldigi built with `patches/fldigi-4.2.13-browser-xmlrpc.patch`
+(fldigi-mcp repo; offered upstream on w1hkj/fldigi issue 55). Check `fldigi.list`
+before calling.
+
+| Method | Args | Returns | Class | Notes |
+| --- | --- | --- | --- | --- |
+| `browser.get_channels` | — | array of struct `{channel:int, freq:int, active:bool, text:string}` | read | one entry per Signal Browser channel that has printed since the last clear; text untrimmed, line breaks kept, capped at 8192 chars |
+| `browser.clear` | — | nil | write | clears every channel on screen and in the API buffer |

@@ -122,8 +122,8 @@ uv run mcp dev src/fldigi_mcp/server.py
 
 fldigi's Signal Browser, the left-hand panel that decodes up to 30 PSK, RTTY or CW
 stations at once, is not on its XML-RPC API. `patches/fldigi-4.2.13-browser-xmlrpc.patch`
-adds two methods, `browser.get_channels` (array of `{channel, freq, active, text}`,
-text untrimmed and accumulated since the last clear) and `browser.clear`. The `browser`
+touches four files (`psk_browser.h/.cxx`, `viewpsk.cxx`, `xmlrpc.cxx`) and adds two methods, `browser.get_channels` (array of `{channel, freq, active, text}`,
+text untrimmed, line breaks kept, accumulated since the last clear) and `browser.clear`. The `browser`
 tool and `signal_hunt method="browser"` use them and say so when fldigi is unpatched.
 Tested on 4.2.13 (macOS, four synthetic PSK31 stations from 0 to -26 dB: all four
 copied in full). The patch applies to the fldigi git HEAD on SourceForge and is prepared

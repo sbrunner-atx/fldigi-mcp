@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `browser` tool and `signal_hunt method="browser"`: fldigi's Signal Browser over
   XML-RPC, every station the decoder bank holds with its text. Needs the patch in
   `patches/fldigi-4.2.13-browser-xmlrpc.patch` (two methods, `browser.get_channels`
-  and `browser.clear`, with an untrimmed per-channel text buffer); on stock fldigi
+  and `browser.clear`, with an untrimmed per-channel text buffer that keeps line breaks); on stock fldigi
   the tool answers with a hint. Tested on 4.2.13 with four synthetic PSK31 stations
   from 0 to -26 dB, all copied in full.
 - FLDIGI-API.md section 16 documents the patched methods; the signal-hunting skill

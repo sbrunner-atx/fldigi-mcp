@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Field Guide restyled: white paper, GitHub-style blue accent, sans-serif fallbacks, no dark cover page. It prints on a home printer now; the black-and-amber look is gone.
 - Field Guide: the signal-hunting chapter opens its Signal Browser section with a callout that the `browser.*` methods are a proposed patch, and the skills table row 03 describes signal hunting instead of repeating the contest row.
 - The API reference files are lower case now (`docs/fldigi-api.md`, `.pdf`, `docs/fldigi-api-spec.md`), matching fldigi's own naming.
 - The Field Guide PDF is now `docs/fldigi-mcp Operating Field Guide.pdf` so a downloaded copy says what it is.

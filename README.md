@@ -118,7 +118,10 @@ to run receive-only.
 uv run mcp dev src/fldigi_mcp/server.py
 ```
 
-## The Signal Browser patch (`patches/`)
+## The Signal Browser patch (`patches/`) — proposed, not yet merged
+
+**Status:** offered to fldigi's maintainer on 11 September 2026 (w1hkj/fldigi issue 55).
+Until it is merged, the method names and fields below are a proposal and may change.
 
 fldigi's Signal Browser, the left-hand panel that decodes up to 30 PSK, RTTY or CW
 stations at once, is not on its XML-RPC API. `patches/fldigi-4.2.13-browser-xmlrpc.patch`

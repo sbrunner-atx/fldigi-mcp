@@ -124,7 +124,7 @@ releases page and install it the same way — it replaces the old one.
 | somewhere without the sound card (Cowork sandbox, a container, or fldigi on a VM via mcp-host-bridge) | run `fldigi-mcp-tap --device iMic` beside fldigi and set **Signal-hunt tap URL** = `http://127.0.0.1:7365` (or the host's address) | the tap runs where the audio is and answers over HTTP; the server never opens a device |
 | anywhere, no audio at all | `signal_hunt` with `method="api"` | steps fldigi's own `search_up` and reads `get_quality`; slow and blind to mode |
 
-## The Signal Browser (optional, needs a patched fldigi)
+## The Signal Browser (optional, needs a patched fldigi; proposed upstream, not merged)
 
 fldigi's left-hand Signal Browser decodes up to 30 PSK, RTTY or CW stations at once
 and copies signals far too weak for a spectrum to rank, but stock fldigi does not

@@ -406,7 +406,12 @@ print(data.data.decode("utf-8", "replace"))
 
 ---
 
-## 16. Patched methods — `browser.*` (not in stock fldigi)
+## 16. PROPOSED methods — `browser.*` (patch offered upstream, not merged)
+
+> **Status: proposed.** These two methods are not in any released fldigi. They come
+> from a patch offered to Dave W1HKJ on 11 September 2026 (w1hkj/fldigi issue 55).
+> Names, signature and struct fields may change before or when he merges it; this
+> section is updated when the patch lands or is reworked.
 
 fldigi's Signal Browser (the multi-channel PSK/RTTY/CW decoder bank behind the
 left-hand panel and View › Signal browser) has no XML-RPC surface in 4.2.13. The

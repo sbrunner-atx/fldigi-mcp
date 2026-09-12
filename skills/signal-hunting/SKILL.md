@@ -34,7 +34,7 @@ audio access, `signal_hunt` with `method="api"` steps `modem.search_up` for each
 modem and reads `modem.get_quality`. It is slow and only finds what the current
 modem can lock to; use it when the tap is unavailable, not by preference.
 
-## With the Signal Browser patch
+## With the Signal Browser patch (proposed upstream, not merged)
 
 fldigi's own Signal Browser is a bank of up to 30 demodulators with DCD; it copies
 PSK, RTTY and CW stations too faint for a spectrum to rank. On a fldigi built with

@@ -89,7 +89,7 @@ on-air tests are clearly marked and require a licensed operator.
 | G2 | `application` launch (when fldigi closed) | Starts fldigi; becomes reachable. |
 | G3 | `application` stop | fldigi quits gracefully. |
 
-## I. Signal Browser (optional, patched fldigi only)
+## I. Signal Browser (optional, patched fldigi only; methods proposed upstream, not merged)
 
 | # | Step | Expect |
 | --- | --- | --- |

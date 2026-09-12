@@ -2,11 +2,11 @@
 
 Field-verified against **fldigi 4.2.13** via `fldigi.list` on 2026-09-09; the list is
 identical to 4.2.11 (first verified 2026-06-23). Total methods: **174** (`fldigi.list`
-prints 176 rows because `log.set_rst_in` and `log.set_rst_out` appear twice). Companion to [FLDIGI-API.md](FLDIGI-API.md).
+prints 176 rows because `log.set_rst_in` and `log.set_rst_out` appear twice). Companion to [fldigi-api.md](fldigi-api.md).
 
 Categories: **read** (returns state, no side effect) · **write** (changes
 state / fires an action) · **keying** (puts RF on the air — see transmit safety
-in FLDIGI-API.md). Type codes: void, bool, int, double, string, bytes (base64),
+in fldigi-api.md). Type codes: void, bool, int, double, string, bytes (base64),
 array, struct. Confidence: all rows enumerated live (`fldigi.list`).
 
 | Method | Args | Returns | Category | Notes |

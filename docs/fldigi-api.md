@@ -9,7 +9,7 @@ software actually exposes — not just what the wiki documents.
 > `fldigi.list` / `fldigi.name_version` on 2026-06-23. Newer or older builds may
 > add or remove methods — always call `fldigi.list` to confirm what *your* build
 > supports. A terse, machine-readable catalog of all 174 is in
-> [FLDIGI-API-SPEC.md](FLDIGI-API-SPEC.md).
+> [fldigi-api-spec.md](fldigi-api-spec.md).
 
 > **Independent project — not affiliated with fldigi or the W1HKJ project.**
 > This reference is a free community resource maintained alongside

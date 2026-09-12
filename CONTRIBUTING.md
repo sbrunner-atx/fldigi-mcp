@@ -57,7 +57,7 @@ docs/           # design & safety documentation
    operation yet and every operation whose argument kind no longer matches.
 3. Wire the new methods into the right group in `methods.py` (or `LEGACY_OPS` if
    fldigi marks them deprecated), update the tool docstring, the README tool
-   table, `docs/FLDIGI-API-SPEC.md`, and the supported-release line in the README.
+   table, `docs/fldigi-api-spec.md`, and the supported-release line in the README.
 
 ## Building the desktop extension (.mcpb)
 

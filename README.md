@@ -23,11 +23,11 @@ Building this server meant mapping fldigi's entire XML-RPC interface and
 **verifying every method against a live build** — so we've written it all up and
 are sharing it freely, whether or not you ever use this MCP server:
 
-- **[docs/FLDIGI-API.md](docs/FLDIGI-API.md)** — a clean, complete, human-readable
+- **[docs/fldigi-api.md](docs/fldigi-api.md)** — a clean, complete, human-readable
   reference organized by namespace, with transport details, types, worked
   examples, a transmit-safety section, and field-tested gotchas.
-- **[docs/FLDIGI-API.pdf](docs/FLDIGI-API.pdf)** — the same, as a printable PDF.
-- **[docs/FLDIGI-API-SPEC.md](docs/FLDIGI-API-SPEC.md)** — a terse,
+- **[docs/fldigi-api.pdf](docs/fldigi-api.pdf)** — the same, as a printable PDF.
+- **[docs/fldigi-api-spec.md](docs/fldigi-api-spec.md)** — a terse,
   machine-readable catalog of all **174 methods** (args, return type,
   read/write/keying).
 

@@ -251,7 +251,7 @@ procedures distilled from live on-air use — bundled with the repo and the
   (delta reads, the no-echo rule, restart detection), and a reference CQ
   loop. Field-proven during ARRL Field Day 2026.
 
-The **[Operating Skills Field Guide](docs/operating-skills-field-guide.pdf)**
+The **[fldigi-mcp Operating Field Guide](<docs/fldigi-mcp Operating Field Guide.pdf>)**
 (PDF) documents these skills and their companion `contest-operating` from the
 sibling [n3fjp-mcp](https://github.com/sbrunner-atx/n3fjp-mcp) — skills
 at a glance, installation, a plain-language "Your first session — Claude for

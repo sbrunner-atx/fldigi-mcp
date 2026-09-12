@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- The Field Guide PDF is now `docs/fldigi-mcp Operating Field Guide.pdf` so a downloaded copy says what it is.
 - Docs mark the `browser.*` methods as proposed (patch offered upstream 11 Sep 2026, not merged).
 
 ## [0.3.0] - 2026-09-11

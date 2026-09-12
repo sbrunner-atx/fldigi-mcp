@@ -92,8 +92,9 @@
     </tr>
     <tr>
       <td>03</td><td class="strong">signal-hunting</td><td class="mono">fldigi-mcp</td>
-      <td>The contest: the QSO state machine from CQ to logged contact, the special-case
-          playbook, and verified N3FJP logging.</td>
+      <td>The band: naming each signal's mode from the audio, ranking the station that sits
+          still and calls CQ, tuning to it, and reading fldigi's Signal Browser where the
+          proposed <span class="mono">browser.*</span> patch is present.</td>
       <td class="get">The right station found, named and tuned before you call</td>
     </tr>
   </table>
@@ -395,14 +396,23 @@
     <tr><td class="strong mono">score</td><td>Strength weighted by persistence and periodicity. The CQing station wins.</td></tr>
   </table>
 
-  <h3>With the Signal Browser patch</h3>
+  <h3>With the Signal Browser patch <span class="mono">proposed, not yet in fldigi</span></h3>
+  <div class="callout warn" style="break-inside:avoid;page-break-inside:avoid">
+    <div class="ct">Proposed API, not in any released fldigi</div>
+    <p>The <code>browser</code> tool and <code>signal_hunt method="browser"</code> call two XML-RPC methods
+    that stock fldigi does not have: <code>browser.get_channels</code> (one struct per channel:
+    <span class="mono">channel, freq, active, text</span>) and <code>browser.clear</code>. They come from a
+    four-file patch offered to Dave W1HKJ on 11 September 2026 (w1hkj/fldigi issue 55) and shipped in
+    fldigi-mcp under <span class="mono">patches/</span>. Until he merges it, the names and fields are a
+    proposal and may change. On an unpatched fldigi both calls answer with a hint and nothing else in this
+    chapter changes.</p>
+  </div>
   <p>fldigi's own Signal Browser, the left-hand panel, is a bank of thirty demodulators with DCD; it copies
-  PSK, RTTY and CW stations too faint for any spectrum to rank. Stock fldigi does not expose it, so
-  fldigi-mcp ships a small patch (<span class="mono">patches/</span>, prepared for upstream) that adds
-  <code>browser.get_channels</code>. On such a build, <code>browser channels</code> or
-  <code>signal_hunt method="browser"</code> returns every channel with its carrier and the text already
-  copied: the confirm step is done before you tune. Four synthetic PSK31 stations from 0 to −26 dB: all
-  four copied in full. The browser names no mode; hunt the audio first when the band's mode is unknown.</p>
+  PSK, RTTY and CW stations too faint for any spectrum to rank. On a build that carries the patch,
+  <code>browser channels</code> or <code>signal_hunt method="browser"</code> returns every channel with its
+  carrier and the text already copied, line breaks kept: the confirm step is done before you tune. Four
+  synthetic PSK31 stations from 0 to −26 dB: all four copied in full. The browser names no mode; hunt the
+  audio first when the band's mode is unknown. Building it yourself is three lines, in the README.</p>
 
   <h3>How a mode is named</h3>
   <p>From the signal's shape, the way you would from the waterfall, with the numbers checked against the

@@ -71,7 +71,9 @@ not known. Without the patch both calls answer with a hint and nothing else chan
 The signatures are in `data/mode_signatures.json`, checked against the Signal
 Identification Wiki (sigidwiki.com, Category:Amateur_Radio) and the fldigi
 manual. RTTY is two narrow lines a standard shift apart (170 Hz in amateur use,
-450 and 850 commercial) with the carrier at the midpoint. PSK31 is a single 30 Hz
+450 and 850 commercial) that key against each other, with the carrier at the
+midpoint; two PSK31 stations that merely sit 170 Hz apart change independently
+and are named as two stations, not one RTTY signal. PSK31 is a single 30 Hz
 line; CW is the same line keyed on and off, told apart by the element gaps. The
 hopping modes show as a grid of discrete tone positions when you look at where
 the energy is from one 30 ms frame to the next, which is what the waterfall's

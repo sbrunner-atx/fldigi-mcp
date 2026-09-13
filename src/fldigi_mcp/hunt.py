@@ -209,6 +209,45 @@ def analyse(
         sp_ = float(np.median(np.diff(pos))) if len(pos) >= 3 else None
         return pos, sp_
 
+    def fsk_anticorrelation(f1, f2, half_bw=25.0):
+        """Correlation of the frame-to-frame power CHANGES of two lines, over frames where
+        both lines have been active within a second. FSK keys mark and space against
+        each other, so its transitions are simultaneous and opposite: about -0.2 to -0.4
+        for RTTY at 45 or 50 Bd. Two PSK31 stations that happen to sit a standard shift
+        apart (usual on the PSK watering holes, where stations space themselves 100 to
+        200 Hz) change independently: about 0. The differencing removes fading and the
+        activity mask removes the other side of a QSO being silent, both of which fooled
+        a plain correlation. Added 13 Sep 2026 after a 20 m PSK31 stream was decoded as
+        RTTY all afternoon."""
+        from numpy.lib.stride_tricks import sliding_window_view as swv
+
+        win_n = int(0.02 * fs)
+        hop = int(0.005 * fs)
+        nfft = 2048
+        fr = np.fft.rfftfreq(nfft, 1 / fs)
+        s1 = (fr >= f1 - half_bw) & (fr <= f1 + half_bw)
+        s2 = (fr >= f2 - half_bw) & (fr <= f2 + half_bw)
+        w2 = np.hanning(win_n)
+        p1, p2 = [], []
+        for i in range(0, len(x) - win_n, hop):
+            sp = np.abs(np.fft.rfft(x[i : i + win_n] * w2, n=nfft)) ** 2
+            p1.append(float(sp[s1].sum()))
+            p2.append(float(sp[s2].sum()))
+        a = np.log10(np.array(p1) + 1e-9)
+        b = np.log10(np.array(p2) + 1e-9)
+        n = int(1.0 / 0.005)
+        if len(a) < 2 * n + 200:
+            return 0.0
+        act1 = swv(np.pad(a, n, mode="edge"), 2 * n + 1).max(axis=1) > np.percentile(a, 90) - 1.0
+        act2 = swv(np.pad(b, n, mode="edge"), 2 * n + 1).max(axis=1) > np.percentile(b, 90) - 1.0
+        both = act1 & act2
+        if both.sum() < 200:
+            return 0.0
+        da, db = np.diff(a[both]), np.diff(b[both])
+        if da.std() == 0 or db.std() == 0:
+            return 0.0
+        return float(np.corrcoef(da, db)[0, 1])
+
     def off_fraction(centre_hz, half_bw=60.0):
         """Fraction of active time inside keying gaps of 40 ms or longer, in +-half_bw
         around centre. Gap DURATION is the discriminator: a CW element gap is 40 ms or
@@ -289,7 +328,7 @@ def analyse(
         spacing = spacing_grid or (float(np.median(np.diff(tones))) if len(tones) >= 3 else None)
         mode, carrier, extra = "unknown", centre, {}
         peak_f = float(f[i])
-        partner, best = None, 0.0
+        partner, best, rejected = None, 0.0, {}
         if width < 60:
             for shift in RTTY_SHIFTS:
                 for sign in (-1, 1):
@@ -299,14 +338,19 @@ def analyse(
                         if s[k] >= 0.5 * s[i] and s[k] >= 6 and s[k] > best:
                             best, partner = s[k], (shift, float(f[k]))
         if partner:
+            anti = fsk_anticorrelation(peak_f, partner[1])
+            if anti > -0.1:     # the two lines do not key against each other: two stations, not one FSK pair
+                rejected = {"rtty_partner_rejected_hz": round(partner[1], 1), "fsk_anticorrelation": round(anti, 2)}
+                partner = None
+        if partner:
             shift, pf = partner
-            mode, carrier, extra = "RTTY", (peak_f + pf) / 2, {"shift": shift}
+            mode, carrier, extra = "RTTY", (peak_f + pf) / 2, {"shift": shift, "fsk_anticorrelation": round(anti, 2)}
             k = int(round((pf - f[0]) / df))
             used[max(0, k - 60) : k + 60] = True  # the partner line is the same signal
         elif width <= 45:  # one line: keying gaps decide CW vs PSK
             off = off_fraction(peak_f)
             mode, carrier = ("CW", peak_f) if off >= 0.05 else ("BPSK31", carrier)
-            extra = {"off_fraction": round(off, 2)}
+            extra = {"off_fraction": round(off, 2), **rejected}
         elif 50 <= width <= 80 and len(tones) <= 3:
             mode = "BPSK63"
         elif 100 <= width <= 150 and len(tones) <= 3:

@@ -176,3 +176,20 @@ def test_fldigi_modem_names():
 def test_signatures_data_is_present():
     assert hunt.RTTY_SHIFTS == [85, 170, 200, 450, 850]
     assert hunt.DOMEX[11] == 262
+
+
+def test_two_psk31_stations_a_shift_apart_are_not_rtty():
+    """On the PSK watering holes stations sit 100 to 200 Hz apart. Two BPSK31 lines
+    170 Hz apart must not become one RTTY signal (13 Sep 2026: a 20 m PSK31 stream
+    was decoded as RTTY all afternoon). Continuous pair, and a pair that alternates
+    like the two sides of a QSO."""
+    x = psk31(1400, 40) + psk31(1570, 40) + noise(40)
+    modes = [r["mode"] for r in analyse(x, top=3)]
+    assert "RTTY" not in modes and "BPSK31" in modes, modes
+    a, b = psk31(1400, 40), psk31(1570, 40)
+    m = np.zeros_like(a)
+    m[: len(m) // 2] = 1
+    modes = [r["mode"] for r in analyse(a * m + b * (1 - m) + noise(40), top=3)]
+    assert "RTTY" not in modes, modes
+    r = analyse(rtty(1500, 170, 40) + noise(40), top=1)[0]
+    assert r["mode"] == "RTTY" and r["fsk_anticorrelation"] < -0.1

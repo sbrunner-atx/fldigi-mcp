@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-09-14
+
 ### Fixed
 - Signal hunt: two PSK31 stations sitting a standard shift apart (usual on the PSK watering holes) were named as one RTTY signal, and a whole afternoon of 20 m PSK31 was decoded with the RTTY modem. An RTTY partner line is now accepted only when the two lines key against each other (transition-level anti-correlation below -0.1; synthetic RTTY measures -0.2 to -0.4, independent stations about 0). Candidates report `fsk_anticorrelation`, and a rejected partner shows as `rtty_partner_rejected_hz`.
 

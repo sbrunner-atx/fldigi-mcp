@@ -409,6 +409,35 @@ def browser(operation: str = "channels") -> dict:
     }
 
 
+_RSID_HINT = (
+    "This fldigi has no rsid.* methods. They come from patches/fldigi-4.2.13-rsid-hits.patch "
+    "in fldigi-mcp (applies on top of the browser patch). Without it, RSID only switches "
+    "the modem; use `controls` toggle_rxid and read the modem name."
+)
+
+
+@mcp.tool()
+def rsid(operation: str = "hits") -> dict:
+    """RSID bursts the detector heard: which modes were announced in the passband and
+    where, as {utc, mode, hz} entries since the last clear. Works with fldigi's RSID set
+    to notify-only (RxID on, "do not change modem"), so the current modem keeps decoding
+    while the list tells you what else is on. operations: hits, clear, available.
+
+    Needs a fldigi built with the rsid-hits patch in fldigi-mcp/patches; on stock 4.2.13
+    the tool says so instead of failing. Receive only.
+    """
+    try:
+        names = {m["name"] for m in _fldigi.call("fldigi.list")}
+    except Exception:
+        names = set()
+    ok = "rsid.get_hits" in names
+    if operation == "available":
+        return {"available": ok}
+    if not ok:
+        return {"operation": operation, "available": False, "hint": _RSID_HINT}
+    return {"operation": operation, "result": _run(methods.RSID_OPS, operation)}
+
+
 @mcp.tool()
 def fldigi_call(method: str, params: list | None = None) -> dict:
     """Escape hatch: call ANY fldigi XML-RPC method by dotted name (e.g. 'rig.get_mode').

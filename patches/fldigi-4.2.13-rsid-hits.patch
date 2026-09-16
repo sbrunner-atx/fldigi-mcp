@@ -1,0 +1,139 @@
+--- a/src/rsid/rsid.cxx
++++ b/src/rsid/rsid.cxx
+@@ -48,7 +48,41 @@
+ #include "arq_io.h"
+ #include "data_io.h"
+ #include "audio_alert.h"
++
++// rsid.get_hits (fldigi-mcp patch, 16 Sep 2026): every RSID burst the detector
++// accepted, kept for an external program to read over XML-RPC. Independent of
++// rsid_notify_only, so a program can let RSID report modes without ever switching
++// the modem and still learn what was heard.
++#include <deque>
++#include <ctime>
++#include <mutex>
++static std::deque<rsid_hit_t> rsid_hit_log;
++static std::mutex rsid_hit_mx;
++
++void rsid_hits_get(std::vector<rsid_hit_t>& out)
++{
++	std::lock_guard<std::mutex> lk(rsid_hit_mx);
++	out.assign(rsid_hit_log.begin(), rsid_hit_log.end());
++}
++
++void rsid_hits_clear()
++{
++	std::lock_guard<std::mutex> lk(rsid_hit_mx);
++	rsid_hit_log.clear();
++}
+ 
++static void rsid_hit_record(int mbin, double hz)
++{
++	rsid_hit_t h;
++	h.utc = (long)time(NULL);
++	h.mode = mode_info[mbin].sname;
++	h.hz = hz;
++	std::lock_guard<std::mutex> lk(rsid_hit_mx);
++	rsid_hit_log.push_back(h);
++	if (rsid_hit_log.size() > 1000)
++		rsid_hit_log.pop_front();
++}
++
+ LOG_FILE_SOURCE(debug::LOG_MODEM);
+ 
+ #include "rsid_defs.cxx"
+@@ -645,6 +679,8 @@
+ 		char msg[50];
+ 		snprintf(msg, sizeof(msg), "RSID: %s @ %0.1f Hz", p_rsid[n].name, rsidfreq);
+ 		LOG_VERBOSE("%s", msg);
++		if (iSymbol != RSID_EOT)
++			rsid_hit_record(mbin, rsidfreq);
+ 	}
+ 	else {
+ 		char msg[50];
+--- a/src/include/rsid.h
++++ b/src/include/rsid.h
+@@ -157,4 +157,11 @@
+ friend void reset_rsid(void *who);
+ };
+ 
++// rsid.get_hits (fldigi-mcp patch): RSID bursts accepted by the detector
++#include <string>
++#include <vector>
++struct rsid_hit_t { long utc; std::string mode; double hz; };
++void rsid_hits_get(std::vector<rsid_hit_t>& out);
++void rsid_hits_clear();
++
+ #endif
+--- a/src/network/xmlrpc.cxx
++++ b/src/network/xmlrpc.cxx
+@@ -3583,7 +3583,58 @@
+ 		*retval = xmlrpc_c::value_nil();
+ 	}
+ };
++
++// =====================================================================
++// rsid.* : RSID bursts heard by the detector (fldigi-mcp patch, 16 Sep 2026).
++// With RSID in notify-only mode the modem never changes; these methods let an
++// external program still learn which modes were announced, and where.
++// =====================================================================
+ 
++#include "rsid.h"
++
++class Rsid_get_hits : public xmlrpc_c::method
++{
++public:
++	Rsid_get_hits()
++	{
++		_signature = "A:n";
++		_help = "Returns the RSID bursts accepted by the detector since rsid.clear, as an "
++			"array of structs {utc:int (epoch seconds), mode:string (modem name as "
++			"modem.set_by_name takes it), hz:double (audio frequency)}. Works with RSID "
++			"in notify-only mode, so the modem need not change for the mode to be known. "
++			"Oldest entries drop after 1000.";
++	}
++	void execute(const xmlrpc_c::paramList& params, xmlrpc_c::value* retval)
++	{
++		std::vector<rsid_hit_t> hits;
++		rsid_hits_get(hits);
++		std::vector<xmlrpc_c::value> out;
++		for (size_t i = 0; i < hits.size(); i++) {
++			std::map<std::string, xmlrpc_c::value> item;
++			item["utc"] = xmlrpc_c::value_int((int)hits[i].utc);
++			item["mode"] = xmlrpc_c::value_string(hits[i].mode);
++			item["hz"] = xmlrpc_c::value_double(hits[i].hz);
++			out.push_back(xmlrpc_c::value_struct(item));
++		}
++		*retval = xmlrpc_c::value_array(out);
++	}
++};
++
++class Rsid_clear : public xmlrpc_c::method
++{
++public:
++	Rsid_clear()
++	{
++		_signature = "n:n";
++		_help = "Forgets the RSID bursts rsid.get_hits would return.";
++	}
++	void execute(const xmlrpc_c::paramList& params, xmlrpc_c::value* retval)
++	{
++		rsid_hits_clear();
++		*retval = xmlrpc_c::value_nil();
++	}
++};
++
+ class Text_get_rx_length : public xmlrpc_c::method
+ {
+ public:
+@@ -4457,7 +4508,9 @@
+ ELEM_(Io_enable_arq, "io.enable_arq")                                  \
+ \
+ ELEM_(Browser_get_channels, "browser.get_channels")                    \
+-	ELEM_(Browser_clear, "browser.clear")                                   \
++	ELEM_(Browser_clear, "browser.clear")                                    \
++	ELEM_(Rsid_get_hits, "rsid.get_hits")                                    \
++	ELEM_(Rsid_clear, "rsid.clear")                                   \
+ 	ELEM_(Text_get_rx_length, "text.get_rx_length")                        \
+ ELEM_(Text_get_rx, "text.get_rx")                                      \
+ ELEM_(Text_clear_rx, "text.clear_rx")                                  \

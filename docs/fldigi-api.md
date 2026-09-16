@@ -423,6 +423,8 @@ methods; they appear in `fldigi.list` only on a build that carries it, and the
 | --- | --- | --- |
 | `browser.get_channels` | `A:n` | Array of structs `{channel:int, freq:int, active:bool, text:string}`: one per channel that has printed since the last clear. `freq` is the audio frequency in Hz; `active` says the channel currently holds a signal; `text` is everything decoded on the channel since `browser.clear`, not trimmed to the widget width (capped at 8192 chars, oldest dropped), with the decoded line breaks kept (the PSK viewer used to turn them into spaces before the widget saw them) and a newline where the channel lost and regained a signal. Empty when the current modem has no browser (Olivia, MFSK, …) or nothing has printed. |
 | `browser.clear` | `n:n` | Clears every channel on screen and in the buffer above. |
+| `rsid.get_hits` | `A:n` | Second patch (`fldigi-4.2.13-rsid-hits.patch`). Array of structs `{utc:int, mode:string, hz:double}`: every RSID burst the detector accepted since `rsid.clear`, with the modem name as `modem.set_by_name` takes it and the audio frequency. Recorded whether or not RSID is in notify-only mode, so a program can leave the modem alone and still learn what was announced. Oldest entries drop after 1000. |
+| `rsid.clear` | `n:n` | Forgets the recorded bursts. |
 
 Gotcha 16: the channel number is a slot in the decoder bank, not a frequency;
 under the browser's ascending-order display the on-screen row and the slot differ,

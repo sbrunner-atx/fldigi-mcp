@@ -196,3 +196,5 @@ before calling.
 | --- | --- | --- | --- | --- |
 | `browser.get_channels` | — | array of struct `{channel:int, freq:int, active:bool, text:string}` | read | one entry per Signal Browser channel that has printed since the last clear; text untrimmed, line breaks kept, capped at 8192 chars |
 | `browser.clear` | — | nil | write | clears every channel on screen and in the API buffer |
+| `rsid.get_hits` | — | array of struct `{utc:int, mode:string, hz:double}` | read | RSID bursts accepted since rsid.clear (second patch, fldigi-4.2.13-rsid-hits.patch) |
+| `rsid.clear` | — | nil | write | forgets the recorded bursts |

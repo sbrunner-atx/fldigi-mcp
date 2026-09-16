@@ -128,6 +128,10 @@ stations at once, is not on its XML-RPC API. `patches/fldigi-4.2.13-browser-xmlr
 touches four files (`psk_browser.h/.cxx`, `viewpsk.cxx`, `xmlrpc.cxx`) and adds two methods, `browser.get_channels` (array of `{channel, freq, active, text}`,
 text untrimmed, line breaks kept, accumulated since the last clear) and `browser.clear`. The `browser`
 tool and `signal_hunt method="browser"` use them and say so when fldigi is unpatched.
+A second patch, `patches/fldigi-4.2.13-rsid-hits.patch` (applies on top of the first), adds
+`rsid.get_hits` and `rsid.clear`: the RSID bursts the detector accepted, as `{utc, mode,
+hz}`. With RSID set to notify-only, fldigi then names the modes on the band without ever
+switching the modem; the `rsid` tool reads the list. Both patches are proposed, not merged.
 Tested on 4.2.13 (macOS, four synthetic PSK31 stations from 0 to -26 dB: all four
 copied in full). The patch applies to the fldigi git HEAD on SourceForge and is prepared
 for upstream submission; until it lands, build fldigi from source with it:
@@ -165,6 +169,7 @@ the mode" is a single permission regardless of which underlying method runs.
 | `signal_hunt` | find and name the signals in the receiver audio; rank CQing stations (experimental, `[hunt]` extra) |
 | `tune_to` | set modem and carrier to a `signal_hunt` candidate, receive only |
 | `browser` | fldigi's Signal Browser: every station the decoder bank holds, with its text (needs the fldigi patch in `patches/`) |
+| `rsid` | RSID bursts heard in the passband, mode and frequency, without switching the modem (needs the rsid-hits patch in `patches/`) |
 | `fldigi_call` | escape hatch — call any method by name, incl. future ones |
 
 Use `application` → `list_methods` to enumerate every method the running build

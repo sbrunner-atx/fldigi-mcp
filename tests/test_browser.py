@@ -21,8 +21,17 @@ def test_browser_ops_are_patch_only():
 
 
 def test_patched_maps_are_not_in_the_stock_map():
-    assert "browser" in methods.PATCHED_OPMAPS
-    assert "browser" not in methods.ALL_OPMAPS
+    assert "browser" in methods.PATCHED_OPMAPS and "rsid" in methods.PATCHED_OPMAPS
+    assert "browser" not in methods.ALL_OPMAPS and "rsid" not in methods.ALL_OPMAPS
+    for op, (method, kind) in methods.RSID_OPS.items():
+        assert method.startswith("rsid.") and method not in STOCK and kind in VALID_KINDS
+
+
+def test_rsid_patch_file_ships():
+    import pathlib
+
+    patch = pathlib.Path(__file__).resolve().parents[1] / "patches" / "fldigi-4.2.13-rsid-hits.patch"
+    assert patch.is_file() and "rsid.get_hits" in patch.read_text()
 
 
 def test_patch_file_ships():

@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `rsid` tool and `patches/fldigi-4.2.13-rsid-hits.patch`: `rsid.get_hits` / `rsid.clear` return the RSID bursts fldigi's detector accepted, mode and frequency, so RSID in notify-only mode becomes a mode oracle that never switches the modem. Proposed upstream alongside the browser patch.
+
+### Added
 - The release workflow builds the Claude Desktop extension (`fldigi-mcp.mcpb`) and attaches it to the GitHub release, so the download link on ae5vg.com always resolves. Do not upload the bundle by hand.
 
 ### Changed

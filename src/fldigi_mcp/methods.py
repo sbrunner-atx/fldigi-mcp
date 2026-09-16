@@ -326,7 +326,11 @@ BROWSER_OPS = {
     "channels": ("browser.get_channels", None),
     "clear": ("browser.clear", None),
 }
-PATCHED_OPMAPS = {"browser": BROWSER_OPS}
+RSID_OPS = {
+    "hits": ("rsid.get_hits", None),
+    "clear": ("rsid.clear", None),
+}
+PATCHED_OPMAPS = {"browser": BROWSER_OPS, "rsid": RSID_OPS}
 
 ALL_OPMAPS = {
     "application": STATION_OPS,

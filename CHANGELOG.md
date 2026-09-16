@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- The release workflow builds the Claude Desktop extension (`fldigi-mcp.mcpb`) and attaches it to the GitHub release, so the download link on ae5vg.com always resolves. Do not upload the bundle by hand.
+
+### Changed
+- Pre-releases (rc or test tags) are no longer published to PyPI.
+- `fldigi_mcp.__version__` is read from the installed package metadata; `pyproject.toml` is the single source of truth and the constant can no longer drift (it had sat at 0.1.5 since 9 Sep).
+- The bundle no longer ships `smoke_test.py` or `scripts/`, matching the sibling projects.
+
+### Fixed
+- A missing `sounddevice` now raises `HuntUnavailable` with the `pip install 'fldigi-mcp[hunt]'` hint, from both the `signal_hunt` tool and the `fldigi-mcp-tap` `/devices` endpoint, instead of a bare `ModuleNotFoundError`. A missing `numpy` already did.
+- `uv.lock` recorded the project as 0.2.2; every `uv run` rewrote it.
+- CI: four lint errors had failed every run since 12 Sep, and a bare `uv sync` left `numpy` out so the 13 signal-hunt tests skipped silently. `numpy` is in the dev group now; CI runs 196 tests.
+
 ## [0.3.1] - 2026-09-14
 
 ### Fixed

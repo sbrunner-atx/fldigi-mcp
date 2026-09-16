@@ -14,3 +14,6 @@ build/
 dist/
 .DS_Store
 icon_*.png
+# dev tooling, not part of the extension
+smoke_test.py
+scripts/

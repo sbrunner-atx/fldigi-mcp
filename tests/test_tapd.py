@@ -4,6 +4,7 @@ asks it instead of the sound card (served here from a thread with a canned answe
 from __future__ import annotations
 
 import json
+import sys
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -23,6 +24,7 @@ def test_health_endpoint():
     h = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/health").read())
     assert h["ok"] is True
     srv.shutdown()
+    srv.server_close()
 
 
 def test_devices_endpoint():
@@ -40,6 +42,29 @@ def test_devices_endpoint():
     d = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/devices").read())
     assert "devices" in d
     srv.shutdown()
+    srv.server_close()
+
+
+def test_devices_without_sounddevice_gives_install_hint(monkeypatch):
+    # Without the audio backend the handler must still answer JSON, and the error must
+    # carry the install hint rather than a bare ModuleNotFoundError.
+    monkeypatch.setitem(sys.modules, "sounddevice", None)
+    from fldigi_mcp import tapd
+
+    srv = HTTPServer(("127.0.0.1", 0), tapd.Handler)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    import urllib.error
+    import urllib.request
+
+    port = srv.server_address[1]
+    with pytest.raises(urllib.error.HTTPError) as exc:
+        urllib.request.urlopen(f"http://127.0.0.1:{port}/devices")
+    assert exc.value.code == 500
+    body = json.loads(exc.value.read())
+    assert "HuntUnavailable" in body["error"]
+    assert "fldigi-mcp[hunt]" in body["error"]
+    srv.shutdown()
+    srv.server_close()
 
 
 def test_signal_hunt_uses_tap_url(monkeypatch):
@@ -80,3 +105,4 @@ def test_signal_hunt_uses_tap_url(monkeypatch):
     out = server.signal_hunt(seconds=20, mode="PSK")
     assert out["candidates"] == []
     srv.shutdown()
+    srv.server_close()

@@ -62,6 +62,17 @@ def _need_numpy() -> None:
         )
 
 
+def _sounddevice():
+    """The live audio tap needs sounddevice; give the install hint, not a bare ImportError."""
+    try:
+        import sounddevice as sd
+    except ImportError:
+        raise HuntUnavailable(
+            "the live audio tap needs sounddevice: pip install 'fldigi-mcp[hunt]'"
+        ) from None
+    return sd
+
+
 # --------------------------------------------------------------------------- audio in
 
 
@@ -80,7 +91,7 @@ def read_wav(path: str) -> tuple:
 def list_devices() -> list[dict]:
     """Input devices sounddevice can open (name and index), for FLDIGI_AUDIO_DEVICE."""
     _need_numpy()
-    import sounddevice as sd
+    sd = _sounddevice()
 
     out = []
     for i, d in enumerate(sd.query_devices()):
@@ -94,7 +105,7 @@ def list_devices() -> list[dict]:
 def capture(seconds: float, device: str | int | None = None, fs: int = 12000) -> tuple:
     """Tap `seconds` of audio from an input device (name substring or index)."""
     _need_numpy()
-    import sounddevice as sd
+    sd = _sounddevice()
 
     dev = device
     if isinstance(device, str) and not device.isdigit():

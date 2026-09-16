@@ -65,6 +65,8 @@ docs/           # design & safety documentation
 npx @anthropic-ai/mcpb pack      # produces fldigi-mcp.mcpb from manifest.json
 ```
 
+The release workflow builds and attaches the bundle; do not upload it by hand.
+
 ## License
 
 By contributing you agree that your contributions are licensed under the

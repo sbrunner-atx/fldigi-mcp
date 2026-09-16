@@ -39,6 +39,11 @@ hunt = ["numpy>=1.24", "sounddevice>=0.4.6"]
 dev = [
     "pytest>=8.0",
     "ruff>=0.6",
+    # tests/test_hunt.py and tests/test_tapd.py importorskip on numpy; without it
+    # here, a bare `uv sync` (what CI runs) silently skips 13 signal-hunt tests.
+    # sounddevice is deliberately NOT here: it is imported lazily inside the live
+    # audio tap only, and pulling it in would drag PortAudio onto the runners.
+    "numpy>=1.24",
 ]
 
 [project.scripts]

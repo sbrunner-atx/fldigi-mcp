@@ -12,7 +12,7 @@ import pytest
 pytest.importorskip("numpy")
 
 
-def test_health_and_devices_endpoints():
+def test_health_endpoint():
     from fldigi_mcp import tapd
 
     srv = HTTPServer(("127.0.0.1", 0), tapd.Handler)
@@ -22,6 +22,21 @@ def test_health_and_devices_endpoints():
     port = srv.server_address[1]
     h = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/health").read())
     assert h["ok"] is True
+    srv.shutdown()
+
+
+def test_devices_endpoint():
+    # /devices opens the audio backend. sounddevice ships in the `hunt` extra and is
+    # deliberately absent on CI (it would drag PortAudio onto the runners), where the
+    # handler correctly answers 500 with a JSON error instead.
+    pytest.importorskip("sounddevice")
+    from fldigi_mcp import tapd
+
+    srv = HTTPServer(("127.0.0.1", 0), tapd.Handler)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    import urllib.request
+
+    port = srv.server_address[1]
     d = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/devices").read())
     assert "devices" in d
     srv.shutdown()

@@ -339,12 +339,20 @@ def analyse(
                             best, partner = s[k], (shift, float(f[k]))
         if partner:
             anti = fsk_anticorrelation(peak_f, partner[1])
-            if anti > -0.1:     # the two lines do not key against each other: two stations, not one FSK pair
-                rejected = {"rtty_partner_rejected_hz": round(partner[1], 1), "fsk_anticorrelation": round(anti, 2)}
+            # the two lines do not key against each other: two stations, not one FSK pair
+            if anti > -0.1:
+                rejected = {
+                    "rtty_partner_rejected_hz": round(partner[1], 1),
+                    "fsk_anticorrelation": round(anti, 2),
+                }
                 partner = None
         if partner:
             shift, pf = partner
-            mode, carrier, extra = "RTTY", (peak_f + pf) / 2, {"shift": shift, "fsk_anticorrelation": round(anti, 2)}
+            mode, carrier, extra = (
+                "RTTY",
+                (peak_f + pf) / 2,
+                {"shift": shift, "fsk_anticorrelation": round(anti, 2)},
+            )
             k = int(round((pf - f[0]) / df))
             used[max(0, k - 60) : k + 60] = True  # the partner line is the same signal
         elif width <= 45:  # one line: keying gaps decide CW vs PSK

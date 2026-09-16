@@ -14,7 +14,7 @@ STOCK = {m["name"] for m in CATALOG["methods"]}
 
 
 def test_browser_ops_are_patch_only():
-    for op, (method, kind) in methods.BROWSER_OPS.items():
+    for _op, (method, kind) in methods.BROWSER_OPS.items():
         assert method.startswith("browser.")
         assert method not in STOCK, f"{method} is stock now: move it into ALL_OPMAPS"
         assert kind in VALID_KINDS

@@ -370,6 +370,30 @@ def legacy(operation: str, value: Any = None) -> dict:
     return {"operation": operation, "result": _run(methods.LEGACY_OPS, operation, value)}
 
 
+_CAPS: dict = {"key": None, "at": 0.0, "names": frozenset()}
+_CAPS_TTL = 30.0
+
+
+def _has_method(name: str) -> bool:
+    """Is this fldigi serving `name`? Capability detection, never version detection: the
+    patched methods appear in fldigi.list only on a build that carries the patch, and a
+    merged release would carry them too. The answer is cached per connection for
+    _CAPS_TTL seconds (fldigi.list is 18 kB) and dropped on any error, so swapping the
+    fldigi under a running server is picked up within half a minute."""
+    import time
+
+    key = (_fldigi.host, _fldigi.port)
+    now = time.time()
+    if _CAPS["key"] != key or now - _CAPS["at"] > _CAPS_TTL:
+        try:
+            names = frozenset(m["name"] for m in _fldigi.call("fldigi.list"))
+        except Exception:
+            _CAPS.update(key=None, at=0.0, names=frozenset())
+            return False
+        _CAPS.update(key=key, at=now, names=names)
+    return name in _CAPS["names"]
+
+
 _BROWSER_HINT = (
     "This fldigi has no browser.* methods. They come from the Signal Browser XML-RPC "
     "patch shipped in fldigi-mcp (patches/fldigi-4.2.13-browser-xmlrpc.patch; prepared for "
@@ -378,11 +402,7 @@ _BROWSER_HINT = (
 
 
 def _browser_available() -> bool:
-    try:
-        names = {m["name"] for m in _fldigi.call("fldigi.list")}
-    except Exception:
-        return False
-    return "browser.get_channels" in names
+    return _has_method("browser.get_channels")
 
 
 @mcp.tool()
@@ -426,11 +446,7 @@ def rsid(operation: str = "hits") -> dict:
     Needs a fldigi built with the rsid-hits patch in fldigi-mcp/patches; on stock 4.2.13
     the tool says so instead of failing. Receive only.
     """
-    try:
-        names = {m["name"] for m in _fldigi.call("fldigi.list")}
-    except Exception:
-        names = set()
-    ok = "rsid.get_hits" in names
+    ok = _has_method("rsid.get_hits")
     if operation == "available":
         return {"available": ok}
     if not ok:

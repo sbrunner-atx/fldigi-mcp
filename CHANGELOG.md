@@ -7,21 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- `rsid` tool and `patches/fldigi-4.2.13-rsid-hits.patch`: `rsid.get_hits` / `rsid.clear` return the RSID bursts fldigi's detector accepted, mode and frequency, so RSID in notify-only mode becomes a mode oracle that never switches the modem. Proposed upstream alongside the browser patch.
+## [0.4.0] - 2026-09-16
 
 ### Added
+- `rsid` tool and `patches/fldigi-4.2.13-rsid-hits.patch`: `rsid.get_hits` / `rsid.clear` return the RSID bursts fldigi's detector accepted, as `{utc, mode, hz}`. With fldigi's RxID set to notify-only the detector names the modes on the band without ever switching the modem, which is what an unattended receiver needs; naming a mode from the spectrum alone cannot separate Olivia from Contestia or THOR from DominoEX. Offered upstream on w1hkj/fldigi issue 55, not merged.
 - The release workflow builds the Claude Desktop extension (`fldigi-mcp.mcpb`) and attaches it to the GitHub release, so the download link on ae5vg.com always resolves. Do not upload the bundle by hand.
 
 ### Changed
+- Patched methods are detected once per connection and cached for 30 seconds instead of listing fldigi's whole catalog on every call; the cache is dropped on any error, so swapping the fldigi under a running server is noticed within half a minute.
+- The API reference, the signal-hunting skill and the Field Guide document `rsid.*` alongside `browser.*`, both marked as proposed patches that are in no released fldigi, with the rule stated: detect the methods in `fldigi.list`, never assume them from a version number.
 - Pre-releases (rc or test tags) are no longer published to PyPI.
 - `fldigi_mcp.__version__` is read from the installed package metadata; `pyproject.toml` is the single source of truth and the constant can no longer drift (it had sat at 0.1.5 since 9 Sep).
 - The bundle no longer ships `smoke_test.py` or `scripts/`, matching the sibling projects.
-
-### Fixed
-- A missing `sounddevice` now raises `HuntUnavailable` with the `pip install 'fldigi-mcp[hunt]'` hint, from both the `signal_hunt` tool and the `fldigi-mcp-tap` `/devices` endpoint, instead of a bare `ModuleNotFoundError`. A missing `numpy` already did.
-- `uv.lock` recorded the project as 0.2.2; every `uv run` rewrote it.
-- CI: four lint errors had failed every run since 12 Sep, and a bare `uv sync` left `numpy` out so the 13 signal-hunt tests skipped silently. `numpy` is in the dev group now; CI runs 196 tests.
 
 ## [0.3.1] - 2026-09-14
 

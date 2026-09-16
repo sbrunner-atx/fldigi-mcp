@@ -406,29 +406,48 @@ print(data.data.decode("utf-8", "replace"))
 
 ---
 
-## 16. PROPOSED methods — `browser.*` (patch offered upstream, not merged)
+## 16. PROPOSED methods — `browser.*` and `rsid.*` (patches offered upstream, not merged)
 
-> **Status: proposed.** These two methods are not in any released fldigi. They come
-> from a patch offered to Dave W1HKJ on 11 September 2026 (w1hkj/fldigi issue 55).
-> Names, signature and struct fields may change before or when he merges it; this
-> section is updated when the patch lands or is reworked.
+> **Status: proposed, in no released fldigi.** Two patches, both offered to Dave W1HKJ
+> on w1hkj/fldigi issue 55: the Signal Browser one on 11 September 2026, the RSID one on
+> 16 September. Names, signatures and struct fields may change before or when they are
+> merged; this section is updated when they land or are reworked. Both ship in
+> `patches/` in fldigi-mcp and apply to fldigi's SourceForge git HEAD; the RSID patch
+> applies on top of the browser patch.
+>
+> **Detect, do not assume.** These methods appear in `fldigi.list` only on a build that
+> carries the patch. Check that list before calling them; the `browser` and `rsid` tools
+> do, and answer with a hint instead of an error on a stock build.
 
-fldigi's Signal Browser (the multi-channel PSK/RTTY/CW decoder bank behind the
-left-hand panel and View › Signal browser) has no XML-RPC surface in 4.2.13. The
-patch `patches/fldigi-4.2.13-browser-xmlrpc.patch` in fldigi-mcp adds these two
-methods; they appear in `fldigi.list` only on a build that carries it, and the
-`browser` tool checks for them before calling.
+**Why the browser.** fldigi's Signal Browser (the multi-channel PSK/RTTY/CW decoder bank
+behind the left-hand panel and View › Signal browser) copies stations far too weak for a
+spectrum to rank, and has no XML-RPC surface in 4.2.13.
+`patches/fldigi-4.2.13-browser-xmlrpc.patch`:
 
 | Method | Signature | Notes |
 | --- | --- | --- |
 | `browser.get_channels` | `A:n` | Array of structs `{channel:int, freq:int, active:bool, text:string}`: one per channel that has printed since the last clear. `freq` is the audio frequency in Hz; `active` says the channel currently holds a signal; `text` is everything decoded on the channel since `browser.clear`, not trimmed to the widget width (capped at 8192 chars, oldest dropped), with the decoded line breaks kept (the PSK viewer used to turn them into spaces before the widget saw them) and a newline where the channel lost and regained a signal. Empty when the current modem has no browser (Olivia, MFSK, …) or nothing has printed. |
 | `browser.clear` | `n:n` | Clears every channel on screen and in the buffer above. |
-| `rsid.get_hits` | `A:n` | Second patch (`fldigi-4.2.13-rsid-hits.patch`). Array of structs `{utc:int, mode:string, hz:double}`: every RSID burst the detector accepted since `rsid.clear`, with the modem name as `modem.set_by_name` takes it and the audio frequency. Recorded whether or not RSID is in notify-only mode, so a program can leave the modem alone and still learn what was announced. Oldest entries drop after 1000. |
+
+**Why RSID.** Naming a mode from the spectrum is guesswork for the hopping modes, and
+fldigi already knows the answer whenever the other station sends RSID. In notify-only
+mode (RxID on, "do not change modem") the detector reports without switching the modem,
+but only to a dialog and the status line. `patches/fldigi-4.2.13-rsid-hits.patch`:
+
+| Method | Signature | Notes |
+| --- | --- | --- |
+| `rsid.get_hits` | `A:n` | Array of structs `{utc:int, mode:string, hz:double}`: every RSID burst the detector accepted since `rsid.clear`, with the modem name as `modem.set_by_name` takes it and the audio frequency. Recorded whether or not RSID is in notify-only mode, so a program can leave the modem alone and still learn what was announced. Oldest entries drop after 1000. |
 | `rsid.clear` | `n:n` | Forgets the recorded bursts. |
 
 Gotcha 16: the channel number is a slot in the decoder bank, not a frequency;
 under the browser's ascending-order display the on-screen row and the slot differ,
 which is why the patch keeps its own per-slot frequency. Read `freq`, not `channel`.
+
+Gotcha 17: `rsid.get_hits` records what the detector accepted, which is filtered by
+fldigi's own RSID receive-mode exclusions; a mode you told fldigi to ignore never
+appears. End-of-transmission bursts are not recorded. With notify-only off, a hit is
+also the moment the modem changed, so a program reading the list should re-read
+`modem.get_name` rather than assume it still owns the modem.
 
 ---
 

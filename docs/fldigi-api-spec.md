@@ -186,9 +186,10 @@ array, struct. Confidence: all rows enumerated live (`fldigi.list`).
 | `navtex.get_message` | int | string | read |  |
 | `navtex.send_message` | string | string | keying |  |
 
-## PROPOSED methods (patch offered upstream 11 Sep 2026, not merged)
+## PROPOSED methods (patches offered upstream, not merged)
 
-Not in any released fldigi. Served only by a fldigi built with `patches/fldigi-4.2.13-browser-xmlrpc.patch`
+Not in any released fldigi. `browser.*` offered 11 Sep 2026, `rsid.*` 16 Sep 2026, both
+on w1hkj/fldigi issue 55. Served only by a fldigi built with `patches/fldigi-4.2.13-browser-xmlrpc.patch`
 (fldigi-mcp repo; offered upstream on w1hkj/fldigi issue 55). Check `fldigi.list`
 before calling.
 

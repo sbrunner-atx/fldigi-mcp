@@ -45,8 +45,25 @@ the carrier and the text already copied, so the "confirm" step is done before yo
 tune. The browser names no mode; use the audio hunt first when the band's mode is
 not known. Without the patch both calls answer with a hint and nothing else changes.
 
+## RSID: let the station name its own mode (proposed patch, not merged)
+
+Most operators on the hopping modes send an RSID burst at the start of an over, and
+fldigi's detector hears it across the whole passband. Set fldigi's RxID to
+**notify only** ("do not change modem") and the detector names modes without touching
+what you are decoding. `rsid hits` then returns `{utc, mode, hz}` for every burst:
+`mode` is the exact name `tune_to` takes, `hz` is where to put the cursor. Use it when
+the analyser says `unknown` on a strong signal, when Olivia and Contestia or THOR and
+DominoEX have to be told apart, and before assuming a quiet band. `rsid clear` before a
+listening window, read after it.
+
+This needs `patches/fldigi-4.2.13-rsid-hits.patch`, offered upstream and not merged; on
+a stock build `rsid` answers with a hint and changes nothing. Stations that do not send
+RSID stay the analyser's problem, which is what the browser covers for PSK and RTTY.
+
 ## The loop
 
+0. **Ask the band first, if the build allows it.** `rsid hits` costs nothing and names
+   modes exactly. `browser available` and `rsid available` say what this fldigi has.
 1. **Hunt.** `signal_hunt(seconds=20)`. For a contest, pass the contest mode so
    only that mode is ranked, e.g. `mode="RTTY"`, and use `seconds=40` so a CQ
    loop can show its period. A fast look for "what is that" is `seconds=10`.

@@ -414,6 +414,23 @@
   synthetic PSK31 stations from 0 to −26 dB: all four copied in full. The browser names no mode; hunt the
   audio first when the band's mode is unknown. Building it yourself is three lines, in the README.</p>
 
+  <h3>Letting the station name its own mode <span class="mono">proposed, not yet in fldigi</span></h3>
+  <div class="callout warn" style="break-inside:avoid;page-break-inside:avoid">
+    <div class="ct">Proposed API, not in any released fldigi</div>
+    <p>The <code>rsid</code> tool calls <code>rsid.get_hits</code> and <code>rsid.clear</code>, from a second
+    four-file patch offered to Dave W1HKJ on 16 September 2026 (w1hkj/fldigi issue 55) and shipped in
+    fldigi-mcp under <span class="mono">patches/</span>, on top of the browser patch. Until it is merged the
+    names and fields are a proposal. On an unpatched fldigi the tool answers with a hint and nothing else in
+    this chapter changes.</p>
+  </div>
+  <p>Naming a mode from its shape is guesswork for the hopping modes: Olivia and Contestia share a grid, so do
+  THOR and DominoEX. Most operators on those modes send an RSID burst at the start of an over, and fldigi's
+  detector hears it across the whole passband. Set RxID to <span class="mono">notify only</span> and the
+  detector reports the mode without switching the modem, so the pass you are running keeps its browser.
+  <code>rsid hits</code> then gives <span class="mono">{utc, mode, hz}</span> for every burst: the mode name
+  is exactly what <code>tune_to</code> takes, and the frequency is where the cursor goes. Ask the band before
+  you guess at it, especially when the analyser says <i>unknown</i> on a strong signal.</p>
+
   <h3>How a mode is named</h3>
   <p>From the signal's shape, the way you would from the waterfall, with the numbers checked against the
   Signal Identification Wiki. Two narrow lines a standard shift apart (170 Hz in amateur use) is RTTY,

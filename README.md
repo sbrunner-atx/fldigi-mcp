@@ -41,7 +41,8 @@ fldigi / W1HKJ project.** Corrections welcome via
 ## Highlights
 
 - **Complete control** — every one of the 174 XML-RPC methods in fldigi 4.2.13 is
-  reachable through a named operation in one of 17 tools (one permission each);
+  reachable through a named operation in one of the grouped tools (one permission
+  each; all 22 tools are listed under [Tools](#tools));
   `tests/test_coverage.py` fails the build if a method of the shipped catalog is
   not wired or an argument type disagrees with fldigi's signature. The
   `fldigi_call` escape hatch remains for methods a newer build may add.
@@ -186,6 +187,8 @@ methods a newer fldigi may add before this connector catches up.
 | `FLDIGI_BAND_GUIDANCE` | `off` | Experimental advisory band guidance. `on` to enable |
 | `FLDIGI_REGION` | `2` | IARU region for band guidance: `1`, `2`, or `3` |
 | `FLDIGI_PATH` | _(auto)_ | Explicit path to the fldigi executable (for `application launch`) |
+| `FLDIGI_AUDIO_DEVICE` | _(system default)_ | Input device the signal hunt taps: the name (or part of it) of the device fldigi listens on, e.g. `iMic` |
+| `FLDIGI_HUNT_URL` | _(empty)_ | URL of a `fldigi-mcp-tap` running beside fldigi, e.g. `http://127.0.0.1:7365`, for when this server cannot open the sound card (sandbox, or fldigi on another machine). Blank taps the local input device |
 
 In the packaged desktop extension these appear as a settings form — most users
 only ever fill in the callsign.

@@ -116,13 +116,41 @@ releases page and install it the same way — it replaces the old one.
 
 ## Signal hunting (optional)
 
-`signal_hunt` needs the audio fldigi listens to. Where that audio is decides the setup:
+There are two ways to hunt. The preferred one reads fldigi's own Signal Browser and
+needs no audio setup, but it needs a patched fldigi (next section; proposed upstream,
+not merged). Until the patch is in fldigi, use the sound bridge: `signal_hunt` listens
+to the same receiver audio as fldigi. Where that audio is decides the setup:
 
 | The MCP server runs... | Setting | Why |
 | --- | --- | --- |
 | on the Mac that hears the receiver (Claude Desktop `.mcpb`) | **Audio input device** = fldigi's input, e.g. `iMic` | Claude Desktop is not App-Sandboxed and holds the audio-input entitlement; macOS asks once for microphone permission, attributed to Claude |
 | somewhere without the sound card (Cowork sandbox, a container, or fldigi on a VM via mcp-host-bridge) | run `fldigi-mcp-tap --device iMic` beside fldigi and set **Signal-hunt tap URL** = `http://127.0.0.1:7365` (or the host's address) | the tap runs where the audio is and answers over HTTP; the server never opens a device |
 | anywhere, no audio at all | `signal_hunt` with `method="api"` | steps fldigi's own `search_up` and reads `get_quality`; slow and blind to mode |
+
+### The sound bridge, step by step
+
+**Radio on a sound card cable** (iMic, SignaLink, the radio's USB port). Two programs can
+read one input device at once, so no extra driver is needed. Look up fldigi's input under
+**Configure → Config Dialog → Soundcard → Devices → Capture** and put that name, or part
+of it, in **Audio input device**. To hear the band on the computer, use fldigi's
+**View → Rx Audio Dialog** (it plays on the **Soundcard → Alerts** device).
+
+**Receiver audio that plays on the computer** (an SDR program, a web receiver such as a
+KiwiSDR, a remote rig program such as wfview). Split it with a virtual sound card:
+
+1. Install BlackHole 2ch (https://existential.audio/blackhole/, free).
+2. In Audio MIDI Setup, **+ → Create Multi-Output Device**; tick your speakers and
+   BlackHole 2ch, set **Primary Device** to the speakers, tick **Drift Correction** for
+   BlackHole 2ch, and name it `Radio + speakers`.
+3. Set the receiver program's output (or, for a web receiver, **System Settings → Sound →
+   Output**) to `Radio + speakers`. The volume keys do not work on a Multi-Output Device.
+4. Set fldigi's **Capture** to `BlackHole 2ch`, and **Audio input device** to `BlackHole`.
+
+On Windows, VB-Audio Virtual Cable (https://vb-audio.com/Cable/) does the same: the
+receiver program plays to `CABLE Input`, fldigi and **Audio input device** use
+`CABLE Output`, and **Listen to this device** on `CABLE Output` (Sound control panel,
+Recording tab) keeps it on your speakers. Any other splitter works as long as fldigi and
+the hunt read the same audio.
 
 ## The Signal Browser (optional, needs a patched fldigi; proposed upstream, not merged)
 

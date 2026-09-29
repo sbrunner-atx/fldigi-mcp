@@ -23,7 +23,12 @@ computer.)
 
 - **Claude Desktop** installed (from <https://claude.ai/download>).
 - **fldigi** installed and running on the same computer
-  (from <https://www.w1hkj.org/>).
+  (from <https://www.w1hkj.org/>), with rig control set up the usual way under
+  **Configure → Config Dialog → Rig Control**: Hardware PTT for an interface such
+  as a RigBlaster (serial port, RTS or DTR), or nothing for a VOX interface such as
+  a SignaLink. Claude transmits by asking fldigi, so if the **T/R** button keys
+  your radio, Claude can too. CAT control (Hamlib, flrig or RigCAT) is optional;
+  with it, Claude can also change frequency and mode.
 - Your **callsign** — only if you want to transmit. Leave it blank to listen
   only.
 

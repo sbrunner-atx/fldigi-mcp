@@ -2,6 +2,8 @@
 
 <!-- mcp-name: io.github.sbrunner-atx/fldigi-mcp -->
 
+Project page: [ae5vg.com/products/fldigi-mcp](https://ae5vg.com/products/fldigi-mcp.html)
+
 An [MCP](https://modelcontextprotocol.io/) server for controlling
 [fldigi](https://www.w1hkj.org/), the popular amateur-radio digital-modem
 application, from MCP-aware clients such as Claude Desktop.
@@ -23,11 +25,11 @@ Building this server meant mapping fldigi's entire XML-RPC interface and
 **verifying every method against a live build** — so we've written it all up and
 are sharing it freely, whether or not you ever use this MCP server:
 
-- **[docs/fldigi-api.md](docs/fldigi-api.md)** — a clean, complete, human-readable
+- **[docs/fldigi-api.md](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/fldigi-api.md)** — a clean, complete, human-readable
   reference organized by namespace, with transport details, types, worked
   examples, a transmit-safety section, and field-tested gotchas.
-- **[docs/fldigi-api.pdf](docs/fldigi-api.pdf)** — the same, as a printable PDF.
-- **[docs/fldigi-api-spec.md](docs/fldigi-api-spec.md)** — a terse,
+- **[docs/fldigi-api.pdf](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/fldigi-api.pdf)** — the same, as a printable PDF.
+- **[docs/fldigi-api-spec.md](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/fldigi-api-spec.md)** — a terse,
   machine-readable catalog of all **174 methods** (args, return type,
   read/write/keying).
 
@@ -84,8 +86,8 @@ and choose the file.
 A short settings form asks for your callsign (everything else has a default).
 **No terminal, no Python, no uv to install.**
 
-👉 **New to this? Follow the simple [step-by-step install guide](docs/INSTALL.md).**
-Also see the [install & safety model](docs/install-and-safety.md).
+👉 **New to this? Follow the simple [step-by-step install guide](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/INSTALL.md).**
+Also see the [install & safety model](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/install-and-safety.md).
 
 ### From source (development)
 
@@ -201,7 +203,7 @@ method via `fldigi_call`) refuse unless `FLDIGI_CALLSIGN` is set. With it blank,
 the station is receive-only. `rx`, `abort`, and `disable_tx` are always allowed
 because they take the station *off* the air. Any non-blank value is accepted
 (club, event, vanity, portable, and international calls all work). See
-[docs/install-and-safety.md](docs/install-and-safety.md).
+[docs/install-and-safety.md](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/install-and-safety.md).
 
 ### Band Guidance (experimental, off by default)
 
@@ -211,7 +213,7 @@ defaults, never hard locks. Region-aware (IARU R1/R2/R3), covering 160 m – 70 
 Enable with `FLDIGI_BAND_GUIDANCE=on`. It adds the `band_guidance` tool and
 enriches `modem`/`frequency` *set* operations with an advisory `guidance` field.
 Because band-plan data is hard to get exactly right, it ships experimental and
-disabled by default. Design and data: [docs/band-guidance.md](docs/band-guidance.md).
+disabled by default. Design and data: [docs/band-guidance.md](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/band-guidance.md).
 
 ### Remote / distributed setups
 
@@ -238,11 +240,11 @@ also bridges N3FJP (for the sibling `n3fjp-mcp`) and any other local service.
 
 ## Skills
 
-The [`skills/`](skills/) directory contains agent skills — operating
+The [`skills/`](https://github.com/sbrunner-atx/fldigi-mcp/tree/main/skills) directory contains agent skills — operating
 procedures distilled from live on-air use — bundled with the repo and the
 `.mcpb` package:
 
-- **[signal-hunting](skills/signal-hunting/SKILL.md)** — find a station worth
+- **[signal-hunting](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/skills/signal-hunting/SKILL.md)** — find a station worth
   working the way an operator reads the waterfall: `signal_hunt` names each
   signal's mode from its bandwidth and tone grid (RTTY, CW, PSK, Olivia, MFSK,
   DominoEX, MT63; signatures checked against sigidwiki.com), ranks the one that
@@ -253,13 +255,13 @@ procedures distilled from live on-air use — bundled with the repo and the
   and the server asks it over HTTP (**Signal-hunt tap URL**); without any audio it
   falls back to stepping fldigi's `search_up`. Verified on five recordings of known
   mode, 5 of 5. Receive only.
-- **[fldigi-operating](skills/fldigi-operating/SKILL.md)** — TX/RX handoff
+- **[fldigi-operating](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/skills/fldigi-operating/SKILL.md)** — TX/RX handoff
   done right (`^r` return-to-receive via `transmit → send`, `abort` as the
   panic button, never poll the TX buffer), RX-buffer polling discipline
   (delta reads, the no-echo rule, restart detection), and a reference CQ
   loop. Field-proven during ARRL Field Day 2026.
 
-The **[fldigi-mcp Operating Field Guide](<docs/fldigi-mcp Operating Field Guide.pdf>)**
+The **[fldigi-mcp Operating Field Guide](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/fldigi-mcp%20Operating%20Field%20Guide.pdf)**
 (PDF) documents these skills and their companion `contest-operating` from the
 sibling [n3fjp-mcp](https://github.com/sbrunner-atx/n3fjp-mcp) — skills
 at a glance, installation, a plain-language "Your first session — Claude for
@@ -283,7 +285,7 @@ coercion; it does not require a running fldigi.
 
 ## License
 
-[GPL-3.0-or-later](LICENSE) © 2026 Stefan Brunner (AE5VG)
+[GPL-3.0-or-later](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/LICENSE) © 2026 Stefan Brunner (AE5VG)
 
 fldigi-mcp is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software

@@ -1,7 +1,7 @@
 [project]
 name = "fldigi-mcp"
-version = "0.4.0"
-description = "An MCP server for controlling the fldigi digital-modem application over XML-RPC."
+version = "0.4.1"
+description = "An MCP server that lets Claude and other AI assistants control fldigi, the amateur-radio digital-modem application, over XML-RPC."
 readme = "README.md"
 license = { text = "GPL-3.0-or-later" }
 requires-python = ">=3.10"
@@ -15,15 +15,25 @@ keywords = [
     "ham-radio",
     "amateur-radio",
     "xmlrpc",
+    "psk31",
+    "rtty",
+    "digital-modes",
+    "claude",
+    "ai-assistant",
+    "ai-agent",
+    "llm",
+    "ae5vg",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Communications :: Ham Radio",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
     "mcp[cli]>=1.2.0,<2",
@@ -51,9 +61,12 @@ fldigi-mcp = "fldigi_mcp.server:main"
 fldigi-mcp-tap = "fldigi_mcp.tapd:main"
 
 [project.urls]
-Homepage = "https://github.com/sbrunner-atx/fldigi-mcp"
+Homepage = "https://ae5vg.com/products/fldigi-mcp.html"
+Documentation = "https://github.com/sbrunner-atx/fldigi-mcp#readme"
 Repository = "https://github.com/sbrunner-atx/fldigi-mcp"
 Issues = "https://github.com/sbrunner-atx/fldigi-mcp/issues"
+Changelog = "https://github.com/sbrunner-atx/fldigi-mcp/blob/main/CHANGELOG.md"
+"Field Guide" = "https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/fldigi-mcp%20Operating%20Field%20Guide.pdf"
 
 [build-system]
 requires = ["hatchling"]

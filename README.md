@@ -89,6 +89,19 @@ A short settings form asks for your callsign (everything else has a default).
 👉 **New to this? Follow the simple [step-by-step install guide](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/INSTALL.md).**
 Also see the [install & safety model](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/install-and-safety.md).
 
+### As a plugin, with the operating skills
+
+fldigi-mcp is part of the **Amateur Radio** plugin, which installs fldigi-mcp, wsjtx-mcp, n3fjp-mcp and their operating skills in one step. There is a version for Claude and a version for ChatGPT, Codex and other apps that support the open Agent Plugins standard, such as Cursor, GitHub Copilot and VS Code. The plugin needs [uv](https://docs.astral.sh/uv/).
+
+In Claude Code:
+
+```
+/plugin marketplace add sbrunner-atx/ae5vg-plugins
+/plugin install amateur-radio@ae5vg
+```
+
+For the other apps, see [ae5vg.com/downloads.html#plugins](https://ae5vg.com/downloads.html#plugins).
+
 ### From source (development)
 
 ```bash

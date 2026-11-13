@@ -2,7 +2,7 @@
 
 This document describes how `fldigi-mcp` is installed and how its transmit
 safety works. It is written for a semi-technical audience and is the reference
-for the packaged desktop-extension (`.mcpb`) behavior.
+for the packaged desktop-connector (`.mcpb`) behavior.
 
 ## Design goals
 

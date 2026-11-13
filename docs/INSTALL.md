@@ -6,7 +6,7 @@ terminal.
 
 ## Where does it work?
 
-This is a **Claude Desktop** extension. It runs in:
+This is a **Claude Desktop** connector. It runs in:
 
 - ✅ **Claude Desktop** on **macOS** or **Windows** (the free app you install on
   your computer)
@@ -16,7 +16,7 @@ It does **not** work in:
 - ❌ Claude in a web browser (claude.ai)
 - ❌ Claude on iPhone or Android
 
-(Extensions only run in the desktop app, because they talk to fldigi on your own
+(Desktop connectors only run in the desktop app, because they talk to fldigi on your own
 computer.)
 
 ## What you need
@@ -35,7 +35,7 @@ computer.)
 You do **not** need Python, `uv`, or anything technical — Claude Desktop handles
 that for you.
 
-## Step 1 — Download the extension
+## Step 1 — Download the connector
 
 1. Go to the releases page:
    **<https://github.com/sbrunner-atx/fldigi-mcp/releases/latest>**
@@ -45,14 +45,14 @@ that for you.
 ## Step 2 — Install it in Claude Desktop
 
 1. Open **Claude Desktop**.
-2. Open **Settings** (the Claude menu, or the gear/⚙︎ icon).
-3. Click **Extensions**.
-4. Click **Advanced settings**, then click **Install Extension…**.
-5. Choose the **`fldigi-mcp.mcpb`** file you just downloaded.
-6. Click **Install**.
+2. Open **Settings**, then **Desktop app**.
+3. Next to **Extensions**, click **Manage**.
+4. Drag the **`fldigi-mcp.mcpb`** file you just downloaded onto that page, and click
+   **Install**.
+   If dragging does not work, click **Advanced settings**, then **Install
+   extension**, and choose the file.
 
-> Tip: the **Install Extension…** button lives under **Advanced settings** on
-> the Extensions page — that's the one spot people tend to miss.
+The new connector then shows under **Settings → Customize → Connectors**.
 
 ## Step 3 — Enter your callsign
 
@@ -68,7 +68,7 @@ Click **Save**.
 
 ## Step 4 — Add the operating skills
 
-The skills teach Claude how to operate. The extension does **not** install them,
+The skills teach Claude how to operate. The connector does **not** install them,
 so you add them once.
 
 1. On the same releases page
@@ -103,7 +103,7 @@ If fldigi runs on a different PC (common in contest stations):
 
 1. On the fldigi computer, start fldigi with
    `--xmlrpc-server-address 0.0.0.0` so it accepts connections.
-2. In the extension's settings, set **fldigi host** to that computer's address
+2. In the connector's settings, set **fldigi host** to that computer's address
    (e.g. `192.168.1.50`).
 
 **If the host times out (Claude Desktop and similar sandboxed clients):** the
@@ -124,7 +124,7 @@ Keep this on a trusted home/club network — the connection is not encrypted.
 - **"Could not reach fldigi"** — make sure fldigi is open. Its remote control is
   on by default; you don't need to enable anything.
 - **Nothing happens after installing** — fully quit Claude Desktop and reopen it.
-- **It won't transmit** — check that you entered a callsign in the extension
+- **It won't transmit** — check that you entered a callsign in the connector
   settings, and approve the prompt when Claude asks.
 
 ## Updating

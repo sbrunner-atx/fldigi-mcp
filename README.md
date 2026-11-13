@@ -64,7 +64,7 @@ keeping the moving parts to Python's standard library and fldigi's own API.
 
 ## Requirements
 
-To **install the desktop extension** (`.mcpb`) all you need is:
+To **install the desktop connector** (`.mcpb`) all you need is:
 
 - **fldigi** running (its XML-RPC server is on by default at `127.0.0.1:7362`).
 
@@ -77,12 +77,13 @@ For **development from source** you additionally need **Python 3.10+** and
 
 ## Install
 
-### Easiest: one-click desktop extension
+### Easiest: the desktop connector
 
 Download `fldigi-mcp.mcpb` from the latest
 [release](https://github.com/sbrunner-atx/fldigi-mcp/releases), then in Claude
-Desktop go to **Settings → Extensions → Advanced settings → Install Extension…**
-and choose the file.
+Desktop open **Settings → Desktop app**, click **Manage** next to **Extensions**,
+and drag the file onto that page (or use **Advanced settings → Install extension**).
+It then shows as a connector under **Settings → Customize → Connectors**.
 A short settings form asks for your callsign (everything else has a default).
 **No terminal, no Python, no uv to install.**
 
@@ -91,7 +92,7 @@ Also see the [install & safety model](https://github.com/sbrunner-atx/fldigi-mcp
 
 ### Add the operating skills
 
-The desktop extension installs only the server. Its operating skills are separate downloads: `fldigi-operating.skill` and `signal-hunting.skill`, from the [latest release](https://github.com/sbrunner-atx/fldigi-mcp/releases/latest) or [ae5vg.com/downloads.html](https://ae5vg.com/downloads.html#fldigi-mcp). In Claude, open **Customize → Skills**, click **Add**, then **Upload skill**, and choose all the files at once.
+The desktop connector installs only the server. Its operating skills are separate downloads: `fldigi-operating.skill` and `signal-hunting.skill`, from the [latest release](https://github.com/sbrunner-atx/fldigi-mcp/releases/latest) or [ae5vg.com/downloads.html](https://ae5vg.com/downloads.html#fldigi-mcp). In Claude, open **Customize → Skills**, click **Add**, then **Upload skill**, and choose all the files at once.
 
 For Claude Code or another MCP client, copy the folders under `skills/` into the client's skills folder, for Claude Code `~/.claude/skills/`.
 
@@ -198,7 +199,7 @@ methods a newer fldigi may add before this connector catches up.
 | `FLDIGI_AUDIO_DEVICE` | _(system default)_ | Input device the signal hunt taps: the name (or part of it) of the device fldigi listens on, e.g. `iMic` |
 | `FLDIGI_HUNT_URL` | _(empty)_ | URL of a `fldigi-mcp-tap` running beside fldigi, e.g. `http://127.0.0.1:7365`, for when this server cannot open the sound card (sandbox, or fldigi on another machine). Blank taps the local input device |
 
-In the packaged desktop extension these appear as a settings form — most users
+In the packaged desktop connector these appear as a settings form — most users
 only ever fill in the callsign.
 
 ### Transmit safety

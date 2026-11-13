@@ -76,7 +76,8 @@ so you add them once.
    **Assets**, click **`fldigi-operating.skill`** and **`signal-hunting.skill`** to download them.
 2. In Claude Desktop, open **Customize → Skills**.
 3. Click **Add**, then **Upload skill**.
-4. Choose **`fldigi-operating.skill`**. Repeat for **`signal-hunting.skill`**.
+4. Choose **`fldigi-operating.skill`** and **`signal-hunting.skill`** together
+   (hold ⌘ on a Mac or Ctrl on Windows to select both), then click **Upload**.
 
 ## Step 5 — Try it
 

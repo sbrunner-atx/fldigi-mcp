@@ -91,7 +91,7 @@ Also see the [install & safety model](https://github.com/sbrunner-atx/fldigi-mcp
 
 ### Add the operating skills
 
-The desktop extension installs only the server. Its operating skills are separate downloads: `fldigi-operating.skill` and `signal-hunting.skill`, from the [latest release](https://github.com/sbrunner-atx/fldigi-mcp/releases/latest) or [ae5vg.com/downloads.html](https://ae5vg.com/downloads.html#fldigi-mcp). In Claude, open **Customize → Skills**, click **Add**, then **Upload skill**, and choose each file.
+The desktop extension installs only the server. Its operating skills are separate downloads: `fldigi-operating.skill` and `signal-hunting.skill`, from the [latest release](https://github.com/sbrunner-atx/fldigi-mcp/releases/latest) or [ae5vg.com/downloads.html](https://ae5vg.com/downloads.html#fldigi-mcp). In Claude, open **Customize → Skills**, click **Add**, then **Upload skill**, and choose all the files at once.
 
 For Claude Code or another MCP client, copy the folders under `skills/` into the client's skills folder, for Claude Code `~/.claude/skills/`.
 

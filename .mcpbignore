@@ -17,3 +17,6 @@ icon_*.png
 # dev tooling, not part of the extension
 smoke_test.py
 scripts/
+
+# Skill files built for the GitHub Release
+*.skill

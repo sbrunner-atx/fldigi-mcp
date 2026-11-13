@@ -66,7 +66,19 @@ A short settings form appears:
 
 Click **Save**.
 
-## Step 4 — Try it
+## Step 4 — Add the operating skills
+
+The skills teach Claude how to operate. The extension does **not** install them,
+so you add them once.
+
+1. On the same releases page
+   (**<https://github.com/sbrunner-atx/fldigi-mcp/releases/latest>**), under
+   **Assets**, click **`fldigi-operating.skill`** and **`signal-hunting.skill`** to download them.
+2. In Claude Desktop, open **Customize → Skills**.
+3. Click **Add**, then **Upload skill**.
+4. Choose **`fldigi-operating.skill`**. Repeat for **`signal-hunting.skill`**.
+
+## Step 5 — Try it
 
 1. Make sure **fldigi is open and running**.
 2. In Claude Desktop, type: **"What's fldigi's status?"**

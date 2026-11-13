@@ -26,3 +26,6 @@ venv/
 
 # Generated icon size variants (only icon.png is tracked)
 icon_*.png
+
+# Skill files built for the GitHub Release
+*.skill

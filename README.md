@@ -89,18 +89,11 @@ A short settings form asks for your callsign (everything else has a default).
 👉 **New to this? Follow the simple [step-by-step install guide](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/INSTALL.md).**
 Also see the [install & safety model](https://github.com/sbrunner-atx/fldigi-mcp/blob/main/docs/install-and-safety.md).
 
-### As a plugin, with the operating skills
+### Add the operating skills
 
-fldigi-mcp is part of the **Amateur Radio** plugin, which installs fldigi-mcp, wsjtx-mcp, n3fjp-mcp and their operating skills in one step. There is a version for Claude and a version for ChatGPT, Codex and other apps that support the open Agent Plugins standard, such as Cursor, GitHub Copilot and VS Code. The plugin needs [uv](https://docs.astral.sh/uv/).
+The desktop extension installs only the server. Its operating skills are separate downloads: `fldigi-operating.skill` and `signal-hunting.skill`, from the [latest release](https://github.com/sbrunner-atx/fldigi-mcp/releases/latest) or [ae5vg.com/downloads.html](https://ae5vg.com/downloads.html#fldigi-mcp). In Claude, open **Customize → Skills**, click **Add**, then **Upload skill**, and choose each file.
 
-In Claude Code:
-
-```
-/plugin marketplace add sbrunner-atx/ae5vg-plugins
-/plugin install amateur-radio@ae5vg
-```
-
-For the other apps, see [ae5vg.com/downloads.html#plugins](https://ae5vg.com/downloads.html#plugins).
+For Claude Code or another MCP client, copy the folders under `skills/` into the client's skills folder, for Claude Code `~/.claude/skills/`.
 
 ### From source (development)
 
@@ -282,8 +275,9 @@ hams" chapter for operators new to AI, the operating standard, the
 special-case playbook, and worked examples transcribed from ARRL Field Day
 2026.
 
-To use with Claude Code / Cowork, copy the skill directory into your
-`~/.claude/skills/` (or a project's `.claude/skills/`).
+In the Claude desktop app and Cowork, upload the skill files as described under
+[Add the operating skills](#add-the-operating-skills). In Claude Code, copy the skill
+directory into your `~/.claude/skills/` (or a project's `.claude/skills/`).
 
 ## Development
 

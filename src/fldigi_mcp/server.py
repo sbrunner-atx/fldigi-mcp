@@ -101,8 +101,10 @@ def diagnostics() -> dict:
     Does NOT connect to fldigi. Reports the resolved FLDIGI_HOST/PORT, this
     process's Python and hostname, the transmit-gate state, and the host's
     network interfaces — so you can tell whether the process can even see the
-    target's network (e.g. when running host-side vs. sandboxed). If a non-
-    loopback host times out, see mcp-host-bridge (docs/INSTALL.md).
+    target's network (e.g. when running host-side vs. sandboxed). If a LAN
+    host fails, ask again once (macOS checks the Local Network permission on
+    the first connection), then see docs/INSTALL.md; mcp-host-bridge is the
+    fallback for clients that cannot reach LAN addresses.
     """
     net = diag.network_interfaces()
     return {

@@ -1,6 +1,6 @@
 [project]
 name = "fldigi-mcp"
-version = "0.4.1"
+version = "0.4.2"
 description = "An MCP server that lets Claude and other AI assistants control fldigi, the amateur-radio digital-modem application, over XML-RPC."
 readme = "README.md"
 license = { text = "GPL-3.0-or-later" }

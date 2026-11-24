@@ -75,7 +75,10 @@ def test_guard_non_loopback_error_adds_bridge_hint():
         msg = str(exc)
         assert "target=192.168.1.50:7362" in msg
         assert "errno=ETIMEDOUT" in msg
-        assert "mcp-host-bridge install fldigi --to 192.168.1.50" in msg
+        assert "ask again" in msg  # first-try Local Network check comes first
+        assert "Local Network" in msg
+        assert "mcp-host-bridge install fldigi --to 192.168.1.50" in msg  # fallback
+        assert msg.index("Local Network") < msg.index("mcp-host-bridge")
     else:  # pragma: no cover
         raise AssertionError("expected FldigiError")
 

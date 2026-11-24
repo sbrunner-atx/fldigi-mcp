@@ -232,11 +232,18 @@ fldigi need not run on the same machine. Point the server at it with
 be kept on a trusted LAN or tunneled over SSH (the XML-RPC interface is
 unauthenticated).
 
-**Sandboxed MCP clients (e.g. Claude Desktop):** the client runs the connector
-**sandboxed so it can only reach `127.0.0.1`, not LAN addresses** — so a correct
-LAN IP for fldigi will time out even though `telnet` to it works. Use the
-standalone [mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge)
-relay on the client computer (it knows `fldigi` = port 7362), then set
+**Claude Desktop reaches the other computer directly.** Enter fldigi's LAN
+address as `FLDIGI_HOST` (in the connector's settings: **fldigi host**). Current
+Claude Desktop on current macOS connects to a LAN address without any relay. On
+a Mac, the very first connection can fail with "No route to host" while macOS
+checks the Local Network permission; ask Claude again and the second try
+connects. If it keeps failing, allow Claude under **System Settings, Privacy &
+Security, Local Network**.
+
+**Fallback: mcp-host-bridge.** An older Claude Desktop or macOS, or an MCP
+client that sandboxes its connectors, can reach only `127.0.0.1`. There, run
+the standalone [mcp-host-bridge](https://github.com/sbrunner-atx/mcp-host-bridge)
+relay on the client computer (it knows `fldigi` = port 7362) and set
 `FLDIGI_HOST=127.0.0.1`:
 
 ```
@@ -244,8 +251,8 @@ pipx install mcp-host-bridge             # or download a binary from its release
 mcp-host-bridge install fldigi --to 192.168.1.50
 ```
 
-Manage it with `mcp-host-bridge status fldigi` / `uninstall fldigi`. The same tool
-also bridges N3FJP (for the sibling `n3fjp-mcp`) and any other local service.
+Manage it with `mcp-host-bridge status fldigi` and `uninstall fldigi`. The same
+tool also relays N3FJP (for the sibling `n3fjp-mcp`) and any other local service.
 
 ## Skills
 
@@ -260,7 +267,7 @@ procedures distilled from live on-air use — bundled with the repo and the
   sits still and calls CQ, `tune_to` sets modem and carrier, and twenty seconds
   of text confirms it. Needs `pip install 'fldigi-mcp[hunt]'` (numpy,
   sounddevice) and the **Audio input device** setting; where the server does not
-  run beside the receiver (sandbox, remote fldigi), `fldigi-mcp-tap` runs there
+  run beside the receiver (a sandbox, or fldigi on another computer), `fldigi-mcp-tap` runs there
   and the server asks it over HTTP (**Signal-hunt tap URL**); without any audio it
   falls back to stepping fldigi's `search_up`. Verified on five recordings of known
   mode, 5 of 5. Receive only.

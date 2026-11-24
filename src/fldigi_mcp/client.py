@@ -55,7 +55,9 @@ class Fldigi:
         ``OSError`` (incl. ``ConnectionRefusedError`` and ``socket.gaierror``)
         means we could not *reach* fldigi, so we raise a structured message with
         host/network detail (see :mod:`fldigi_mcp.diag`) plus, for a non-loopback
-        host, a pointer to mcp-host-bridge. ``xmlrpc.client.Fault`` is a
+        host, what to try: ask again (the macOS Local Network check), the Local
+        Network setting, and mcp-host-bridge as the fallback. A LAN address is
+        never blocked here; the connection is always attempted. ``xmlrpc.client.Fault`` is a
         *post-connect* fault (fldigi got the call and rejected it), so it keeps
         its own message.
         """
@@ -65,12 +67,19 @@ class Fldigi:
             msg = diag.connection_error(self.host, self.port, exc)
             if not _is_loopback(self.host):
                 msg += (
-                    " | If this host cannot reach the target (e.g. a sandboxed MCP "
-                    "client that only reaches loopback), run the standalone "
-                    f"mcp-host-bridge on this machine — `mcp-host-bridge install fldigi "
-                    f"--to {self.host}` — and set FLDIGI_HOST to 127.0.0.1. See "
-                    "https://github.com/sbrunner-atx/mcp-host-bridge and docs/INSTALL.md. "
-                    "Run the `diagnostics` tool for host/network detail."
+                    " | fldigi is on another computer. If this was the first call since "
+                    "the connector started and the error is 'No route to host', ask "
+                    "again: macOS checks the Local Network permission on the first "
+                    "connection to a LAN address. If it keeps failing, check that fldigi "
+                    f"runs there with --xmlrpc-server-address 0.0.0.0 on port {self.port}, "
+                    "and on a Mac allow Claude under System Settings, Privacy & "
+                    "Security, Local Network. Only if this client cannot reach LAN "
+                    "addresses at all (an older Claude Desktop or macOS, or a client "
+                    "that sandboxes connectors), run mcp-host-bridge on this machine: "
+                    f"`mcp-host-bridge install fldigi --to {self.host}`, then set "
+                    "FLDIGI_HOST to 127.0.0.1. See docs/INSTALL.md and "
+                    "https://github.com/sbrunner-atx/mcp-host-bridge. "
+                    "Run the `diagnostics` tool for host and network detail."
                 )
             raise FldigiError(msg) from exc
         except xmlrpc.client.Fault as exc:

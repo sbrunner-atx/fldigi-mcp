@@ -32,7 +32,7 @@ touching; the rest can be left at their defaults.
 | Setting | Type | Default | Notes |
 | --- | --- | --- | --- |
 | **Callsign** | text | _(empty)_ | The only field most users set. It is the single transmit gate — enter it to enable transmit, leave it blank to stay receive-only. |
-| **fldigi host** | text | `127.0.0.1` | Change only if fldigi runs on another computer. |
+| **fldigi host** | text | `127.0.0.1` | Change only if fldigi runs on another computer: enter that computer's address. If the first try reports "No route to host", ask again (macOS checks the Local Network permission). |
 | **fldigi port** | number | `7362` | fldigi's XML-RPC port. |
 
 All settings are editable afterwards from the connector's settings page. The

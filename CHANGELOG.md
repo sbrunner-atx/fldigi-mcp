@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-11-23
+
+Claude Desktop now reaches fldigi on another computer by its LAN address, so mcp-host-bridge is no longer required. It stays as the fallback.
+
+### Changed
+- The **fldigi host** setting says to enter the other computer's address. If Claude reports "No route to host" on the very first try, ask again: macOS checks the Local Network permission on the first connection. If it keeps failing, allow Claude under System Settings, Privacy & Security, Local Network. mcp-host-bridge is for an older Claude Desktop or macOS, or a client that sandboxes connectors.
+- The connection error for a LAN host gives the same order: ask again, check fldigi's `--xmlrpc-server-address` and the Local Network setting, and only then the bridge. The server still never blocks a LAN address.
+- README, `docs/INSTALL.md`, `docs/install-and-safety.md` and the Operating Field Guide (HTML and PDF) describe the direct connection first and the bridge as the fallback. The Field Guide's setup step now says to enter the callsign in the fldigi-mcp settings, not the fldigi settings. The Field Guide's Mac and Windows diagram shows n3fjp-mcp connecting to N3FJP across the network, without a relay or sandbox.
+
 ## [0.4.1] - 2026-11-12
 
 Package page only; no code or behavior changes.

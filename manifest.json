@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "fldigi-mcp",
   "display_name": "fldigi (Amateur Radio)",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Control the fldigi amateur-radio digital-modem application from Claude.",
   "long_description": "Connects to fldigi's built-in XML-RPC interface and exposes the full API as a small set of logically-grouped tools. Read and control the modem, frequency, rig (CAT), logbook, and transmitter through plain language. Safe by default: the operator callsign is the single transmit gate, so with no callsign set the station is receive-only and nothing can key the radio. Includes an optional, experimental, region-aware Band Guidance feature that suggests calling frequencies and warns about out-of-segment operation (advisory only, never a hard lock).",
   "author": {
@@ -187,7 +187,7 @@
     "fldigi_host": {
       "type": "string",
       "title": "fldigi host",
-      "description": "Host where fldigi runs. Leave as 127.0.0.1 unless fldigi is on another computer.",
+      "description": "Where fldigi runs. Keep 127.0.0.1 when fldigi is on this computer. If fldigi is on another computer, enter its address (for example 192.168.1.50) and start fldigi there with --xmlrpc-server-address 0.0.0.0. If Claude reports \"No route to host\" on the very first try, ask again: macOS checks the Local Network permission on the first connection. If it keeps failing, allow Claude under System Settings, Privacy & Security, Local Network. mcp-host-bridge is needed only with an older Claude Desktop or macOS, or a client that sandboxes connectors. See docs/INSTALL.md.",
       "default": "127.0.0.1"
     },
     "fldigi_port": {
